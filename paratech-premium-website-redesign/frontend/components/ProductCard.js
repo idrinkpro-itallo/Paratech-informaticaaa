@@ -1,3 +1,4 @@
+import Image from "next/image";
 import CategoryIcon from "./icons/CategoryIcon";
 import { CATEGORY_META, STOCK_META, WA_SALES, waLink, formatPrice, tagStyle } from "@/lib/products-data";
 
@@ -27,10 +28,22 @@ export default function ProductCard({ product, showFavorite = false, isFavorite 
             ♥
           </button>
         )}
-        <div className="pv-icon-glow" style={{ background: meta.accent, boxShadow: `0 0 60px 26px ${meta.glow}` }} />
-        <div className="pv-icon-wrap" style={{ color: meta.accent }}>
-          <CategoryIcon category={product.category} />
-        </div>
+        {product.imageUrl ? (
+          <Image
+            src={product.imageUrl}
+            alt={product.name}
+            fill
+            sizes="(max-width: 640px) 50vw, 280px"
+            style={{ objectFit: "cover", zIndex: 1 }}
+          />
+        ) : (
+          <>
+            <div className="pv-icon-glow" style={{ background: meta.accent, boxShadow: `0 0 60px 26px ${meta.glow}` }} />
+            <div className="pv-icon-wrap" style={{ color: meta.accent }}>
+              <CategoryIcon category={product.category} />
+            </div>
+          </>
+        )}
       </div>
       <div className="pv-body">
         <div className="pv-name">{product.name}</div>

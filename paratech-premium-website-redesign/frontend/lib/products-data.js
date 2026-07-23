@@ -24,6 +24,9 @@ export const STOCK_META = {
   "backorder": { label: "Sob encomenda", color: "#60a5fa" }
 };
 
+// Fonte do seed inicial do banco (prisma/seed.js) — usada uma única vez pra
+// popular o Postgres. Depois da migração pro banco, produtos são cadastrados
+// e editados pelo painel /admin (lib/products.js), não por este array.
 export const PRODUCTS = [
   { id: 1, name: "Notebook Intel Core i5 8GB 256GB SSD", category: "laptops", description: "Leve, rápido e ideal para trabalho e estudo no dia a dia.", stock: "in-stock", price: 2899.9, oldPrice: 3299.9, installment: "10x de R$ 289,99", tag: "Mais vendido", brand: "Genérico" },
   { id: 2, name: "Computador Desktop Ryzen 5 16GB 512GB SSD", category: "desktop-computers", description: "Alta performance para multitarefa, edição e produtividade.", stock: "in-stock", price: 3199.0, oldPrice: null, installment: "10x de R$ 319,90", tag: "Novo", brand: "Genérico" },
@@ -42,14 +45,6 @@ export const PRODUCTS = [
   { id: 15, name: "Resma de Papel A4 500 Folhas", category: "office-equipment", description: "Papel branco de alta qualidade para impressão e cópias.", stock: "in-stock", price: 27.9, oldPrice: null, installment: "à vista", tag: null, brand: "Genérico" },
   { id: 16, name: "Organizador de Mesa para Escritório", category: "office-equipment", description: "Mantenha sua mesa organizada com estilo e praticidade.", stock: "in-stock", price: 39.9, oldPrice: null, installment: "à vista", tag: "Novo", brand: "Genérico" }
 ];
-
-// Active categories = only the ones with products today, in CATEGORY_META's
-// declared order — the filter chips, Home category grid and footer links
-// read from this.
-const usedIds = new Set(PRODUCTS.map(p => p.category));
-export const CATEGORIES = Object.keys(CATEGORY_META)
-  .filter(id => usedIds.has(id))
-  .map(id => ({ id, label: CATEGORY_META[id].label }));
 
 export const WA_SUPPORT = "5537991222578";
 export const WA_SALES = "5537999681192";

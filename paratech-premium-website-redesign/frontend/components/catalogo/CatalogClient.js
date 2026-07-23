@@ -7,9 +7,9 @@ import SiteHeader from "@/components/SiteHeader";
 import { SiteFooterSimple } from "@/components/SiteFooter";
 import WhatsAppFab from "@/components/WhatsAppFab";
 import ProductCard from "@/components/ProductCard";
-import { CATEGORIES, PRODUCTS, WA_SALES, waLink } from "@/lib/products-data";
+import { WA_SALES, waLink } from "@/lib/products-data";
 
-export default function CatalogClient() {
+export default function CatalogClient({ categories, products }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [maxPrice, setMaxPrice] = useState(3500);
@@ -18,13 +18,13 @@ export default function CatalogClient() {
 
   useEffect(() => {
     const hash = (window.location.hash || "").replace("#", "");
-    if (CATEGORIES.some((c) => c.id === hash)) {
+    if (categories.some((c) => c.id === hash)) {
       setActiveCategory(hash);
     }
-  }, []);
+  }, [categories]);
 
   const filteredProducts = useMemo(() => {
-    let list = PRODUCTS.filter(
+    let list = products.filter(
       (p) =>
         (activeCategory === "all" || p.category === activeCategory) &&
         p.price <= maxPrice &&
@@ -34,12 +34,12 @@ export default function CatalogClient() {
     if (sortKey === "preco-desc") list = [...list].sort((a, b) => b.price - a.price);
     if (sortKey === "nome") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
     return list;
-  }, [activeCategory, maxPrice, searchQuery, sortKey]);
+  }, [products, activeCategory, maxPrice, searchQuery, sortKey]);
 
   const noResults = filteredProducts.length === 0;
   const resultsLabel = `${filteredProducts.length} produto${filteredProducts.length === 1 ? "" : "s"} encontrado${filteredProducts.length === 1 ? "" : "s"}`;
 
-  const chips = [{ id: "all", label: "Todas" }, ...CATEGORIES];
+  const chips = [{ id: "all", label: "Todas" }, ...categories];
 
   return (
     <>

@@ -1,0 +1,76 @@
+// Schema do site da Paratech.
+// Espelha 1:1 a fonte de verdade dos protótipos: project/products-data.js
+// (PRODUCTS, CATEGORY_META, STOCK_META). O seed em prisma/seed.js popula a
+// base a partir de lib/products-data.js, garantindo paridade com o design.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Categoria de produto — carrega a identidade visual (gradiente c1→c2, accent,
+// glow) usada nos cards e tiles. O `id` é o slug (ex.: "laptops"). Gerenciada
+// só pelo seed: o admin não tem tela de CRUD de categoria (cada categoria tem
+// um ícone SVG desenhado à mão em components/icons/CategoryIcon.js).
+model Category {
+  id       String    @id
+  label    String
+  c1       String
+  c2       String
+  accent   String
+  glow     String
+  products Product[]
+}
+
+// Estados de estoque com rótulo e cor (in-stock / low-stock / backorder).
+// Fixos — não editáveis pelo admin.
+model StockStatus {
+  key      String    @id
+  label    String
+  color    String
+  products Product[]
+}
+
+// Produto do catálogo. `oldPrice` e `tag` são opcionais; `brand` default
+// "Genérico"; `imageUrl` guarda a foto real enviada via upload no admin
+// (Vercel Blob) — quando ausente, o card usa o visual .pv-visual (gradiente).
+model Product {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  oldPrice    Float?
+  installment String
+  tag         String?
+  brand       String      @default("Genérico")
+  imageUrl    String?
+  category    Category    @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  stockStatus StockStatus @relation(fields: [stock], references: [key])
+  stock       String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([categoryId])
+  @@index([stock])
+}
+
+// Lead capturado pelo formulário de contato ou por um pedido de orçamento.
+// Modelo mantido para uso futuro — hoje nada grava aqui (o formulário de
+// Contato continua abrindo o WhatsApp direto, sem persistir).
+model Lead {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  telefone  String
+  assunto   String?
+  mensagem  String?
+  source    String   @default("contato")
+  productId Int?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

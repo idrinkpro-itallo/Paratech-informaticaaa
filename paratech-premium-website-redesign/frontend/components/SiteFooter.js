@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./SiteFooter.module.css";
-import { WA_SUPPORT, CATEGORIES } from "@/lib/products-data";
+import { WA_SUPPORT } from "@/lib/products-data";
 
 const LEGAL_LINE = "© 2026 ARJ Informática e Acessórios LTDA — CNPJ 27.379.480/0001-08";
 
@@ -24,8 +24,8 @@ export function SiteFooterSimple({ links }) {
   );
 }
 
-export function SiteFooterFull() {
-  const quickCategories = CATEGORIES.slice(0, 4);
+export function SiteFooterFull({ categories = [] }) {
+  const quickCategories = categories.slice(0, 4);
   return (
     <footer className={`${styles.footer} ${styles.footerFull}`}>
       <div className={styles.fullGrid}>

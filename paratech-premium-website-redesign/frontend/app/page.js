@@ -9,7 +9,12 @@ import CategoryTile from "@/components/CategoryTile";
 import StatsCounters from "@/components/home/StatsCounters";
 import TestimonialCarousel from "@/components/home/TestimonialCarousel";
 import PromoCountdown from "@/components/home/PromoCountdown";
-import { CATEGORIES, PRODUCTS, WA_SALES, WA_SUPPORT, waLink } from "@/lib/products-data";
+import { WA_SALES, WA_SUPPORT, waLink } from "@/lib/products-data";
+import { getActiveCategories, getAllProducts } from "@/lib/products";
+
+// Catálogo é gerenciado pelo /admin — mantém sempre a data mais recente do
+// banco em vez de congelar no build.
+export const dynamic = "force-dynamic";
 
 const HERO_TILES = [
   { id: "hero-notebook", src: "/images/hero/hero-notebook.jpg", alt: "Notebook gamer", caption: "notebook gamer", captionColor: "#fff", style: { top: 0, left: 20, width: 160, height: 110, borderColor: "rgba(255,255,255,.12)" } },
@@ -42,9 +47,10 @@ const GALLERY_CAPTIONS = [
   "foto: estoque",
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [categories, products] = await Promise.all([getActiveCategories(), getAllProducts()]);
   const featuredProducts = FEATURED_PRODUCT_IDS
-    .map((id) => PRODUCTS.find((p) => p.id === id))
+    .map((id) => products.find((p) => p.id === id))
     .filter(Boolean);
 
   return (
@@ -116,7 +122,7 @@ export default function HomePage() {
           <h2 className={styles.sectionTitle}>Encontre o que sua empresa precisa</h2>
         </div>
         <div className={styles.categoriesGrid}>
-          {CATEGORIES.map((c) => (
+          {categories.map((c) => (
             <CategoryTile key={c.id} category={c} />
           ))}
         </div>
@@ -193,7 +199,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <SiteFooterFull />
+      <SiteFooterFull categories={categories} />
       <WhatsAppFab showCatalogLink />
     </>
   );
