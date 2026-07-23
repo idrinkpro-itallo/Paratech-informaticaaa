@@ -1,0 +1,32 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente (nunca comitar segredos)
+.env
+**/.env
+!**/.env.example
+
+# Banco SQLite (recriado via db:migrate + db:seed)
+**/prisma/dev.db
+**/prisma/dev.db-journal
+**/*.sqlite
+**/*.sqlite3
+
+# Uploads em runtime (mantém a pasta, ignora o conteúdo)
+paratech-premium-website-redesign/backend/uploads/*
+!paratech-premium-website-redesign/backend/uploads/.gitkeep
+
+# Prisma client gerado
+**/node_modules/.prisma/
+
+# Logs
+*.log
+npm-debug.log*
+
+# SO / editor
+.DS_Store
+Thumbs.db
+.thumbnail
+
+# Repo é PRIVADO — os materiais do cliente (uploads/CNPJ.pdf, imagens da marca)
+# são intencionalmente versionados. Não adicionar aqui.

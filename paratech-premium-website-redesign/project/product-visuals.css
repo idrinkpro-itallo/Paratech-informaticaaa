@@ -1,0 +1,243 @@
+/* Premium product-card visual system — category icon identities, hover
+   animations, glass/glow chrome. Shared by Catalogo.dc.html and Home.dc.html
+   so both pages stay visually consistent. */
+
+.pv-card {
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, .06);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .05);
+  transition: transform .35s cubic-bezier(.2, .8, .2, 1), box-shadow .35s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.pv-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, .14);
+}
+
+/* ── Visual tile (stands in for the product photo) ─────────────────────── */
+.pv-visual {
+  position: relative;
+  height: 190px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pv-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: .6;
+  pointer-events: none;
+}
+.pv-visual::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, .16) 50%, transparent 60%);
+  transform: translateX(-60%);
+  transition: transform .8s ease;
+  pointer-events: none;
+}
+.pv-card:hover .pv-visual::after {
+  transform: translateX(60%);
+}
+
+/* Floating ambient particles inside the visual tile */
+.pv-particles { position: absolute; inset: 0; pointer-events: none; }
+.pv-particles span {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .55);
+  animation: pv-particle 6s ease-in-out infinite;
+}
+.pv-particles span:nth-child(1) { top: 22%; left: 16%; animation-delay: 0s; }
+.pv-particles span:nth-child(2) { top: 68%; left: 28%; animation-delay: 1.1s; }
+.pv-particles span:nth-child(3) { top: 34%; left: 82%; animation-delay: 2.2s; }
+.pv-particles span:nth-child(4) { top: 78%; left: 70%; animation-delay: 3.1s; }
+.pv-particles span:nth-child(5) { top: 12%; left: 55%; animation-delay: 4s; }
+
+/* Icon + glow */
+.pv-icon-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(20px);
+  opacity: .5;
+  animation: pv-pulse 3.2s ease-in-out infinite;
+}
+.pv-icon-wrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pv-icon {
+  width: 58px;
+  height: 58px;
+  animation: pv-float 4.2s ease-in-out infinite;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, .4));
+  transition: transform .35s ease;
+}
+.pv-card:hover .pv-icon {
+  transform: scale(1.14) translateY(-4px);
+}
+.pv-card:hover .pv-icon-glow {
+  opacity: .85;
+}
+
+/* Glassmorphism chips over the visual */
+.pv-cat-pill {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  background: rgba(255, 255, 255, .14);
+  border: 1px solid rgba(255, 255, 255, .28);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  max-width: calc(100% - 56px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pv-tag {
+  position: absolute;
+  top: 42px;
+  left: 12px;
+  z-index: 3;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 6px;
+}
+.pv-fav {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .92);
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  transition: transform .2s ease;
+}
+.pv-fav:hover { transform: scale(1.12); }
+
+/* ── Card body ───────────────────────────────────────────────────────── */
+.pv-body { padding: 18px; display: flex; flex-direction: column; flex: 1; }
+.pv-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #16181B;
+  margin-bottom: 6px;
+  min-height: 36px;
+}
+.pv-desc {
+  font-size: 12px;
+  color: #5B6168;
+  line-height: 1.45;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pv-stock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #5B6168;
+  margin-bottom: 12px;
+}
+.pv-stock-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px currentColor;
+  opacity: .9;
+}
+.pv-old-price { font-size: 12px; color: #9aa0a6; text-decoration: line-through; }
+.pv-price { font-family: Sora, sans-serif; font-weight: 800; font-size: 20px; color: #16181B; }
+.pv-installment { font-size: 11px; color: #5B6168; margin-bottom: 14px; }
+
+.pv-actions { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+.btn-quote, .btn-whatsapp {
+  display: block;
+  text-align: center;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 11px;
+  border-radius: 10px;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn-quote {
+  background: #16181B;
+  color: #FFD400;
+}
+.btn-quote:hover {
+  background: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, .28);
+}
+.btn-whatsapp {
+  background: #25D366;
+  color: #fff;
+}
+.btn-whatsapp:hover {
+  background: #1fb857;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(37, 211, 102, .38);
+}
+
+/* ── Keyframes ───────────────────────────────────────────────────────── */
+@keyframes pv-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+@keyframes pv-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: .45; }
+  50% { transform: translate(-50%, -50%) scale(1.18); opacity: .7; }
+}
+@keyframes pv-particle {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0; }
+  15% { opacity: .8; }
+  50% { transform: translateY(-16px) scale(1.3); opacity: .5; }
+  85% { opacity: .8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pv-icon, .pv-icon-glow, .pv-particles span, .pv-visual::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

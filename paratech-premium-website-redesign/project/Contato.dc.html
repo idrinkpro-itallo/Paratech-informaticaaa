@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0}
+  @keyframes glowPulse{0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,.55)}50%{box-shadow:0 0 0 14px rgba(37,211,102,0)}}
+  a{color:#E30613;text-decoration:none}
+  a:hover{color:#FFD400}
+  input::placeholder,textarea::placeholder{color:#9aa0a6}
+</style>
+</helmet>
+<div style="font-family:Manrope,sans-serif;background:#F7F7F5;color:#16181B;overflow-x:hidden;position:relative">
+
+<header style="position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:{{ headerBg }};backdrop-filter:{{ headerBlur }};border-bottom:{{ headerBorder }};transition:all .35s ease">
+  <a href="Home.dc.html" style="display:flex;align-items:center;gap:10px">
+    <img src="assets/paratech-logo.jpg" alt="Paratech" style="width:46px;height:46px;border-radius:50%;object-fit:cover">
+    <span style="font-family:Sora,sans-serif;font-weight:800;font-size:18px;color:#fff">PARATECH<span style="color:#FFD400">.</span></span>
+  </a>
+  <nav style="display:flex;gap:32px">
+    <a href="Home.dc.html" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Início</a>
+    <a href="Home.dc.html#categorias" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Categorias</a>
+    <a href="Catalogo.dc.html" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Catálogo</a>
+    <a href="Home.dc.html#promocoes" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Promoções</a>
+    <a href="Contato.dc.html" style="color:#FFD400;font-weight:700;font-size:14px">Contato</a>
+  </nav>
+  <a href="https://wa.me/5537991222578" target="_blank" style="display:flex;align-items:center;gap:8px;background:#25D366;color:#fff;font-weight:700;font-size:13px;padding:10px 18px;border-radius:999px;box-shadow:0 6px 18px rgba(37,211,102,.35)" style-hover="box-shadow:0 6px 26px rgba(37,211,102,.6)">Falar no WhatsApp</a>
+</header>
+
+<section style="padding:80px 48px 60px;background:radial-gradient(circle at 20% 0%,#1c2128 0%,#0B0D10 60%,#050607 100%);text-align:center">
+  <div style="color:#FFD400;font-weight:700;font-size:13px;letter-spacing:2px;margin-bottom:10px">FALE COM A PARATECH</div>
+  <h1 style="font-family:Sora,sans-serif;font-weight:800;font-size:44px;color:#fff;margin:0">Estamos prontos para te atender</h1>
+</section>
+
+<section style="padding:70px 48px 100px;max-width:1200px;margin:0 auto">
+  <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:48px">
+
+    <div style="display:flex;flex-direction:column;gap:24px">
+      <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:20px;padding:32px;box-shadow:0 8px 24px rgba(0,0,0,.05)">
+        <div style="font-family:Sora,sans-serif;font-weight:800;font-size:18px;margin-bottom:20px">Informações</div>
+        <div style="display:flex;flex-direction:column;gap:16px;font-size:14px">
+          <div><div style="font-weight:700;margin-bottom:3px">Endereço</div><div style="color:#5B6168">R. Nova Serrana, 31, Loja — N. Sra. de Lourdes<br/>Pará de Minas/MG — CEP 35.660-178</div></div>
+          <div><div style="font-weight:700;margin-bottom:3px">Telefone</div><a href="tel:+553732372355" style="color:#5B6168" style-hover="color:#E30613">(37) 3237-2355</a></div>
+          <div><div style="font-weight:700;margin-bottom:3px">E-mail</div><a href="mailto:arjtech@hotmail.com" style="color:#5B6168" style-hover="color:#E30613">arjtech@hotmail.com</a></div>
+          <div><div style="font-weight:700;margin-bottom:3px">Horário de atendimento</div><div style="color:#5B6168">Segunda a Sábado — 8h às 18h</div></div>
+        </div>
+        <a href="https://wa.me/5537991222578" target="_blank" style="display:block;text-align:center;margin-top:24px;background:#25D366;color:#fff;font-weight:700;font-size:14px;padding:13px;border-radius:10px">Falar no WhatsApp agora</a>
+      </div>
+      <div style="border-radius:20px;overflow:hidden;border:1px solid rgba(0,0,0,.06);height:280px">
+        <iframe title="Mapa Paratech" src="https://www.google.com/maps?q=R.+Nova+Serrana,31,Para+de+Minas,MG&output=embed" style="width:100%;height:100%;border:0" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:20px;padding:36px;box-shadow:0 8px 24px rgba(0,0,0,.05)">
+      <div style="font-family:Sora,sans-serif;font-weight:800;font-size:18px;margin-bottom:22px">Envie uma mensagem</div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <input value="{{ nome }}" onChange="{{ onNomeChange }}" type="text" placeholder="Seu nome" style="padding:13px 16px;border:1px solid rgba(0,0,0,.12);border-radius:10px;font-size:14px;font-family:Manrope,sans-serif" />
+        <input value="{{ telefone }}" onChange="{{ onTelefoneChange }}" type="text" placeholder="Seu telefone/WhatsApp" style="padding:13px 16px;border:1px solid rgba(0,0,0,.12);border-radius:10px;font-size:14px;font-family:Manrope,sans-serif" />
+        <select value="{{ assunto }}" onChange="{{ onAssuntoChange }}" style="padding:13px 16px;border:1px solid rgba(0,0,0,.12);border-radius:10px;font-size:14px;font-family:Manrope,sans-serif;color:#16181B">
+          <option value="Orçamento">Orçamento de produto</option>
+          <option value="Assistência">Assistência técnica</option>
+          <option value="Dúvida">Dúvida geral</option>
+          <option value="Outro">Outro assunto</option>
+        </select>
+        <textarea value="{{ mensagem }}" onChange="{{ onMensagemChange }}" placeholder="Sua mensagem" rows="5" style="padding:13px 16px;border:1px solid rgba(0,0,0,.12);border-radius:10px;font-size:14px;font-family:Manrope,sans-serif;resize:vertical"></textarea>
+        <button onClick="{{ onSubmit }}" style="background:#E30613;color:#fff;font-weight:700;font-size:14px;padding:14px;border-radius:10px;border:none;cursor:pointer" style-hover="background:#c00510">Enviar mensagem</button>
+        <div style="font-size:12px;color:#9aa0a6;text-align:center">Ao enviar, sua mensagem será aberta no WhatsApp com um especialista.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer style="background:#0B0D10;color:rgba(255,255,255,.75);padding:50px 48px 26px">
+  <div style="max-width:1360px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;align-items:center;padding-bottom:22px;border-bottom:1px solid rgba(255,255,255,.08)">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="assets/paratech-logo.jpg" alt="Paratech" style="width:38px;height:38px;border-radius:50%;object-fit:cover">
+      <span style="font-family:Sora,sans-serif;font-weight:800;font-size:15px;color:#fff">PARATECH</span>
+    </div>
+    <div style="display:flex;gap:28px;font-size:13px">
+      <a href="Home.dc.html" style="color:rgba(255,255,255,.6)" style-hover="color:#FFD400">Início</a>
+      <a href="Catalogo.dc.html" style="color:rgba(255,255,255,.6)" style-hover="color:#FFD400">Catálogo</a>
+    </div>
+  </div>
+  <div style="max-width:1360px;margin:0 auto;padding-top:18px;font-size:12px;color:rgba(255,255,255,.4)">© 2026 ARJ Informática e Acessórios LTDA — CNPJ 27.379.480/0001-08</div>
+</footer>
+
+<div style="position:fixed;bottom:28px;right:28px;z-index:200;display:flex;flex-direction:column;gap:14px;align-items:flex-end">
+  <a href="Catalogo.dc.html" style="display:flex;align-items:center;gap:10px;background:#23262B;color:#fff;padding:12px 18px;border-radius:999px;font-weight:700;font-size:13px;box-shadow:0 10px 24px rgba(0,0,0,.35)" style-hover="background:#000">
+    <div style="width:8px;height:8px;background:#FFD400;border-radius:2px"></div>Catálogo
+  </a>
+  <a href="https://wa.me/5537991222578" target="_blank" style="width:60px;height:60px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(0,0,0,.35);animation:glowPulse 2.4s ease-out infinite" title="Fale com um Especialista">
+    <div style="width:26px;height:26px;border-radius:50%;border:3px solid #fff"></div>
+  </a>
+</div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;defaultAssunto&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Orçamento&quot;,&quot;options&quot;:[&quot;Orçamento&quot;,&quot;Assistência&quot;,&quot;Dúvida&quot;,&quot;Outro&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Formulário&quot;}}">
+class Component extends DCLogic {
+  state = { scrolled: false, nome: "", telefone: "", assunto: "Orçamento", mensagem: "" };
+
+  componentDidMount() {
+    this._onScroll = () => this.setState(s => s.scrolled !== window.scrollY > 40 ? { scrolled: window.scrollY > 40 } : null);
+    window.addEventListener("scroll", this._onScroll);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this._onScroll);
+  }
+
+  renderVals() {
+    const s = this.state;
+    return {
+      headerBg: s.scrolled ? "rgba(11,13,16,0.78)" : "transparent",
+      headerBlur: s.scrolled ? "blur(16px)" : "none",
+      headerBorder: s.scrolled ? "1px solid rgba(255,255,255,0.08)" : "none",
+      nome: s.nome,
+      onNomeChange: (e) => this.setState({ nome: e.target.value }),
+      telefone: s.telefone,
+      onTelefoneChange: (e) => this.setState({ telefone: e.target.value }),
+      assunto: s.assunto,
+      onAssuntoChange: (e) => this.setState({ assunto: e.target.value }),
+      mensagem: s.mensagem,
+      onMensagemChange: (e) => this.setState({ mensagem: e.target.value }),
+      onSubmit: () => {
+        const msg = `Olá! Meu nome é ${s.nome || "-"}.\nTelefone: ${s.telefone || "-"}\nAssunto: ${s.assunto}\nMensagem: ${s.mensagem || "-"}`;
+        window.open(`https://wa.me/5537991222578?text=${encodeURIComponent(msg)}`, "_blank");
+      }
+    };
+  }
+}
+
+</script>
+</body>
+</html>
