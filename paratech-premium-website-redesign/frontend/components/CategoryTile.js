@@ -1,0 +1,25 @@
+import Link from "next/link";
+import CategoryIcon from "./icons/CategoryIcon";
+import styles from "./CategoryTile.module.css";
+import { CATEGORY_META } from "@/lib/products-data";
+
+export default function CategoryTile({ category }) {
+  const meta = CATEGORY_META[category.id];
+  const gradient = `linear-gradient(160deg, ${meta.c1}, ${meta.c2})`;
+
+  return (
+    <Link href={`/catalogo#${category.id}`} className="pv-card">
+      <div className={`pv-visual ${styles.visual}`} style={{ background: gradient }}>
+        <div className="pv-particles"><span></span><span></span><span></span><span></span><span></span></div>
+        <div className="pv-icon-glow" style={{ background: meta.accent, boxShadow: `0 0 60px 26px ${meta.glow}` }} />
+        <div className="pv-icon-wrap" style={{ color: meta.accent }}>
+          <CategoryIcon category={category.id} />
+        </div>
+      </div>
+      <div className={styles.body}>
+        <div className={styles.title}>{category.label}</div>
+        <div className={styles.desc}>{meta.tagline}</div>
+      </div>
+    </Link>
+  );
+}

@@ -1,0 +1,17 @@
+.visual {
+  height: 150px;
+}
+.body {
+  padding: 26px 24px 24px;
+}
+.title {
+  font-family: var(--font-sora), Sora, sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #16181B;
+  margin-bottom: 6px;
+}
+.desc {
+  font-size: 13px;
+  color: #5B6168;
+}

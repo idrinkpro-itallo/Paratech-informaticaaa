@@ -1,0 +1,170 @@
+.hero {
+  padding: 80px 48px 60px;
+  background: radial-gradient(circle at 20% 0%, #1c2128 0%, #0B0D10 60%, #050607 100%);
+  text-align: center;
+}
+.eyebrow {
+  color: #FFD400;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+.title {
+  font-family: var(--font-sora), Sora, sans-serif;
+  font-weight: 800;
+  font-size: 44px;
+  color: #fff;
+  margin: 0;
+}
+
+.content {
+  padding: 70px 48px 100px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 48px;
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, .06);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .05);
+}
+.cardTitle {
+  font-family: var(--font-sora), Sora, sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #16181B;
+}
+.infoList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 14px;
+}
+.infoLabel {
+  font-weight: 700;
+  margin-bottom: 3px;
+  color: #16181B;
+}
+.infoValue {
+  color: #5B6168;
+}
+.infoLink {
+  color: #5B6168;
+}
+.infoLink:hover {
+  color: #E30613;
+}
+.whatsBtn {
+  display: block;
+  text-align: center;
+  margin-top: 24px;
+  background: #25D366;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 13px;
+  border-radius: 10px;
+}
+.whatsBtn:hover {
+  color: #fff;
+}
+
+.mapCard {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, .06);
+  height: 280px;
+}
+.mapFrame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.formCard {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, .06);
+  border-radius: 20px;
+  padding: 36px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .05);
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.input,
+.select,
+.textarea {
+  padding: 13px 16px;
+  border: 1px solid rgba(0, 0, 0, .12);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: var(--font-manrope), Manrope, sans-serif;
+  color: #16181B;
+}
+.textarea {
+  resize: vertical;
+}
+.submitBtn {
+  background: #E30613;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-manrope), Manrope, sans-serif;
+}
+.submitBtn:hover {
+  background: #c00510;
+}
+.formNote {
+  font-size: 12px;
+  color: #9aa0a6;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .hero, .content {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .title {
+    font-size: 30px;
+  }
+  .card, .formCard {
+    padding: 24px;
+  }
+}
