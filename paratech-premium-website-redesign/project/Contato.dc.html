@@ -17,6 +17,12 @@
   a{color:#E30613;text-decoration:none}
   a:hover{color:#FFD400}
   input::placeholder,textarea::placeholder{color:#9aa0a6}
+  .mega-trigger{position:relative}
+  .mega-panel{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(8px);width:480px;background:#16181B;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px 20px;box-shadow:0 20px 50px rgba(0,0,0,.45);opacity:0;visibility:hidden;transition:opacity .18s ease,transform .18s ease;pointer-events:none;z-index:150}
+  .mega-trigger:hover .mega-panel{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);pointer-events:auto}
+  .mega-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:rgba(255,255,255,.82);font-size:13px;font-weight:600}
+  .mega-item:hover{background:rgba(255,255,255,.06);color:#fff}
+  .mega-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 </style>
 </helmet>
 <div style="font-family:Manrope,sans-serif;background:#F7F7F5;color:#16181B;overflow-x:hidden;position:relative">
@@ -28,7 +34,25 @@
   </a>
   <nav style="display:flex;gap:32px">
     <a href="Home.dc.html" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Início</a>
-    <a href="Home.dc.html#categorias" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Categorias</a>
+    <div class="mega-trigger">
+      <a href="Home.dc.html#categorias" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Categorias</a>
+      <div class="mega-panel">
+        <a href="Catalogo.dc.html#laptops" class="mega-item"><span class="mega-dot" style="background:#4da3ff"></span>Notebooks</a>
+        <a href="Catalogo.dc.html#desktop-computers" class="mega-item"><span class="mega-dot" style="background:#a374ff"></span>Computadores Desktop</a>
+        <a href="Catalogo.dc.html#gaming" class="mega-item"><span class="mega-dot" style="background:#ff4d7e"></span>Gamer</a>
+        <a href="Catalogo.dc.html#smartphones" class="mega-item"><span class="mega-dot" style="background:#2dd4bf"></span>Smartphones</a>
+        <a href="Catalogo.dc.html#printers" class="mega-item"><span class="mega-dot" style="background:#ffb020"></span>Impressoras</a>
+        <a href="Catalogo.dc.html#networking" class="mega-item"><span class="mega-dot" style="background:#38bdf8"></span>Redes</a>
+        <a href="Catalogo.dc.html#ssd-storage" class="mega-item"><span class="mega-dot" style="background:#4ade80"></span>SSD &amp; Armazenamento</a>
+        <a href="Catalogo.dc.html#ram-memory" class="mega-item"><span class="mega-dot" style="background:#c084fc"></span>Memória RAM</a>
+        <a href="Catalogo.dc.html#monitors" class="mega-item"><span class="mega-dot" style="background:#60a5fa"></span>Monitores</a>
+        <a href="Catalogo.dc.html#accessories" class="mega-item"><span class="mega-dot" style="background:#fb923c"></span>Acessórios</a>
+        <a href="Catalogo.dc.html#audio" class="mega-item"><span class="mega-dot" style="background:#e879f9"></span>Áudio</a>
+        <a href="Catalogo.dc.html#security-cameras" class="mega-item"><span class="mega-dot" style="background:#34d399"></span>Câmeras de Segurança</a>
+        <a href="Catalogo.dc.html#cables" class="mega-item"><span class="mega-dot" style="background:#facc15"></span>Cabos</a>
+        <a href="Catalogo.dc.html#office-equipment" class="mega-item"><span class="mega-dot" style="background:#f87171"></span>Escritório</a>
+      </div>
+    </div>
     <a href="Catalogo.dc.html" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Catálogo</a>
     <a href="Home.dc.html#promocoes" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Promoções</a>
     <a href="Contato.dc.html" style="color:#FFD400;font-weight:700;font-size:14px">Contato</a>

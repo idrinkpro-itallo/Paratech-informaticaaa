@@ -186,9 +186,8 @@
   box-shadow: 0 0 0 3px currentColor;
   opacity: .9;
 }
-.pv-old-price { font-size: 12px; color: #9aa0a6; text-decoration: line-through; }
-.pv-price { font-family: Sora, sans-serif; font-weight: 800; font-size: 20px; color: #16181B; }
-.pv-installment { font-size: 11px; color: #5B6168; margin-bottom: 14px; }
+.pv-code { font-size: 11px; color: #9aa0a6; letter-spacing: .02em; margin-bottom: 4px; }
+.pv-price-cta { font-family: Sora, sans-serif; font-weight: 700; font-size: 14px; font-style: italic; color: #5B6168; margin-bottom: 14px; }
 
 .pv-actions { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
 .btn-quote, .btn-whatsapp {

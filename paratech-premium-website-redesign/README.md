@@ -19,23 +19,29 @@ The design medium is **HTML/CSS/JS** — these are prototypes, not production co
 ## Bundle contents
 
 - `paratech-premium-website-redesign/README.md` — this file
-- `paratech-premium-website-redesign/project/` — the `Paratech Premium Website Redesign` project files (HTML prototypes, assets, components)
-- `paratech-premium-website-redesign/backend/` — **backend de produção** (Node.js + Express + Prisma/SQLite)
+- `paratech-premium-website-redesign/project/` — the `Paratech Premium Website Redesign` project files (HTML prototypes, assets, components). Still the visual contract; not rendered or edited as if it were the live site.
+- `paratech-premium-website-redesign/frontend/` — **o site de produção**: app Next.js único (páginas públicas + painel `/admin` + acesso ao banco via Prisma/Server Actions, sem API HTTP separada).
 
-## Backend
+## Frontend de produção
 
-O `backend/` implementa a API que o site vai consumir: catálogo (CRUD + filtros),
-captura de leads do formulário/orçamentos e upload das fotos reais dos produtos.
-Os dados são semeados a partir de `project/products-data.js`, então o backend fica
-em paridade com os protótipos.
+A migração dos protótipos `.dc.html` para produção **já aconteceu** e vive inteira em
+`frontend/`: Home, Catálogo e Contato pixel-perfect a partir dos protótipos, mais um
+painel `/admin` (login + CRUD de produto com upload de foto) que grava direto no
+Postgres via Prisma. Os dados iniciais são semeados a partir de
+`frontend/lib/products-data.js` (espelho de `project/products-data.js`), então o
+catálogo real nasce em paridade com os protótipos — depois do primeiro seed, produtos
+são cadastrados/editados pelo `/admin`, não por esses arquivos.
 
 ```bash
-cd paratech-premium-website-redesign/backend
-npm install && npm run db:migrate && npm run db:seed && npm run dev
+cd paratech-premium-website-redesign/frontend
+npm install && npx prisma migrate dev --name init && npm run db:seed && npm run dev
 ```
 
-Detalhes, variáveis de ambiente e lista completa de endpoints em
-[`backend/README.md`](backend/README.md).
+Detalhes de arquitetura, variáveis de ambiente e checklist de prontidão em
+[`../DOCUMENTACAO.md`](../DOCUMENTACAO.md); passo a passo até o lançamento em
+[`../COMO-FINALIZAR-RAPIDO.md`](../COMO-FINALIZAR-RAPIDO.md).
 
-> A migração dos protótipos `.dc.html` para um frontend de produção pixel-perfect
-> continua sendo um trabalho à parte; o backend apenas expõe a API para ele.
+> Um `backend/` Node.js/Express/Prisma separado existiu neste repositório mas foi
+> removido em 2026-07-22: sua lógica foi portada para dentro do próprio `frontend/`
+> (Server Components + Server Actions), evitando manter duas implementações da
+> mesma coisa.

@@ -15,19 +15,35 @@
 <style>
   *{box-sizing:border-box}
   body{margin:0}
-  @keyframes floatA{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-  @keyframes floatB{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
   @keyframes glowPulse{0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,.55)}50%{box-shadow:0 0 0 14px rgba(37,211,102,0)}}
-  @keyframes dashMove{0%{background-position:0 0}100%{background-position:120px 120px}}
+  @keyframes dashMove{0%{transform:translate(0,0)}100%{transform:translate(-42px,-42px)}}
   @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-  .htile{animation:floatA 5s ease-in-out infinite}
-  .htile:nth-child(2){animation:floatB 6s ease-in-out infinite;animation-delay:.4s}
-  .htile:nth-child(3){animation:floatA 5.5s ease-in-out infinite;animation-delay:.8s}
-  .htile:nth-child(4){animation:floatB 6.5s ease-in-out infinite;animation-delay:1.1s}
-  .htile:nth-child(5){animation:floatA 5.2s ease-in-out infinite;animation-delay:1.5s}
-  .htile:nth-child(6){animation:floatB 5.8s ease-in-out infinite;animation-delay:.2s}
+  @keyframes heroImgFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @keyframes heroBannerCycle{0%{opacity:0}2%{opacity:1}23%{opacity:1}25%{opacity:0}100%{opacity:0}}
+  .hero-banner{position:relative;height:460px}
+  .hero-banner-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px 12px;opacity:0;animation:heroBannerCycle 24s infinite}
+  .hero-banner-slide:nth-child(2){animation-delay:6s}
+  .hero-banner-slide:nth-child(3){animation-delay:12s}
+  .hero-banner-slide:nth-child(4){animation-delay:18s}
+  .hero-banner-glow{position:absolute;top:18%;left:50%;width:200px;height:200px;border-radius:50%;transform:translate(-50%,-50%);filter:blur(30px);opacity:.5}
+  .hero-banner-img{position:relative;z-index:2;width:220px;height:220px;margin-bottom:18px;animation:heroImgFloat 5s ease-in-out infinite}
+  .hero-banner-tag{position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:3;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px}
+  .hero-banner-kicker{position:relative;z-index:2;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+  .hero-banner-headline{position:relative;z-index:2;font-family:Sora,sans-serif;font-weight:800;font-size:clamp(20px,2.4vw,27px);line-height:1.25;color:#fff;max-width:340px;margin:0 0 10px}
+  .hero-banner-price{position:relative;z-index:2;font-size:13px;font-style:italic;color:rgba(255,255,255,.55);margin-bottom:18px}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  }
   a{color:#E30613;text-decoration:none}
   a:hover{color:#FFD400}
+  @keyframes bannerCycle{0%{opacity:0}4%{opacity:1}30%{opacity:1}36%{opacity:0}100%{opacity:0}}
+  .banner-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;opacity:0;animation:bannerCycle 9s infinite}
+  .mega-trigger{position:relative}
+  .mega-panel{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(8px);width:480px;background:#16181B;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px 20px;box-shadow:0 20px 50px rgba(0,0,0,.45);opacity:0;visibility:hidden;transition:opacity .18s ease,transform .18s ease;pointer-events:none;z-index:150}
+  .mega-trigger:hover .mega-panel{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);pointer-events:auto}
+  .mega-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:rgba(255,255,255,.82);font-size:13px;font-weight:600}
+  .mega-item:hover{background:rgba(255,255,255,.06);color:#fff}
+  .mega-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 </style>
 </helmet>
 <div id="top" style="font-family:Manrope,sans-serif;background:#F7F7F5;color:#16181B;overflow-x:hidden;position:relative">
@@ -39,7 +55,25 @@
   </a>
   <nav style="display:flex;gap:32px">
     <a href="Home.dc.html" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Início</a>
-    <a href="Home.dc.html#categorias" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Categorias</a>
+    <div class="mega-trigger">
+      <a href="Home.dc.html#categorias" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Categorias</a>
+      <div class="mega-panel">
+        <a href="Catalogo.dc.html#laptops" class="mega-item"><span class="mega-dot" style="background:#4da3ff"></span>Notebooks</a>
+        <a href="Catalogo.dc.html#desktop-computers" class="mega-item"><span class="mega-dot" style="background:#a374ff"></span>Computadores Desktop</a>
+        <a href="Catalogo.dc.html#gaming" class="mega-item"><span class="mega-dot" style="background:#ff4d7e"></span>Gamer</a>
+        <a href="Catalogo.dc.html#smartphones" class="mega-item"><span class="mega-dot" style="background:#2dd4bf"></span>Smartphones</a>
+        <a href="Catalogo.dc.html#printers" class="mega-item"><span class="mega-dot" style="background:#ffb020"></span>Impressoras</a>
+        <a href="Catalogo.dc.html#networking" class="mega-item"><span class="mega-dot" style="background:#38bdf8"></span>Redes</a>
+        <a href="Catalogo.dc.html#ssd-storage" class="mega-item"><span class="mega-dot" style="background:#4ade80"></span>SSD &amp; Armazenamento</a>
+        <a href="Catalogo.dc.html#ram-memory" class="mega-item"><span class="mega-dot" style="background:#c084fc"></span>Memória RAM</a>
+        <a href="Catalogo.dc.html#monitors" class="mega-item"><span class="mega-dot" style="background:#60a5fa"></span>Monitores</a>
+        <a href="Catalogo.dc.html#accessories" class="mega-item"><span class="mega-dot" style="background:#fb923c"></span>Acessórios</a>
+        <a href="Catalogo.dc.html#audio" class="mega-item"><span class="mega-dot" style="background:#e879f9"></span>Áudio</a>
+        <a href="Catalogo.dc.html#security-cameras" class="mega-item"><span class="mega-dot" style="background:#34d399"></span>Câmeras de Segurança</a>
+        <a href="Catalogo.dc.html#cables" class="mega-item"><span class="mega-dot" style="background:#facc15"></span>Cabos</a>
+        <a href="Catalogo.dc.html#office-equipment" class="mega-item"><span class="mega-dot" style="background:#f87171"></span>Escritório</a>
+      </div>
+    </div>
     <a href="Catalogo.dc.html" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Catálogo</a>
     <a href="Home.dc.html#promocoes" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Promoções</a>
     <a href="Contato.dc.html" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Contato</a>
@@ -48,11 +82,16 @@
 </header>
 
 <section style="position:relative;min-height:92vh;display:flex;align-items:center;background:radial-gradient(circle at 20% 20%,#1c2128 0%,#0B0D10 55%,#050607 100%);overflow:hidden;padding:0 48px">
-  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,212,0,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,212,0,.06) 1px,transparent 1px);background-size:42px 42px;animation:dashMove 8s linear infinite;opacity:.5"></div>
+  <div style="position:absolute;inset:-42px;background-image:linear-gradient(rgba(255,212,0,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,212,0,.06) 1px,transparent 1px);background-size:42px 42px;animation:dashMove 8s linear infinite;opacity:.5;will-change:transform"></div>
   <div style="position:absolute;top:-120px;right:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(227,6,19,.35),transparent 70%);filter:blur(10px)"></div>
   <div style="position:absolute;bottom:-140px;left:10%;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(255,212,0,.18),transparent 70%);filter:blur(10px)"></div>
 
   <div style="position:relative;z-index:2;display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;max-width:1360px;margin:0 auto;width:100%;padding:120px 0 80px">
+    <div style="grid-column:1 / -1;position:relative;height:32px;overflow:hidden;background:rgba(227,6,19,.12);border:1px solid rgba(227,6,19,.25);border-radius:8px;margin-bottom:8px">
+      <span class="banner-slide" style="animation-delay:0s;color:#FFD400;font-weight:700;font-size:12px;letter-spacing:.3px">Entrega rápida em Pará de Minas e região</span>
+      <span class="banner-slide" style="animation-delay:3s;color:#FFD400;font-weight:700;font-size:12px;letter-spacing:.3px">Atendimento direto pelo WhatsApp, sem robô</span>
+      <span class="banner-slide" style="animation-delay:6s;color:#FFD400;font-weight:700;font-size:12px;letter-spacing:.3px">+15 anos de experiência em tecnologia</span>
+    </div>
     <div>
       <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,212,0,.12);border:1px solid rgba(255,212,0,.35);color:#FFD400;font-size:12px;font-weight:700;letter-spacing:1.5px;padding:7px 14px;border-radius:999px;margin-bottom:24px">TECNOLOGIA · PARÁ DE MINAS/MG</div>
       <h1 style="font-family:Sora,sans-serif;font-weight:800;font-size:clamp(40px,5.2vw,68px);line-height:1.15;color:#fff;margin:0 0 22px">A Tecnologia que <span style="color:#E30613">Move</span> o seu <span style="color:#FFD400">Negócio</span>.</h1>
@@ -68,30 +107,42 @@
       </div>
     </div>
 
-    <div style="position:relative;height:460px">
-      <div class="htile" style="position:absolute;top:0;left:20px;width:160px;height:110px;border-radius:16px;border:1px solid rgba(255,255,255,.12);box-shadow:0 20px 40px rgba(0,0,0,.4);transition:transform .3s,box-shadow .3s" style-hover="transform:scale(1.08) rotate(-1deg);box-shadow:0 26px 54px rgba(227,6,19,.4)">
-        <image-slot id="hero-notebook" shape="rounded" radius="16" placeholder="notebook gamer" style="width:100%;height:100%"></image-slot>
-        <div style="position:absolute;left:0;right:0;bottom:0;padding:6px 10px;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff;font:600 10px/1.3 ui-monospace,monospace;border-radius:0 0 16px 16px;pointer-events:none">notebook gamer</div>
+    <div class="hero-banner">
+      <div class="hero-banner-slide">
+        <div class="hero-banner-glow" style="background:#4da3ff;box-shadow:0 0 120px 60px rgba(77,163,255,.45)"></div>
+        <div class="hero-banner-tag" style="background:#23262B;color:#FFD400">Mais vendido</div>
+        <div class="hero-banner-img"><image-slot id="hero-notebook" shape="rounded" radius="16" placeholder="notebook i5" style="width:100%;height:100%"></image-slot></div>
+        <div class="hero-banner-kicker" style="color:#4da3ff">O queridinho da Paratech</div>
+        <div class="hero-banner-headline">Trabalhe rápido. Estude fácil. Viva sem travar.</div>
+        <div class="hero-banner-price">Preço sob consulta</div>
+        <a href="https://wa.me/5537999681192?text=Quero%20um%20or%C3%A7amento%20para%3A%20Notebook%20Intel%20Core%20i5%208GB%20256GB%20SSD" target="_blank" class="btn-quote" style="display:inline-block;width:auto;padding:11px 20px">Solicitar Orçamento</a>
       </div>
-      <div class="htile" style="position:absolute;top:40px;right:0;width:130px;height:130px;border-radius:16px;border:1px solid rgba(255,212,0,.3);box-shadow:0 20px 40px rgba(0,0,0,.4);transition:transform .3s,box-shadow .3s" style-hover="transform:scale(1.08) rotate(1deg);box-shadow:0 26px 54px rgba(255,212,0,.4)">
-        <image-slot id="hero-monitor" shape="rounded" radius="16" placeholder="monitor full hd" style="width:100%;height:100%"></image-slot>
-        <div style="position:absolute;left:0;right:0;bottom:0;padding:6px 10px;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#FFD400;font:600 10px/1.3 ui-monospace,monospace;border-radius:0 0 16px 16px;pointer-events:none">monitor full hd</div>
+      <div class="hero-banner-slide">
+        <div class="hero-banner-glow" style="background:#60a5fa;box-shadow:0 0 120px 60px rgba(96,165,250,.4)"></div>
+        <div class="hero-banner-tag" style="background:#E30613;color:#fff">Promoção</div>
+        <div class="hero-banner-img"><image-slot id="hero-monitor" shape="rounded" radius="16" placeholder="monitor full hd" style="width:100%;height:100%"></image-slot></div>
+        <div class="hero-banner-kicker" style="color:#60a5fa">Tela nova, o mesmo orçamento</div>
+        <div class="hero-banner-headline">Cada detalhe, mais nítido.</div>
+        <div class="hero-banner-price">Preço sob consulta</div>
+        <a href="https://wa.me/5537999681192?text=Quero%20um%20or%C3%A7amento%20para%3A%20Monitor%20LED%2024%22%20Full%20HD%2075Hz" target="_blank" class="btn-quote" style="display:inline-block;width:auto;padding:11px 20px">Solicitar Orçamento</a>
       </div>
-      <div class="htile" style="position:absolute;top:190px;left:0;width:120px;height:120px;border-radius:16px;border:1px solid rgba(227,6,19,.35);box-shadow:0 20px 40px rgba(0,0,0,.4);transition:transform .3s,box-shadow .3s" style-hover="transform:scale(1.08) rotate(-1deg);box-shadow:0 26px 54px rgba(227,6,19,.45)">
-        <image-slot id="hero-ssd" shape="rounded" radius="16" placeholder="ssd nvme" style="width:100%;height:100%"></image-slot>
-        <div style="position:absolute;left:0;right:0;bottom:0;padding:6px 10px;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#ff8a8a;font:600 10px/1.3 ui-monospace,monospace;border-radius:0 0 16px 16px;pointer-events:none">ssd nvme</div>
+      <div class="hero-banner-slide">
+        <div class="hero-banner-glow" style="background:#4ade80;box-shadow:0 0 120px 60px rgba(74,222,128,.4)"></div>
+        <div class="hero-banner-tag" style="background:#E30613;color:#fff">Promoção</div>
+        <div class="hero-banner-img"><image-slot id="hero-ssd" shape="rounded" radius="16" placeholder="ssd nvme" style="width:100%;height:100%"></image-slot></div>
+        <div class="hero-banner-kicker" style="color:#4ade80">Boot instantâneo, sem enrolação</div>
+        <div class="hero-banner-headline">Seu PC merece essa velocidade.</div>
+        <div class="hero-banner-price">Preço sob consulta</div>
+        <a href="https://wa.me/5537999681192?text=Quero%20um%20or%C3%A7amento%20para%3A%20SSD%20NVMe%201TB%20M.2" target="_blank" class="btn-quote" style="display:inline-block;width:auto;padding:11px 20px">Solicitar Orçamento</a>
       </div>
-      <div class="htile" style="position:absolute;top:170px;right:30px;width:150px;height:100px;border-radius:16px;border:1px solid rgba(255,255,255,.12);box-shadow:0 20px 40px rgba(0,0,0,.4);transition:transform .3s,box-shadow .3s" style-hover="transform:scale(1.08) rotate(1deg);box-shadow:0 26px 54px rgba(255,255,255,.2)">
-        <image-slot id="hero-printer" shape="rounded" radius="16" placeholder="impressora multifuncional" style="width:100%;height:100%"></image-slot>
-        <div style="position:absolute;left:0;right:0;bottom:0;padding:6px 10px;background:linear-gradient(transparent,rgba(0,0,0,.75));color:rgba(255,255,255,.85);font:600 10px/1.3 ui-monospace,monospace;border-radius:0 0 16px 16px;pointer-events:none">impressora multifuncional</div>
-      </div>
-      <div class="htile" style="position:absolute;bottom:0;left:40px;width:130px;height:110px;border-radius:16px;border:1px solid rgba(255,255,255,.12);box-shadow:0 20px 40px rgba(0,0,0,.4);transition:transform .3s,box-shadow .3s" style-hover="transform:scale(1.08) rotate(-1deg);box-shadow:0 26px 54px rgba(255,255,255,.2)">
-        <image-slot id="hero-headset" shape="rounded" radius="16" placeholder="headset gamer" style="width:100%;height:100%"></image-slot>
-        <div style="position:absolute;left:0;right:0;bottom:0;padding:6px 10px;background:linear-gradient(transparent,rgba(0,0,0,.75));color:rgba(255,255,255,.85);font:600 10px/1.3 ui-monospace,monospace;border-radius:0 0 16px 16px;pointer-events:none">headset gamer</div>
-      </div>
-      <div class="htile" style="position:absolute;bottom:20px;right:0;width:120px;height:90px;border-radius:16px;border:1px solid rgba(255,212,0,.3);box-shadow:0 20px 40px rgba(0,0,0,.4);transition:transform .3s,box-shadow .3s" style-hover="transform:scale(1.08) rotate(1deg);box-shadow:0 26px 54px rgba(255,212,0,.4)">
-        <image-slot id="hero-router" shape="rounded" radius="16" placeholder="roteador wifi 6" style="width:100%;height:100%"></image-slot>
-        <div style="position:absolute;left:0;right:0;bottom:0;padding:6px 10px;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#FFD400;font:600 10px/1.3 ui-monospace,monospace;border-radius:0 0 16px 16px;pointer-events:none">roteador wifi 6</div>
+      <div class="hero-banner-slide">
+        <div class="hero-banner-glow" style="background:#ffb020;box-shadow:0 0 120px 60px rgba(255,176,32,.4)"></div>
+        <div class="hero-banner-tag" style="background:#23262B;color:#FFD400">Mais vendido</div>
+        <div class="hero-banner-img"><image-slot id="hero-printer" shape="rounded" radius="16" placeholder="impressora laser" style="width:100%;height:100%"></image-slot></div>
+        <div class="hero-banner-kicker" style="color:#ffb020">Confiança pra imprimir todo dia</div>
+        <div class="hero-banner-headline">Imprima na velocidade do seu negócio.</div>
+        <div class="hero-banner-price">Preço sob consulta</div>
+        <a href="https://wa.me/5537999681192?text=Quero%20um%20or%C3%A7amento%20para%3A%20Impressora%20Laser%20Monocrom%C3%A1tica%20USB%2FRede" target="_blank" class="btn-quote" style="display:inline-block;width:auto;padding:11px 20px">Solicitar Orçamento</a>
       </div>
     </div>
   </div>
@@ -217,9 +268,8 @@
           <div class="pv-name">Notebook Intel Core i5 8GB 256GB SSD</div>
           <div class="pv-desc">Leve, rápido e ideal para trabalho e estudo no dia a dia.</div>
           <div class="pv-stock"><span class="pv-stock-dot" style="color:#22c55e;background:#22c55e"></span>Em estoque</div>
-          <div class="pv-old-price">R$ 3.299,90</div>
-          <div class="pv-price">R$ 2.899,90</div>
-          <div class="pv-installment">10x de R$ 289,99</div>
+          <div class="pv-code">Código: PT-0001</div>
+          <div class="pv-price-cta">Preço sob consulta</div>
           <div class="pv-actions">
             <a href="https://wa.me/5537999681192?text=Quero%20um%20or%C3%A7amento%20para%3A%20Notebook%20Intel%20Core%20i5%208GB%20256GB%20SSD" target="_blank" class="btn-quote">Solicitar Orçamento</a>
             <a href="https://wa.me/5537999681192?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%3A%20Notebook%20Intel%20Core%20i5%208GB%20256GB%20SSD" target="_blank" class="btn-whatsapp">Falar no WhatsApp</a>
@@ -238,9 +288,8 @@
           <div class="pv-name">Monitor LED 24" Full HD 75Hz</div>
           <div class="pv-desc">Imagem nítida com taxa de atualização suave para o dia a dia.</div>
           <div class="pv-stock"><span class="pv-stock-dot" style="color:#f59e0b;background:#f59e0b"></span>Últimas unidades</div>
-          <div class="pv-old-price">R$ 849,00</div>
-          <div class="pv-price">R$ 699,00</div>
-          <div class="pv-installment">8x de R$ 87,38</div>
+          <div class="pv-code">Código: PT-0003</div>
+          <div class="pv-price-cta">Preço sob consulta</div>
           <div class="pv-actions">
             <a href="https://wa.me/5537999681192?text=Quero%20um%20or%C3%A7amento%20para%3A%20Monitor%20LED%2024%20Full%20HD%2075Hz" target="_blank" class="btn-quote">Solicitar Orçamento</a>
             <a href="https://wa.me/5537999681192?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%3A%20Monitor%20LED%2024%20Full%20HD%2075Hz" target="_blank" class="btn-whatsapp">Falar no WhatsApp</a>
@@ -259,9 +308,8 @@
           <div class="pv-name">SSD NVMe 1TB M.2</div>
           <div class="pv-desc">Velocidade de leitura e gravação de última geração.</div>
           <div class="pv-stock"><span class="pv-stock-dot" style="color:#22c55e;background:#22c55e"></span>Em estoque</div>
-          <div class="pv-old-price">R$ 499,90</div>
-          <div class="pv-price">R$ 429,90</div>
-          <div class="pv-installment">6x de R$ 71,65</div>
+          <div class="pv-code">Código: PT-0010</div>
+          <div class="pv-price-cta">Preço sob consulta</div>
           <div class="pv-actions">
             <a href="https://wa.me/5537999681192?text=Quero%20um%20or%C3%A7amento%20para%3A%20SSD%20NVMe%201TB%20M.2" target="_blank" class="btn-quote">Solicitar Orçamento</a>
             <a href="https://wa.me/5537999681192?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%3A%20SSD%20NVMe%201TB%20M.2" target="_blank" class="btn-whatsapp">Falar no WhatsApp</a>
@@ -280,8 +328,8 @@
           <div class="pv-name">Impressora Laser Monocromática</div>
           <div class="pv-desc">Impressão rápida em preto e branco para o escritório.</div>
           <div class="pv-stock"><span class="pv-stock-dot" style="color:#22c55e;background:#22c55e"></span>Em estoque</div>
-          <div class="pv-price">R$ 899,00</div>
-          <div class="pv-installment">10x de R$ 89,90</div>
+          <div class="pv-code">Código: PT-0006</div>
+          <div class="pv-price-cta">Preço sob consulta</div>
           <div class="pv-actions">
             <a href="https://wa.me/5537999681192?text=Quero%20um%20or%C3%A7amento%20para%3A%20Impressora%20Laser%20Monocrom%C3%A1tica" target="_blank" class="btn-quote">Solicitar Orçamento</a>
             <a href="https://wa.me/5537999681192?text=Ol%C3%A1!%20Tenho%20uma%20d%C3%BAvida%20sobre%3A%20Impressora%20Laser%20Monocrom%C3%A1tica" target="_blank" class="btn-whatsapp">Falar no WhatsApp</a>

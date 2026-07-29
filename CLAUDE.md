@@ -4,18 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## O que é este repositório
 
-Este é um **bundle de handoff do Claude Design** (claude.ai/design) — NÃO é código de produção. Um usuário desenhou o redesign do site da **Paratech** (ARJ Informática e Acessórios LTDA, loja de informática em Pará de Minas/MG) em protótipos HTML/CSS/JS, e exportou este pacote para que um agente de código implemente o design "de verdade".
+Este repositório tem **duas camadas** — não trate uma como se fosse a outra:
 
-**Regras de ouro do handoff (do README):**
+1. `paratech-premium-website-redesign/project/` — o **bundle de handoff do Claude Design** (claude.ai/design) original: protótipos HTML/CSS/JS estáticos, não código de produção. Um usuário desenhou o redesign do site da **Paratech** (ARJ Informática e Acessórios LTDA, loja de informática em Pará de Minas/MG) nesses protótipos. Eles continuam sendo o **contrato visual** (fonte da verdade de cor/tipografia/layout) e não são renderizados nem editados como se fossem o site real.
+2. `paratech-premium-website-redesign/frontend/` — o site de produção **já implementado**: app Next.js com Home/Catálogo/Contato públicos, painel `/admin` e banco Postgres via Prisma. A migração do design "de verdade" (regra de ouro nº 2 abaixo) já aconteceu nessa pasta — ver `DOCUMENTACAO.md` para arquitetura completa e `COMO-FINALIZAR-RAPIDO.md` para o que falta até o lançamento. Antes de assumir que uma tarefa é "migrar protótipo do zero", confira se a página/comportamento já existe ali.
+
+**Regras de ouro do handoff (do README), válidas para a camada `project/`:**
 
 1. A página que o usuário tinha aberta ao exportar foi `project/Catalogo.dc.html` — é quase certamente o design principal a ser construído. Leia-a por inteiro, e siga todos os imports dela.
 2. O trabalho é **recriar o visual pixel-perfect** na tecnologia de destino (React, Vue, etc.) — **não** copiar a estrutura interna do protótipo.
-3. **Não renderize os arquivos no navegador nem tire screenshots** a menos que o usuário peça. Tudo (dimensões, cores, layout) está no código-fonte.
+3. **Não renderize os arquivos no navegador nem tire screenshots** a menos que o usuário peça. Tudo (dimensões, cores, layout) está no código-fonte. Isso vale para os `.dc.html`; o app em `frontend/` é código de produção normal e pode/deve ser conferido no navegador quando fizer sentido.
 4. Se algo for ambíguo, pergunte antes de implementar.
 
-Não há build, lint ou testes — são protótipos estáticos. O `package-lock.json` na raiz é vazio/trivial. Não existe git aqui.
+`project/` não tem build, lint ou testes — são protótipos estáticos, e o `package-lock.json` histórico na raiz do handoff é vazio/trivial. Já `frontend/` é um app Next.js real, com seu próprio `package.json`, build, lint e migrations Prisma — ver `frontend/README.md`.
 
-## Anatomia dos protótipos (formato `.dc.html`)
+## Anatomia dos protótipos (formato `.dc.html`, pasta `project/`)
 
 Cada página é um HTML com um runtime próprio (`support.js`) que emula um mini-React:
 
@@ -26,7 +29,9 @@ Cada página é um HTML com um runtime próprio (`support.js`) que emula um mini
 - `<image-slot>` (via `image-slot.js`) = placeholder de imagem preenchível pelo usuário; na produção vira `<img>` real com as fotos dos produtos.
 - Quase todo o estilo é inline no HTML; o que é compartilhado vive em `product-visuals.css`.
 
-## Mapa dos arquivos
+## Mapa dos arquivos (protótipo, pasta `project/`)
+
+Para o mapa de arquivos do app de produção (`frontend/app`, `frontend/lib`, `frontend/prisma`), ver a seção 2 de `DOCUMENTACAO.md` — não duplicado aqui porque muda com mais frequência que o protótipo.
 
 | Arquivo | Papel |
 |---|---|

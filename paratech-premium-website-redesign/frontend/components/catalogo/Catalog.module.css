@@ -80,20 +80,6 @@
   font-family: var(--font-manrope), Manrope, sans-serif;
 }
 
-.priceRow {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-top: 22px;
-  color: rgba(255, 255, 255, .7);
-  font-size: 13px;
-  flex-wrap: wrap;
-}
-.priceRange {
-  width: 220px;
-  max-width: 100%;
-}
-
 .resultsSection {
   padding: 48px 48px 100px;
   max-width: 1360px;

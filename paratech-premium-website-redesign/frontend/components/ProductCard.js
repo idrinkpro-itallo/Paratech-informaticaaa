@@ -1,6 +1,6 @@
 import Image from "next/image";
 import CategoryIcon from "./icons/CategoryIcon";
-import { CATEGORY_META, STOCK_META, WA_SALES, waLink, formatPrice, tagStyle } from "@/lib/products-data";
+import { CATEGORY_META, STOCK_META, WA_SALES, waLink, tagStyle } from "@/lib/products-data";
 
 export default function ProductCard({ product, showFavorite = false, isFavorite = false, onToggleFavorite }) {
   const meta = CATEGORY_META[product.category];
@@ -52,9 +52,8 @@ export default function ProductCard({ product, showFavorite = false, isFavorite 
           <span className="pv-stock-dot" style={{ color: stock.color, background: stock.color }} />
           {stock.label}
         </div>
-        {product.oldPrice ? <div className="pv-old-price">{formatPrice(product.oldPrice)}</div> : null}
-        <div className="pv-price">{formatPrice(product.price)}</div>
-        <div className="pv-installment">{product.installment}</div>
+        <div className="pv-code">Código: PT-{String(product.id).padStart(4, "0")}</div>
+        <div className="pv-price-cta">Preço sob consulta</div>
         <div className="pv-actions">
           <a
             href={waLink(WA_SALES, `Quero um orçamento para: ${product.name}`)}

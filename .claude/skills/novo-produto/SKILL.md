@@ -5,7 +5,14 @@ description: Adicionar, editar ou remover produtos do catálogo Paratech (produc
 
 # Novo produto no catálogo
 
-Todos os produtos vivem em um único lugar: `paratech-premium-website-redesign/project/products-data.js`, no array `PRODUCTS`. Os cards do Catálogo e da Home se montam sozinhos a partir daí — **nunca** edite HTML para adicionar produto.
+Primeiro identifique **qual camada** o pedido afeta — o repositório tem duas fontes de produto que não se sincronizam sozinhas:
+
+- **Protótipo** (`paratech-premium-website-redesign/project/products-data.js`, array `PRODUCTS`) — a referência de design. Editar aqui não afeta o site no ar.
+- **Produção** (`paratech-premium-website-redesign/frontend/`) — o site que os clientes veem. Produtos vivem no Postgres (modelo `Product` em `prisma/schema.prisma`), e o jeito correto de cadastrar/editar/apagar é pelo **painel `/admin`** (login com `ADMIN_PASSWORD` → "+ Novo produto" ou "Editar"/"Apagar" na listagem) — que já cuida de upload de foto (Vercel Blob) e validação (Zod). `frontend/lib/products-data.js` tem seu próprio array `PRODUCTS`, mas ele só é usado **uma vez**, pelo `prisma/seed.js`, para popular o banco na primeira migration — editá-lo depois disso não muda nada no site.
+
+Se o pedido for algo como "cadastra esse produto" sem deixar claro a camada, pergunte se é para o protótipo (design), para produção (aí é o `/admin`, ou você mesmo rodando uma alteração via Prisma se tiver acesso ao banco) ou para os dois.
+
+Em qualquer camada, os cards do Catálogo e da Home se montam sozinhos a partir dos dados — **nunca** edite HTML para adicionar produto.
 
 ## Formato de um produto
 
@@ -28,5 +35,5 @@ Todos os produtos vivem em um único lugar: `paratech-premium-website-redesign/p
 
 ## Depois de editar
 
-- Não é preciso mexer em mais nenhum arquivo.
-- Se o usuário estiver com uma implementação de produção (React etc.), replique a mudança na fonte de dados equivalente de lá também — pergunte onde ela mora se não for óbvio.
+- Editando só o protótipo (`project/products-data.js`): não é preciso mexer em mais nenhum arquivo.
+- Editando produção: prefira orientar o uso do painel `/admin` em vez de editar dados direto. Se você mesmo estiver alterando o banco (ex.: script Prisma, correção pontual), lembre que `categoryId` deve existir em `Category` e `stock` em `StockStatus` antes de gravar o produto.

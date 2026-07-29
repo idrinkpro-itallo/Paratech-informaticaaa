@@ -13,6 +13,7 @@ export default function TestimonialCarousel() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = setInterval(() => {
       setIndex((i) => (i + 1) % TESTIMONIALS.length);
     }, 5000);

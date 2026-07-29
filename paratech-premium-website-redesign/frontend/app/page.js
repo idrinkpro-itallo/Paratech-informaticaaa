@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
 import SiteHeader from "@/components/SiteHeader";
@@ -9,21 +8,13 @@ import CategoryTile from "@/components/CategoryTile";
 import StatsCounters from "@/components/home/StatsCounters";
 import TestimonialCarousel from "@/components/home/TestimonialCarousel";
 import PromoCountdown from "@/components/home/PromoCountdown";
+import HeroProductBanner from "@/components/home/HeroProductBanner";
 import { WA_SALES, WA_SUPPORT, waLink } from "@/lib/products-data";
 import { getActiveCategories, getAllProducts } from "@/lib/products";
 
 // Catálogo é gerenciado pelo /admin — mantém sempre a data mais recente do
 // banco em vez de congelar no build.
 export const dynamic = "force-dynamic";
-
-const HERO_TILES = [
-  { id: "hero-notebook", src: "/images/hero/hero-notebook.jpg", alt: "Notebook gamer", caption: "notebook gamer", captionColor: "#fff", style: { top: 0, left: 20, width: 160, height: 110, borderColor: "rgba(255,255,255,.12)" } },
-  { id: "hero-monitor", src: "/images/hero/hero-monitor.png", alt: "Monitor Full HD", caption: "monitor full hd", captionColor: "#FFD400", style: { top: 40, right: 0, width: 130, height: 130, borderColor: "rgba(255,212,0,.3)" } },
-  { id: "hero-ssd", src: "/images/hero/hero-ssd.jpg", alt: "SSD NVMe", caption: "ssd nvme", captionColor: "#ff8a8a", style: { top: 190, left: 0, width: 120, height: 120, borderColor: "rgba(227,6,19,.35)" } },
-  { id: "hero-printer", src: "/images/hero/hero-printer.jpg", alt: "Impressora multifuncional", caption: "impressora multifuncional", captionColor: "rgba(255,255,255,.85)", style: { top: 170, right: 30, width: 150, height: 100, borderColor: "rgba(255,255,255,.12)" } },
-  { id: "hero-headset", src: "/images/hero/hero-headset.jpg", alt: "Headset gamer", caption: "headset gamer", captionColor: "rgba(255,255,255,.85)", style: { bottom: 0, left: 40, width: 130, height: 110, borderColor: "rgba(255,255,255,.12)" } },
-  { id: "hero-router", src: "/images/hero/hero-router.jpg", alt: "Roteador Wi-Fi 6", caption: "roteador wifi 6", captionColor: "#FFD400", style: { bottom: 20, right: 0, width: 120, height: 90, borderColor: "rgba(255,212,0,.3)" } },
-];
 
 const FEATURED_PRODUCT_IDS = [1, 3, 10, 6];
 
@@ -63,6 +54,11 @@ export default async function HomePage() {
         <div className={styles.blurYellow} aria-hidden="true" />
 
         <div className={styles.heroInner}>
+          <div className={styles.bannerStrip}>
+            <span className={styles.bannerSlide} style={{ animationDelay: "0s" }}>Entrega rápida em Pará de Minas e região</span>
+            <span className={styles.bannerSlide} style={{ animationDelay: "3s" }}>Atendimento direto pelo WhatsApp, sem robô</span>
+            <span className={styles.bannerSlide} style={{ animationDelay: "6s" }}>+15 anos de experiência em tecnologia</span>
+          </div>
           <div>
             <div className={styles.badge}>TECNOLOGIA · PARÁ DE MINAS/MG</div>
             <h1 className={styles.heroTitle}>
@@ -98,21 +94,7 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className={styles.tilesDesktop} aria-hidden="true">
-            {HERO_TILES.map((tile) => (
-              <div key={tile.id} className={styles.htile} style={tile.style}>
-                <Image src={tile.src} alt={tile.alt} fill className={styles.tileImg} sizes="160px" />
-                <div className={styles.tileCaption} style={{ color: tile.captionColor }}>{tile.caption}</div>
-              </div>
-            ))}
-          </div>
-          <div className={styles.tilesMobile}>
-            {HERO_TILES.map((tile) => (
-              <div key={tile.id} className={styles.htile}>
-                <Image src={tile.src} alt={tile.alt} fill className={styles.tileImg} sizes="33vw" />
-              </div>
-            ))}
-          </div>
+          <HeroProductBanner products={featuredProducts} />
         </div>
       </section>
 

@@ -12,7 +12,6 @@ import { WA_SALES, waLink } from "@/lib/products-data";
 export default function CatalogClient({ categories, products }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
-  const [maxPrice, setMaxPrice] = useState(3500);
   const [sortKey, setSortKey] = useState("relevancia");
   const [favorites, setFavorites] = useState({});
 
@@ -27,14 +26,12 @@ export default function CatalogClient({ categories, products }) {
     let list = products.filter(
       (p) =>
         (activeCategory === "all" || p.category === activeCategory) &&
-        p.price <= maxPrice &&
         p.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    if (sortKey === "preco-asc") list = [...list].sort((a, b) => a.price - b.price);
-    if (sortKey === "preco-desc") list = [...list].sort((a, b) => b.price - a.price);
     if (sortKey === "nome") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
+    if (sortKey === "recentes") list = [...list].sort((a, b) => b.id - a.id);
     return list;
-  }, [products, activeCategory, maxPrice, searchQuery, sortKey]);
+  }, [products, activeCategory, searchQuery, sortKey]);
 
   const noResults = filteredProducts.length === 0;
   const resultsLabel = `${filteredProducts.length} produto${filteredProducts.length === 1 ? "" : "s"} encontrado${filteredProducts.length === 1 ? "" : "s"}`;
@@ -68,9 +65,8 @@ export default function CatalogClient({ categories, products }) {
               className={styles.sortSelect}
             >
               <option value="relevancia">Relevância</option>
-              <option value="preco-asc">Menor preço</option>
-              <option value="preco-desc">Maior preço</option>
               <option value="nome">Nome A-Z</option>
+              <option value="recentes">Mais recentes</option>
             </select>
           </div>
 
@@ -94,20 +90,6 @@ export default function CatalogClient({ categories, products }) {
                 </button>
               );
             })}
-          </div>
-
-          <div className={styles.priceRow}>
-            <label htmlFor="catalog-price">Preço até R$ {maxPrice.toLocaleString("pt-BR")}</label>
-            <input
-              id="catalog-price"
-              type="range"
-              min="0"
-              max="3500"
-              step="50"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(Number(e.target.value))}
-              className={styles.priceRange}
-            />
           </div>
         </div>
       </section>

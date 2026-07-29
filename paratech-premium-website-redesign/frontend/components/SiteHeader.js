@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./SiteHeader.module.css";
 import { WA_SUPPORT } from "@/lib/products-data";
+import CategoryMegaMenu from "./CategoryMegaMenu";
 
 const NAV_LINKS = [
   { key: "home", href: "/", label: "Início" },
@@ -39,15 +40,19 @@ export default function SiteHeader({ active = null }) {
       </Link>
 
       <nav className={styles.nav} aria-label="Navegação principal">
-        {NAV_LINKS.map((link) => (
-          <Link
-            key={link.key}
-            href={link.href}
-            className={link.key === active ? styles.navLinkActive : styles.navLink}
-          >
-            {link.label}
-          </Link>
-        ))}
+        {NAV_LINKS.map((link) =>
+          link.key === "categorias" ? (
+            <CategoryMegaMenu key={link.key} />
+          ) : (
+            <Link
+              key={link.key}
+              href={link.href}
+              className={link.key === active ? styles.navLinkActive : styles.navLink}
+            >
+              {link.label}
+            </Link>
+          )
+        )}
       </nav>
 
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>

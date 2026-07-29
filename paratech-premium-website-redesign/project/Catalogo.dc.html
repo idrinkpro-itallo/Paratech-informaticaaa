@@ -18,6 +18,12 @@
   a{color:#E30613;text-decoration:none}
   a:hover{color:#FFD400}
   input[type=range]{accent-color:#E30613}
+  .mega-trigger{position:relative}
+  .mega-panel{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(8px);width:480px;background:#16181B;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px 20px;box-shadow:0 20px 50px rgba(0,0,0,.45);opacity:0;visibility:hidden;transition:opacity .18s ease,transform .18s ease;pointer-events:none;z-index:150}
+  .mega-trigger:hover .mega-panel{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);pointer-events:auto}
+  .mega-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:rgba(255,255,255,.82);font-size:13px;font-weight:600}
+  .mega-item:hover{background:rgba(255,255,255,.06);color:#fff}
+  .mega-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 </style>
 </helmet>
 <div style="font-family:Manrope,sans-serif;background:#F7F7F5;color:#16181B;overflow-x:hidden;position:relative">
@@ -29,7 +35,25 @@
   </a>
   <nav style="display:flex;gap:32px">
     <a href="Home.dc.html" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Início</a>
-    <a href="Home.dc.html#categorias" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Categorias</a>
+    <div class="mega-trigger">
+      <a href="Home.dc.html#categorias" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Categorias</a>
+      <div class="mega-panel">
+        <a href="Catalogo.dc.html#laptops" class="mega-item"><span class="mega-dot" style="background:#4da3ff"></span>Notebooks</a>
+        <a href="Catalogo.dc.html#desktop-computers" class="mega-item"><span class="mega-dot" style="background:#a374ff"></span>Computadores Desktop</a>
+        <a href="Catalogo.dc.html#gaming" class="mega-item"><span class="mega-dot" style="background:#ff4d7e"></span>Gamer</a>
+        <a href="Catalogo.dc.html#smartphones" class="mega-item"><span class="mega-dot" style="background:#2dd4bf"></span>Smartphones</a>
+        <a href="Catalogo.dc.html#printers" class="mega-item"><span class="mega-dot" style="background:#ffb020"></span>Impressoras</a>
+        <a href="Catalogo.dc.html#networking" class="mega-item"><span class="mega-dot" style="background:#38bdf8"></span>Redes</a>
+        <a href="Catalogo.dc.html#ssd-storage" class="mega-item"><span class="mega-dot" style="background:#4ade80"></span>SSD &amp; Armazenamento</a>
+        <a href="Catalogo.dc.html#ram-memory" class="mega-item"><span class="mega-dot" style="background:#c084fc"></span>Memória RAM</a>
+        <a href="Catalogo.dc.html#monitors" class="mega-item"><span class="mega-dot" style="background:#60a5fa"></span>Monitores</a>
+        <a href="Catalogo.dc.html#accessories" class="mega-item"><span class="mega-dot" style="background:#fb923c"></span>Acessórios</a>
+        <a href="Catalogo.dc.html#audio" class="mega-item"><span class="mega-dot" style="background:#e879f9"></span>Áudio</a>
+        <a href="Catalogo.dc.html#security-cameras" class="mega-item"><span class="mega-dot" style="background:#34d399"></span>Câmeras de Segurança</a>
+        <a href="Catalogo.dc.html#cables" class="mega-item"><span class="mega-dot" style="background:#facc15"></span>Cabos</a>
+        <a href="Catalogo.dc.html#office-equipment" class="mega-item"><span class="mega-dot" style="background:#f87171"></span>Escritório</a>
+      </div>
+    </div>
     <a href="Catalogo.dc.html" style="color:#FFD400;font-weight:700;font-size:14px">Catálogo</a>
     <a href="Home.dc.html#promocoes" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Promoções</a>
     <a href="Contato.dc.html" style="color:#fff;font-weight:600;font-size:14px" style-hover="color:#FFD400">Contato</a>
@@ -46,9 +70,8 @@
       <input value="{{ searchQuery }}" onChange="{{ onSearchChange }}" type="text" placeholder="Buscar produto por nome..." style="flex:1;min-width:260px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:14px 18px;border-radius:12px;font-size:14px;font-family:Manrope,sans-serif" />
       <select value="{{ sortKey }}" onChange="{{ onSortChange }}" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:14px 16px;border-radius:12px;font-size:14px;font-family:Manrope,sans-serif">
         <option value="relevancia" style="color:#16181B">Relevância</option>
-        <option value="preco-asc" style="color:#16181B">Menor preço</option>
-        <option value="preco-desc" style="color:#16181B">Maior preço</option>
         <option value="nome" style="color:#16181B">Nome A-Z</option>
+        <option value="recentes" style="color:#16181B">Mais recentes</option>
       </select>
     </div>
 
@@ -56,11 +79,6 @@
       <sc-for list="{{ categoryChips }}" as="chip" hint-placeholder-count="5">
         <button onClick="{{ chip.onClick }}" style="background:{{ chip.bg }};color:{{ chip.color }};border:1px solid {{ chip.border }};padding:9px 18px;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer">{{ chip.label }}</button>
       </sc-for>
-    </div>
-
-    <div style="display:flex;align-items:center;gap:14px;margin-top:22px;color:rgba(255,255,255,.7);font-size:13px">
-      <span>Preço até R$ {{ maxPriceLabel }}</span>
-      <input type="range" min="0" max="3500" step="50" value="{{ maxPrice }}" onChange="{{ onPriceChange }}" style="width:220px" />
     </div>
   </div>
 </section>
@@ -102,11 +120,8 @@
           <div class="pv-name">{{ p.name }}</div>
           <div class="pv-desc">{{ p.description }}</div>
           <div class="pv-stock"><span class="pv-stock-dot" style="color:{{ p.stockColor }};background:{{ p.stockColor }}"></span>{{ p.stockLabel }}</div>
-          <sc-if value="{{ p.oldPriceLabel }}" hint-placeholder-val="{{ false }}">
-            <div class="pv-old-price">{{ p.oldPriceLabel }}</div>
-          </sc-if>
-          <div class="pv-price">{{ p.priceLabel }}</div>
-          <div class="pv-installment">{{ p.installment }}</div>
+          <div class="pv-code">Código: {{ p.code }}</div>
+          <div class="pv-price-cta">Preço sob consulta</div>
           <div class="pv-actions">
             <a href="{{ p.waQuoteLink }}" target="_blank" class="btn-quote">Solicitar Orçamento</a>
             <a href="{{ p.waChatLink }}" target="_blank" class="btn-whatsapp">Falar no WhatsApp</a>
@@ -154,13 +169,12 @@
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;defaultSort&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;relevancia&quot;,&quot;options&quot;:[&quot;relevancia&quot;,&quot;preco-asc&quot;,&quot;preco-desc&quot;,&quot;nome&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Catálogo&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;defaultSort&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;relevancia&quot;,&quot;options&quot;:[&quot;relevancia&quot;,&quot;nome&quot;,&quot;recentes&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Catálogo&quot;}}">
 class Component extends DCLogic {
   state = {
     scrolled: false,
     searchQuery: "",
     activeCategory: "all",
-    maxPrice: 3500,
     sortKey: "relevancia",
     favorites: {},
     products: [],
@@ -186,8 +200,6 @@ class Component extends DCLogic {
     window.removeEventListener("scroll", this._onScroll);
   }
 
-  fmtPrice(v) { return "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-
   tagStyle(tag) {
     if (tag === "Novo") return { bg: "#FFD400", color: "#16181B" };
     if (tag === "Promoção") return { bg: "#E30613", color: "#fff" };
@@ -210,12 +222,10 @@ class Component extends DCLogic {
 
     let list = s.products.filter(p =>
       (s.activeCategory === "all" || p.category === s.activeCategory) &&
-      p.price <= s.maxPrice &&
       p.name.toLowerCase().includes(s.searchQuery.toLowerCase())
     );
-    if (s.sortKey === "preco-asc") list = [...list].sort((a, b) => a.price - b.price);
-    if (s.sortKey === "preco-desc") list = [...list].sort((a, b) => b.price - a.price);
     if (s.sortKey === "nome") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
+    if (s.sortKey === "recentes") list = [...list].sort((a, b) => b.id - a.id);
 
     const fallbackMeta = { label: "Produtos", c1: "#23262B", c2: "#16181B", accent: "#FFD400", glow: "rgba(255,212,0,.4)" };
     const fallbackStock = { label: "Em estoque", color: "#22c55e" };
@@ -253,9 +263,7 @@ class Component extends DCLogic {
         isOffice: p.category === "office-equipment",
         stockLabel: stock.label,
         stockColor: stock.color,
-        priceLabel: this.fmtPrice(p.price),
-        oldPriceLabel: p.oldPrice ? this.fmtPrice(p.oldPrice) : null,
-        installment: p.installment,
+        code: "PT-" + String(p.id).padStart(4, "0"),
         favColor: s.favorites[p.id] ? "#E30613" : "#c7c9cc",
         onToggleFav: () => this.setState(st => ({ favorites: { ...st.favorites, [p.id]: !st.favorites[p.id] } })),
         waQuoteLink: `https://wa.me/5537999681192?text=${msgQuote}`,
@@ -282,9 +290,6 @@ class Component extends DCLogic {
       onSearchChange: (e) => this.setState({ searchQuery: e.target.value }),
       sortKey: s.sortKey,
       onSortChange: (e) => this.setState({ sortKey: e.target.value }),
-      maxPrice: s.maxPrice,
-      maxPriceLabel: s.maxPrice.toLocaleString("pt-BR"),
-      onPriceChange: (e) => this.setState({ maxPrice: Number(e.target.value) }),
       categoryChips,
       filteredProducts,
       noResults: filteredProducts.length === 0,
