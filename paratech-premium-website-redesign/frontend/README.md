@@ -1,36 +1,23 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Paratech — frontend (Next.js)
 
-## Getting Started
+App de produção do site da Paratech: páginas públicas (Home, Catálogo, Contato) + painel `/admin`, num único deploy Next.js. Sem API separada — Server Components/Actions falam direto com o Postgres via Prisma.
 
-First, run the development server:
+Documentação completa (arquitetura, plano de deploy, checklist de entrega) está na raiz do repositório: [`DOCUMENTACAO.md`](../../DOCUMENTACAO.md), [`COMO-FINALIZAR-RAPIDO.md`](../../COMO-FINALIZAR-RAPIDO.md).
+
+## Rodando localmente
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install                        # roda "prisma generate" via postinstall
+# preencha .env.local com os valores reais (ver .env.example)
+npx prisma migrate dev --name init # só na primeira vez, cria as tabelas
+npm run db:seed                    # popula categorias/estoques/produtos iniciais
+npm run dev                        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variáveis de ambiente
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Ver [`.env.example`](.env.example). Nenhuma delas é commitada — só o `.env.example` (documentação, sem valores reais) fica versionado.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploy
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Configurado para Vercel (`vercel.json`, região `gru1`/São Paulo). O script `vercel-build` roda `prisma migrate deploy` antes do build, então migrations pendentes são aplicadas a cada deploy automaticamente — só funciona depois que o Postgres (Neon) estiver provisionado e `DATABASE_URL` configurado no projeto Vercel.

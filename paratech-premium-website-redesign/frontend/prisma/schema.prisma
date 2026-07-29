@@ -13,17 +13,33 @@ datasource db {
 }
 
 // Categoria de produto — carrega a identidade visual (gradiente c1→c2, accent,
-// glow) usada nos cards e tiles. O `id` é o slug (ex.: "laptops"). Gerenciada
-// só pelo seed: o admin não tem tela de CRUD de categoria (cada categoria tem
-// um ícone SVG desenhado à mão em components/icons/CategoryIcon.js).
+// glow) usada nos cards e tiles. O `id` é o slug (ex.: "laptops"), travado
+// após a criação (é FK de Product e vira hash da URL do Catálogo).
+// Gerenciada pelo admin (/admin/categorias). As 14 categorias originais têm
+// um ícone SVG desenhado à mão em components/icons/CategoryIcon.js indexado
+// pelo `id`; categorias novas usam um dos ícones genéricos de `iconKey`.
 model Category {
   id       String    @id
   label    String
+  tagline  String    @default("")
+  iconKey  String    @default("generic-box")
   c1       String
   c2       String
   accent   String
   glow     String
   products Product[]
+}
+
+// Conteúdo editável da Home e do Contato (hero, promoção, depoimentos,
+// galeria, infos de contato etc.) — uma linha JSON por seção em vez de uma
+// tabela rígida por seção, já que cada seção tem forma bem diferente (listas
+// de tiles, depoimentos, features). Gerenciado pelo admin (/admin/home,
+// /admin/contato); os defaults ficam em lib/site-content.js e são usados
+// caso a linha ainda não exista (banco novo, antes do seed rodar).
+model SiteContent {
+  section   String   @id
+  data      Json
+  updatedAt DateTime @updatedAt
 }
 
 // Estados de estoque com rótulo e cor (in-stock / low-stock / backorder).

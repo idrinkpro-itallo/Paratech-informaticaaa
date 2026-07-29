@@ -56,8 +56,9 @@ Login em `/admin` com a senha (`ADMIN_PASSWORD`). De lá:
 
 1. Repo já existe em `github.com/IDRINKPRO/paratechinfo` (branches `main`/`teste`) — sigo commitando na `teste` e você aprova o merge pra `main`.
 2. Se ainda não conectou o repositório do GitHub ao projeto Vercel durante o `vercel link` do Passo 1, isso dá pra fazer pelo painel Vercel ("Import Git Repository") — assim cada push na `main` vira deploy automático, e branches de preview ganham URL própria pra revisar antes de aprovar.
-3. Variáveis de ambiente de produção: as mesmas do Passo 1 (`DATABASE_URL`/equivalente, `BLOB_READ_WRITE_TOKEN`, `ADMIN_PASSWORD`, `SESSION_SECRET`) precisam existir no projeto Vercel — o `vercel env add` do Passo 1 já cuida disso se você rodou de dentro da pasta linkada.
-4. Primeiro deploy público eu só faço com sua confirmação na hora.
+3. Variáveis de ambiente de produção: as mesmas do Passo 1 (`DATABASE_URL`/equivalente, `BLOB_READ_WRITE_TOKEN`, `ADMIN_PASSWORD`, `SESSION_SECRET`) precisam existir no projeto Vercel — o `vercel env add` do Passo 1 já cuida disso se você rodou de dentro da pasta linkada. Sem `DATABASE_URL` válida o build falha de propósito (o script `vercel-build` roda `prisma migrate deploy` antes do `next build`), então este passo é bloqueante.
+4. `frontend/vercel.json` já fixa a região (`gru1`/São Paulo); framework é auto-detectado. Nenhuma configuração extra necessária no painel além das env vars.
+5. Primeiro deploy público eu só faço com sua confirmação na hora.
 
 ### Passo 5 — Domínio próprio
 

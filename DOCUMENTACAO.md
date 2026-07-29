@@ -54,6 +54,7 @@ paratechinfo/                              (raiz do git — remote único, ver s
         │   ├── schema.prisma              modelos: Category, StockStatus, Product, Lead (Postgres)
         │   └── seed.js                    popula a partir de lib/products-data.js — só a primeira vez
         ├── proxy.js                       protege /admin/* (checagem otimista de sessão)
+        ├── vercel.json                    config de deploy (framework, região gru1/São Paulo)
         └── .env.example                   variáveis necessárias (ver seção 4)
 ```
 
@@ -104,7 +105,7 @@ Nenhuma dessas variáveis é commitada — só `.env.example` (documentação, s
 | Painel admin (login + CRUD de produto + upload de foto) | ✅ Código pronto | Falta testar contra um banco/storage reais |
 | Banco de dados compatível com serverless | ⚠️ Schema pronto, não provisionado | `schema.prisma` já aponta pra `postgresql`; falta criar o Postgres (Neon via Vercel) e rodar a migration |
 | Storage de upload | ⚠️ Código pronto, não provisionado | Upload já usa Vercel Blob (`@vercel/blob`); falta criar o store |
-| Config de build/deploy | ✅ Não precisa de nada extra | Next.js é auto-detectado pela Vercel; `postinstall: prisma generate` já configurado |
+| Config de build/deploy | ✅ Pronto | `vercel.json` (framework, região `gru1`) + `postinstall: prisma generate` + `vercel-build: prisma migrate deploy && next build` (aplica migrations pendentes a cada deploy) |
 | Variáveis de ambiente de produção | ❌ Não definidas | Precisam ser criadas no projeto Vercel (seção 4) |
 | Autenticação do admin | ✅ Implementada | Sessão via cookie assinado (JWT/`jose`), senha única em `ADMIN_PASSWORD` |
 | Revisão visual no navegador | ⏳ Pendente | Código de produção pode e deve ser conferido no navegador (diferente dos protótipos `.dc.html`) |
