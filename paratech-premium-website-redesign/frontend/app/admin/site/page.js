@@ -1,5 +1,6 @@
 import { verifySession } from "@/lib/dal";
 import { getSiteContent } from "@/lib/site-content";
+import { getAllProducts, getActiveCategories } from "@/lib/products";
 import { logout } from "@/app/admin/actions";
 import AdminNav from "@/components/admin/AdminNav";
 import SiteEditor from "@/components/admin/SiteEditor";
@@ -9,9 +10,11 @@ export const metadata = { title: "Site | Admin" };
 
 export default async function AdminSitePage() {
   await verifySession();
-  const [home, contato] = await Promise.all([
+  const [home, contato, products, categories] = await Promise.all([
     getSiteContent("home"),
     getSiteContent("contato"),
+    getAllProducts(),
+    getActiveCategories(),
   ]);
 
   return (
@@ -29,7 +32,7 @@ export default async function AdminSitePage() {
 
       <AdminNav active="site" />
 
-      <SiteEditor initialHome={home} initialContato={contato} />
+      <SiteEditor initialHome={home} initialContato={contato} products={products} categories={categories} />
     </main>
   );
 }

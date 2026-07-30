@@ -57,6 +57,13 @@ export const homeContentSchema = z.object({
     .min(1, "Adicione ao menos um depoimento."),
   visitTitle: requiredText,
   visitSubtitle: requiredText,
+  featuredProductIds: z.array(z.number()).min(1, "Selecione ao menos um produto em destaque."),
+  features: z
+    .array(z.object({ title: requiredText, desc: requiredText }))
+    .length(8, "São 8 cards de diferenciais."),
+  gallery: z
+    .array(z.object({ url: z.string().trim(), caption: requiredText }))
+    .min(1, "Adicione ao menos uma foto na galeria."),
 });
 
 export const contatoContentSchema = z.object({

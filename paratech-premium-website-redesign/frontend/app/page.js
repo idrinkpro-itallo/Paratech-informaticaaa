@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import styles from "./page.module.css";
 import SiteHeader from "@/components/SiteHeader";
 import { SiteFooterFull } from "@/components/SiteFooter";
@@ -9,6 +10,7 @@ import StatsCounters from "@/components/home/StatsCounters";
 import TestimonialCarousel from "@/components/home/TestimonialCarousel";
 import PromoCountdown from "@/components/home/PromoCountdown";
 import HeroProductBanner from "@/components/home/HeroProductBanner";
+import { FEATURE_ICONS } from "@/components/home/FeatureIcons";
 import { WA_SALES, WA_SUPPORT, waLink } from "@/lib/products-data";
 import { getActiveCategories, getAllProducts } from "@/lib/products";
 import { getSiteContent } from "@/lib/site-content";
@@ -17,35 +19,13 @@ import { getSiteContent } from "@/lib/site-content";
 // data mais recente do banco em vez de congelar no build.
 export const dynamic = "force-dynamic";
 
-const FEATURED_PRODUCT_IDS = [1, 3, 10, 6];
-
-const FEATURES = [
-  { title: "Atendimento Especializado", desc: "Equipe técnica pronta para ajudar", iconBg: "rgba(227,6,19,.1)", icon: <div style={{ width: 18, height: 18, borderRadius: "50%", border: "3px solid #E30613" }} /> },
-  { title: "Produtos Originais", desc: "Qualidade garantida em cada item", iconBg: "rgba(255,212,0,.14)", icon: <div style={{ width: 18, height: 18, borderRadius: 4, background: "#FFD400" }} /> },
-  { title: "Garantia", desc: "Em todos os produtos e serviços", iconBg: "rgba(35,38,43,.08)", icon: <div style={{ width: 18, height: 18, border: "3px solid #23262B", borderRadius: "50%", borderTopColor: "transparent" }} /> },
-  { title: "Entrega Rápida", desc: "Receba no conforto da sua casa", iconBg: "rgba(227,6,19,.1)", icon: <div style={{ width: 0, height: 0, borderLeft: "10px solid transparent", borderRight: "10px solid transparent", borderBottom: "16px solid #E30613" }} /> },
-  { title: "Melhores Preços", desc: "Custo-benefício em toda a linha", iconBg: "rgba(255,212,0,.14)", icon: <div style={{ width: 20, height: 14, borderRadius: 3, border: "3px solid #FFD400" }} /> },
-  { title: "Suporte Técnico", desc: "Sempre que você precisar", iconBg: "rgba(35,38,43,.08)", icon: <div style={{ width: 16, height: 16, background: "#23262B", transform: "rotate(45deg)" }} /> },
-  { title: "Parcelamento Facilitado", desc: "Em até 10x no cartão", iconBg: "rgba(227,6,19,.1)", icon: <div style={{ width: 20, height: 14, borderRadius: 2, border: "3px solid #E30613" }} /> },
-  { title: "+15 Anos de Mercado", desc: "Tradição e confiança em Pará de Minas", iconBg: "rgba(255,212,0,.14)", icon: <div style={{ width: 18, height: 18, borderRadius: "50%", background: "#FFD400" }} /> },
-];
-
-const GALLERY_CAPTIONS = [
-  "foto: fachada da loja",
-  "foto: equipe técnica",
-  "foto: bancada de reparos",
-  "foto: showroom",
-  "foto: atendimento",
-  "foto: estoque",
-];
-
 export default async function HomePage() {
   const [categories, products, home] = await Promise.all([
     getActiveCategories(),
     getAllProducts(),
     getSiteContent("home"),
   ]);
-  const featuredProducts = FEATURED_PRODUCT_IDS
+  const featuredProducts = home.featuredProductIds
     .map((id) => products.find((p) => p.id === id))
     .filter(Boolean);
 
@@ -132,9 +112,11 @@ export default async function HomePage() {
           <h2 className={styles.sectionTitle}>Diferenciais que fazem a diferença</h2>
         </div>
         <div className={styles.featuresGrid}>
-          {FEATURES.map((f) => (
-            <div key={f.title} className={styles.featureCard}>
-              <div className={styles.featureIconWrap} style={{ background: f.iconBg }}>{f.icon}</div>
+          {home.features.map((f, i) => (
+            <div key={i} className={styles.featureCard}>
+              <div className={styles.featureIconWrap} style={{ background: FEATURE_ICONS[i].iconBg }}>
+                {FEATURE_ICONS[i].icon}
+              </div>
               <div className={styles.featureTitle}>{f.title}</div>
               <div className={styles.featureDesc}>{f.desc}</div>
             </div>
@@ -159,9 +141,22 @@ export default async function HomePage() {
           <h2 className={styles.sectionTitle}>Nossa loja e equipe</h2>
         </div>
         <div className={styles.galleryGrid}>
-          {GALLERY_CAPTIONS.map((caption) => (
-            <div key={caption} className={styles.galleryPlaceholder}>{caption}</div>
-          ))}
+          {home.gallery.map((photo, i) =>
+            photo.url ? (
+              <div key={i} className={styles.galleryPhoto}>
+                <Image
+                  src={photo.url}
+                  alt={photo.caption}
+                  fill
+                  sizes="(max-width: 640px) 50vw, 33vw"
+                  style={{ objectFit: "cover" }}
+                />
+                <span className={styles.galleryCaption}>{photo.caption}</span>
+              </div>
+            ) : (
+              <div key={i} className={styles.galleryPlaceholder}>{photo.caption}</div>
+            )
+          )}
         </div>
       </section>
 

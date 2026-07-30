@@ -265,3 +265,254 @@
   color: #9aa0a6;
   font-size: 13px;
 }
+
+.helpText {
+  font-size: 12px;
+  color: #9aa0a6;
+  margin: 0;
+}
+
+/* Device toggle (preview pane) */
+.previewLabel {
+  justify-content: space-between;
+}
+
+.deviceToggle {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 3px;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.deviceBtn {
+  background: transparent;
+  border: none;
+  color: #9aa0a6;
+  font-family: var(--font-sora), sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.deviceBtnActive {
+  background: #23262b;
+  color: #ffd400;
+}
+
+.phoneShell {
+  display: flex;
+  justify-content: center;
+  padding: 18px 0;
+  background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0 12px, transparent 12px 24px);
+  border-radius: 16px;
+}
+
+.previewFrameMobile {
+  max-width: 390px;
+  max-height: 720px;
+  border: 10px solid #16181b;
+  border-radius: 38px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  position: relative;
+}
+
+.previewFrameMobile::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 18px;
+  background: #16181b;
+  border-radius: 0 0 12px 12px;
+  z-index: 2;
+}
+
+/* Featured products picker */
+.productsPickerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.productPickCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.productPickToggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: #16181b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 10px 8px;
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+}
+
+.productPickActive .productPickToggle {
+  border-color: #25d366;
+  background: rgba(37, 211, 102, 0.08);
+}
+
+.productPickThumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: #23262b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #9aa0a6;
+  font-weight: 700;
+}
+
+.productPickImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.productPickName {
+  font-size: 11px;
+  color: #fff;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.productPickBadge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: #25d366;
+  color: #0b0d10;
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productPickReorder {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.productPickReorder button {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-radius: 6px;
+  padding: 3px 0;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.productPickReorder button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* Gallery editor */
+.galleryEditGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+.galleryEditCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.galleryThumb {
+  position: relative;
+  height: 100px;
+  border-radius: 10px;
+  background: #16181b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.galleryThumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.galleryThumbEmpty {
+  color: #9aa0a6;
+  font-size: 11px;
+}
+
+.galleryThumbPending {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Diferenciais (features) editor */
+.featuresEditGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.featureEditCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #16181b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.featureEditIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uploadBtn {
+  background: rgba(255, 212, 0, 0.12);
+  border: 1px solid rgba(255, 212, 0, 0.4);
+  color: #ffd400;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-weight: 700;
+  font-size: 11px;
+  text-align: center;
+  cursor: pointer;
+}

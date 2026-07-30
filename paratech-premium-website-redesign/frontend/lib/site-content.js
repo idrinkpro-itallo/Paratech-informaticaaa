@@ -38,6 +38,25 @@ export const HOME_CONTENT_DEFAULT = {
   ],
   visitTitle: "Vem tomar um café e ver de perto",
   visitSubtitle: "R. Nova Serrana, 31, Loja — Nossa Sra. de Lourdes, Pará de Minas/MG",
+  featuredProductIds: [1, 3, 10, 6],
+  features: [
+    { title: "Atendimento Especializado", desc: "Equipe técnica pronta para ajudar" },
+    { title: "Produtos Originais", desc: "Qualidade garantida em cada item" },
+    { title: "Garantia", desc: "Em todos os produtos e serviços" },
+    { title: "Entrega Rápida", desc: "Receba no conforto da sua casa" },
+    { title: "Melhores Preços", desc: "Custo-benefício em toda a linha" },
+    { title: "Suporte Técnico", desc: "Sempre que você precisar" },
+    { title: "Parcelamento Facilitado", desc: "Em até 10x no cartão" },
+    { title: "+15 Anos de Mercado", desc: "Tradição e confiança em Pará de Minas" },
+  ],
+  gallery: [
+    { url: "", caption: "foto: fachada da loja" },
+    { url: "", caption: "foto: equipe técnica" },
+    { url: "", caption: "foto: bancada de reparos" },
+    { url: "", caption: "foto: showroom" },
+    { url: "", caption: "foto: atendimento" },
+    { url: "", caption: "foto: estoque" },
+  ],
 };
 
 export const CONTATO_CONTENT_DEFAULT = {

@@ -613,6 +613,24 @@
   text-align: center;
   padding: 12px;
 }
+.galleryPhoto {
+  position: relative;
+  height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #16181b;
+}
+.galleryCaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px 14px 10px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+}
 
 /* ── Visit CTA ───────────────────────────────────────────────────────── */
 .visitSection {

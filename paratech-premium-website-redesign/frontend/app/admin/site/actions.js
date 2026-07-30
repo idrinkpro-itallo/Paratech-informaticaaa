@@ -1,12 +1,40 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { put } from "@vercel/blob";
 import { verifySession } from "@/lib/dal";
 import { saveSiteContent } from "@/lib/site-content";
 import { homeContentSchema, contatoContentSchema } from "@/lib/validators";
 
 const SCHEMAS = { home: homeContentSchema, contato: contatoContentSchema };
 const REVALIDATE_PATHS = { home: ["/"], contato: ["/contato"] };
+
+const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
+// Upload isolado (fora do save de conteúdo, que trafega JSON): a foto sobe
+// pro Blob assim que escolhida, e a URL fica só no estado do formulário até
+// "Publicar alterações" gravar o conteúdo inteiro.
+export async function uploadGalleryPhotoAction(formData) {
+  await verifySession();
+
+  const file = formData.get("photo");
+  if (!file || typeof file === "string" || file.size === 0) {
+    return { error: "Selecione uma imagem." };
+  }
+  if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
+    return { error: "Formato de imagem inválido. Envie JPEG, PNG, WEBP ou GIF." };
+  }
+  if (file.size > MAX_IMAGE_BYTES) {
+    return { error: "Imagem maior que 5 MB." };
+  }
+
+  const blob = await put(`site/galeria/${Date.now()}-${file.name}`, file, {
+    access: "public",
+    addRandomSuffix: true,
+  });
+  return { ok: true, url: blob.url };
+}
 
 export async function saveSiteContentAction(section, payload) {
   await verifySession();

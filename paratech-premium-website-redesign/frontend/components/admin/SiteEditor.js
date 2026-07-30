@@ -1,18 +1,24 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { saveSiteContentAction } from "@/app/admin/site/actions";
+import { saveSiteContentAction, uploadGalleryPhotoAction } from "@/app/admin/site/actions";
+import HeroProductBanner from "@/components/home/HeroProductBanner";
+import { FEATURE_ICONS } from "@/components/home/FeatureIcons";
+import ProductCard from "@/components/ProductCard";
+import CategoryTile from "@/components/CategoryTile";
+import { SiteFooterFull } from "@/components/SiteFooter";
 import pageStyles from "@/app/page.module.css";
 import contatoStyles from "@/components/contato/Contato.module.css";
 import styles from "./SiteEditor.module.css";
 
 const emptyTestimonial = () => ({ text: "", name: "", role: "Cliente Paratech", initial: "" });
 
-export default function SiteEditor({ initialHome, initialContato }) {
+export default function SiteEditor({ initialHome, initialContato, products = [], categories = [] }) {
   const [section, setSection] = useState("home");
   const [home, setHome] = useState(initialHome);
   const [contato, setContato] = useState(initialContato);
   const [status, setStatus] = useState({ home: null, contato: null });
+  const [device, setDevice] = useState("desktop");
   const [pending, startTransition] = useTransition();
 
   const data = section === "home" ? home : contato;
@@ -61,15 +67,39 @@ export default function SiteEditor({ initialHome, initialContato }) {
       <div className={styles.split}>
         <div className={styles.formPane}>
           {section === "home" ? (
-            <HomeForm home={home} setHome={setHome} />
+            <HomeForm home={home} setHome={setHome} products={products} />
           ) : (
             <ContatoForm contato={contato} setContato={setContato} />
           )}
         </div>
         <div className={styles.previewPane}>
-          <div className={styles.previewLabel}>Pré-visualização em tempo real</div>
-          <div className={styles.previewFrame}>
-            {section === "home" ? <HomePreview home={home} /> : <ContatoPreview contato={contato} />}
+          <div className={styles.previewLabel}>
+            Pré-visualização em tempo real
+            <div className={styles.deviceToggle}>
+              <button
+                type="button"
+                className={`${styles.deviceBtn} ${device === "desktop" ? styles.deviceBtnActive : ""}`}
+                onClick={() => setDevice("desktop")}
+              >
+                Desktop
+              </button>
+              <button
+                type="button"
+                className={`${styles.deviceBtn} ${device === "mobile" ? styles.deviceBtnActive : ""}`}
+                onClick={() => setDevice("mobile")}
+              >
+                Mobile
+              </button>
+            </div>
+          </div>
+          <div className={device === "mobile" ? styles.phoneShell : undefined}>
+            <div className={`${styles.previewFrame} ${device === "mobile" ? styles.previewFrameMobile : ""}`}>
+              {section === "home" ? (
+                <HomePreview home={home} products={products} categories={categories} />
+              ) : (
+                <ContatoPreview contato={contato} />
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -95,7 +125,7 @@ function Section({ title, children }) {
   );
 }
 
-function HomeForm({ home, setHome }) {
+function HomeForm({ home, setHome, products }) {
   const set = (key) => (e) => setHome((h) => ({ ...h, [key]: e.target.value }));
 
   const setStat = (index, key) => (e) =>
@@ -112,6 +142,12 @@ function HomeForm({ home, setHome }) {
   const addBanner = () => setHome((h) => ({ ...h, bannerMessages: [...h.bannerMessages, "Nova mensagem"] }));
   const removeBanner = (index) =>
     setHome((h) => ({ ...h, bannerMessages: h.bannerMessages.filter((_, i) => i !== index) }));
+
+  const setFeature = (index, key) => (e) =>
+    setHome((h) => ({
+      ...h,
+      features: h.features.map((f, i) => (i === index ? { ...f, [key]: e.target.value } : f)),
+    }));
 
   const setTestimonial = (index, key) => (e) =>
     setHome((h) => ({
@@ -153,6 +189,18 @@ function HomeForm({ home, setHome }) {
             <input className={styles.input} value={home.ctaCatalogLabel} onChange={set("ctaCatalogLabel")} />
           </Field>
         </div>
+      </Section>
+
+      <Section title="Produtos em destaque (banner do hero)">
+        <p className={styles.helpText}>
+          Escolha quais produtos giram nos cards do hero da Home. Clique para selecionar; a ordem de seleção define
+          a ordem de exibição — use as setas para reordenar.
+        </p>
+        <FeaturedProductsPicker
+          products={products}
+          featuredProductIds={home.featuredProductIds}
+          setHome={setHome}
+        />
       </Section>
 
       <Section title="Faixa de destaques (rotativa)">
@@ -240,6 +288,36 @@ function HomeForm({ home, setHome }) {
         <button type="button" className={styles.addBtn} onClick={addTestimonial}>+ Adicionar depoimento</button>
       </Section>
 
+      <Section title="Diferenciais (por que a Paratech)">
+        <p className={styles.helpText}>Os 8 cards ficam na mesma ordem/ícone; só o texto é editável.</p>
+        <div className={styles.featuresEditGrid}>
+          {home.features.map((f, i) => (
+            <div key={i} className={styles.featureEditCard}>
+              <div className={styles.featureEditIcon} style={{ background: FEATURE_ICONS[i].iconBg }}>
+                {FEATURE_ICONS[i].icon}
+              </div>
+              <input
+                className={styles.input}
+                placeholder="Título"
+                value={f.title}
+                onChange={setFeature(i, "title")}
+              />
+              <input
+                className={styles.input}
+                placeholder="Descrição"
+                value={f.desc}
+                onChange={setFeature(i, "desc")}
+              />
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Galeria de fotos">
+        <p className={styles.helpText}>Envie as fotos da loja/equipe. Sem foto, o slot mostra só a legenda.</p>
+        <GalleryEditor gallery={home.gallery} setHome={setHome} />
+      </Section>
+
       <Section title="Visite a loja">
         <Field label="Título">
           <input className={styles.input} value={home.visitTitle} onChange={set("visitTitle")} />
@@ -249,6 +327,133 @@ function HomeForm({ home, setHome }) {
         </Field>
       </Section>
     </>
+  );
+}
+
+function FeaturedProductsPicker({ products, featuredProductIds, setHome }) {
+  const toggle = (id) =>
+    setHome((h) => {
+      const has = h.featuredProductIds.includes(id);
+      return {
+        ...h,
+        featuredProductIds: has
+          ? h.featuredProductIds.filter((x) => x !== id)
+          : [...h.featuredProductIds, id],
+      };
+    });
+
+  const move = (id, dir) =>
+    setHome((h) => {
+      const ids = [...h.featuredProductIds];
+      const i = ids.indexOf(id);
+      const j = i + dir;
+      if (j < 0 || j >= ids.length) return h;
+      [ids[i], ids[j]] = [ids[j], ids[i]];
+      return { ...h, featuredProductIds: ids };
+    });
+
+  if (!products.length) {
+    return <p className={styles.helpText}>Nenhum produto cadastrado ainda.</p>;
+  }
+
+  return (
+    <div className={styles.productsPickerGrid}>
+      {products.map((p) => {
+        const order = featuredProductIds.indexOf(p.id);
+        const selected = order !== -1;
+        return (
+          <div key={p.id} className={`${styles.productPickCard} ${selected ? styles.productPickActive : ""}`}>
+            <button type="button" className={styles.productPickToggle} onClick={() => toggle(p.id)}>
+              <span className={styles.productPickThumb}>
+                {p.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={p.imageUrl} alt="" className={styles.productPickImg} />
+                ) : (
+                  p.name.slice(0, 1)
+                )}
+              </span>
+              <span className={styles.productPickName}>{p.name}</span>
+              {selected && <span className={styles.productPickBadge}>{order + 1}</span>}
+            </button>
+            {selected && (
+              <div className={styles.productPickReorder}>
+                <button type="button" onClick={() => move(p.id, -1)} disabled={order === 0}>↑</button>
+                <button type="button" onClick={() => move(p.id, 1)} disabled={order === featuredProductIds.length - 1}>↓</button>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function GalleryEditor({ gallery, setHome }) {
+  const setCaption = (i) => (e) =>
+    setHome((h) => ({ ...h, gallery: h.gallery.map((g, idx) => (idx === i ? { ...g, caption: e.target.value } : g)) }));
+  const setUrl = (i, url) =>
+    setHome((h) => ({ ...h, gallery: h.gallery.map((g, idx) => (idx === i ? { ...g, url } : g)) }));
+  const addPhoto = () => setHome((h) => ({ ...h, gallery: [...h.gallery, { url: "", caption: "foto: nova imagem" }] }));
+  const removePhoto = (i) => setHome((h) => ({ ...h, gallery: h.gallery.filter((_, idx) => idx !== i) }));
+
+  return (
+    <>
+      <div className={styles.galleryEditGrid}>
+        {gallery.map((photo, i) => (
+          <GalleryUploadSlot
+            key={i}
+            photo={photo}
+            onCaptionChange={setCaption(i)}
+            onUploaded={(url) => setUrl(i, url)}
+            onRemove={() => removePhoto(i)}
+            disableRemove={gallery.length <= 1}
+          />
+        ))}
+      </div>
+      <button type="button" className={styles.addBtn} onClick={addPhoto}>+ Adicionar foto</button>
+    </>
+  );
+}
+
+function GalleryUploadSlot({ photo, onCaptionChange, onUploaded, onRemove, disableRemove }) {
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState(null);
+
+  const handleFile = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setError(null);
+    const formData = new FormData();
+    formData.set("photo", file);
+    startTransition(async () => {
+      const result = await uploadGalleryPhotoAction(formData);
+      if (result.error) setError(result.error);
+      else onUploaded(result.url);
+    });
+    e.target.value = "";
+  };
+
+  return (
+    <div className={styles.galleryEditCard}>
+      <div className={styles.galleryThumb}>
+        {photo.url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={photo.url} alt="" className={styles.galleryThumbImg} />
+        ) : (
+          <span className={styles.galleryThumbEmpty}>Sem foto</span>
+        )}
+        {pending && <span className={styles.galleryThumbPending}>Enviando...</span>}
+      </div>
+      <label className={styles.uploadBtn}>
+        {photo.url ? "Trocar foto" : "Enviar foto"}
+        <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={handleFile} hidden />
+      </label>
+      <input className={styles.input} placeholder="Legenda" value={photo.caption} onChange={onCaptionChange} />
+      {error && <span className={styles.statusError}>{error}</span>}
+      <button type="button" className={styles.removeBtn} onClick={onRemove} disabled={disableRemove}>
+        Remover
+      </button>
+    </div>
   );
 }
 
@@ -296,7 +501,11 @@ function ContatoForm({ contato, setContato }) {
   );
 }
 
-function HomePreview({ home }) {
+function HomePreview({ home, products, categories }) {
+  const featuredProducts = home.featuredProductIds
+    .map((id) => products.find((p) => p.id === id))
+    .filter(Boolean);
+
   return (
     <div className={pageStyles.hero} style={{ position: "relative", overflow: "hidden", borderRadius: 16 }}>
       <div className={pageStyles.heroGrid} aria-hidden="true" />
@@ -331,7 +540,60 @@ function HomePreview({ home }) {
             ))}
           </div>
         </div>
+
+        <HeroProductBanner products={featuredProducts} />
       </div>
+
+      {categories.length > 0 && (
+        <section className={pageStyles.categoriesSection}>
+          <div className={pageStyles.sectionHead}>
+            <div className={pageStyles.eyebrow}>CATEGORIAS</div>
+            <h2 className={pageStyles.sectionTitle}>Encontre o que sua empresa precisa</h2>
+          </div>
+          <div className={pageStyles.categoriesGrid}>
+            {categories.map((c) => (
+              <CategoryTile key={c.id} category={c} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {featuredProducts.length > 0 && (
+        <section className={pageStyles.featuredSection}>
+          <div className={pageStyles.featuredInner}>
+            <div className={pageStyles.featuredHead}>
+              <div>
+                <div className={pageStyles.eyebrow}>PRODUTOS EM DESTAQUE</div>
+                <h2 className={pageStyles.sectionTitle}>Os mais procurados</h2>
+              </div>
+              <span className={pageStyles.viewAllLink}>Ver catálogo completo →</span>
+            </div>
+            <div className={pageStyles.productsGrid}>
+              {featuredProducts.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className={pageStyles.featuresSection}>
+        <div className={pageStyles.sectionHead}>
+          <div className={pageStyles.eyebrow}>POR QUE A PARATECH</div>
+          <h2 className={pageStyles.sectionTitle}>Diferenciais que fazem a diferença</h2>
+        </div>
+        <div className={pageStyles.featuresGrid}>
+          {home.features.map((f, i) => (
+            <div key={i} className={pageStyles.featureCard}>
+              <div className={pageStyles.featureIconWrap} style={{ background: FEATURE_ICONS[i].iconBg }}>
+                {FEATURE_ICONS[i].icon}
+              </div>
+              <div className={pageStyles.featureTitle}>{f.title}</div>
+              <div className={pageStyles.featureDesc}>{f.desc}</div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <section className={pageStyles.numbersSection}>
         <div className={pageStyles.numbersGrid}>
@@ -397,6 +659,30 @@ function HomePreview({ home }) {
         </div>
       </section>
 
+      <section className={pageStyles.gallerySection}>
+        <div className={pageStyles.sectionHead}>
+          <div className={pageStyles.eyebrow}>GALERIA</div>
+          <h2 className={pageStyles.sectionTitle}>Nossa loja e equipe</h2>
+        </div>
+        <div className={pageStyles.galleryGrid}>
+          {home.gallery.map((photo, i) =>
+            photo.url ? (
+              <div key={i} className={pageStyles.galleryPhoto}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={photo.url}
+                  alt={photo.caption}
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+                />
+                <span className={pageStyles.galleryCaption}>{photo.caption}</span>
+              </div>
+            ) : (
+              <div key={i} className={pageStyles.galleryPlaceholder}>{photo.caption}</div>
+            )
+          )}
+        </div>
+      </section>
+
       <section className={pageStyles.visitSection}>
         <div className={pageStyles.visitRow}>
           <div>
@@ -409,6 +695,8 @@ function HomePreview({ home }) {
           </div>
         </div>
       </section>
+
+      <SiteFooterFull categories={categories} />
     </div>
   );
 }
