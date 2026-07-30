@@ -11,9 +11,10 @@ import PromoCountdown from "@/components/home/PromoCountdown";
 import HeroProductBanner from "@/components/home/HeroProductBanner";
 import { WA_SALES, WA_SUPPORT, waLink } from "@/lib/products-data";
 import { getActiveCategories, getAllProducts } from "@/lib/products";
+import { getSiteContent } from "@/lib/site-content";
 
-// Catálogo é gerenciado pelo /admin — mantém sempre a data mais recente do
-// banco em vez de congelar no build.
+// Catálogo e conteúdo editável são gerenciados pelo /admin — mantém sempre a
+// data mais recente do banco em vez de congelar no build.
 export const dynamic = "force-dynamic";
 
 const FEATURED_PRODUCT_IDS = [1, 3, 10, 6];
@@ -39,7 +40,11 @@ const GALLERY_CAPTIONS = [
 ];
 
 export default async function HomePage() {
-  const [categories, products] = await Promise.all([getActiveCategories(), getAllProducts()]);
+  const [categories, products, home] = await Promise.all([
+    getActiveCategories(),
+    getAllProducts(),
+    getSiteContent("home"),
+  ]);
   const featuredProducts = FEATURED_PRODUCT_IDS
     .map((id) => products.find((p) => p.id === id))
     .filter(Boolean);
@@ -55,42 +60,36 @@ export default async function HomePage() {
 
         <div className={styles.heroInner}>
           <div className={styles.bannerStrip}>
-            <span className={styles.bannerSlide} style={{ animationDelay: "0s" }}>Entrega rápida em Pará de Minas e região</span>
-            <span className={styles.bannerSlide} style={{ animationDelay: "3s" }}>Atendimento direto pelo WhatsApp, sem robô</span>
-            <span className={styles.bannerSlide} style={{ animationDelay: "6s" }}>+15 anos de experiência em tecnologia</span>
+            {home.bannerMessages.map((msg, i) => (
+              <span key={i} className={styles.bannerSlide} style={{ animationDelay: `${i * 3}s` }}>{msg}</span>
+            ))}
           </div>
           <div>
-            <div className={styles.badge}>TECNOLOGIA · PARÁ DE MINAS/MG</div>
+            <div className={styles.badge}>{home.heroKicker}</div>
             <h1 className={styles.heroTitle}>
-              A Tecnologia que <span style={{ color: "#E30613" }}>Move</span> o seu <span style={{ color: "#FFD400" }}>Negócio</span>.
+              {home.heroTitleBefore} <span style={{ color: "#E30613" }}>{home.heroTitleRed}</span> {home.heroTitleMiddle}{" "}
+              <span style={{ color: "#FFD400" }}>{home.heroTitleYellow}</span>
+              {home.heroTitleAfter}
             </h1>
-            <p className={styles.heroLead}>
-              Notebooks, computadores, periféricos, impressoras e acessórios com atendimento especializado e entrega rápida. Peça pelo WhatsApp e receba sem sair de casa.
-            </p>
+            <p className={styles.heroLead}>{home.heroLead}</p>
             <div className={styles.ctaRow}>
               <a
-                href={waLink(WA_SALES, "Olá! Quero falar sobre produtos da Paratech.")}
+                href={waLink(WA_SALES, home.ctaWhatsMessage)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.ctaWhats}
               >
                 Falar no WhatsApp
               </a>
-              <Link href="/catalogo" className={styles.ctaCatalog}>Ver Catálogo</Link>
+              <Link href="/catalogo" className={styles.ctaCatalog}>{home.ctaCatalogLabel}</Link>
             </div>
             <div className={styles.statsRow}>
-              <div>
-                <div className={styles.statNum}>+15 anos</div>
-                <div className={styles.statLabel}>de mercado</div>
-              </div>
-              <div>
-                <div className={styles.statNum}>+10.000</div>
-                <div className={styles.statLabel}>clientes atendidos</div>
-              </div>
-              <div>
-                <div className={styles.statNum}>98%</div>
-                <div className={styles.statLabel}>satisfação</div>
-              </div>
+              {home.heroStats.map((s, i) => (
+                <div key={i}>
+                  <div className={styles.statNum}>{s.value}</div>
+                  <div className={styles.statLabel}>{s.label}</div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -143,11 +142,16 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <StatsCounters />
+      <StatsCounters targets={home.countersTargets} />
 
-      <PromoCountdown />
+      <PromoCountdown
+        badge={home.promoBadge}
+        title={home.promoTitle}
+        text={home.promoText}
+        ctaLabel={home.promoCtaLabel}
+      />
 
-      <TestimonialCarousel />
+      <TestimonialCarousel testimonials={home.testimonials} />
 
       <section className={styles.gallerySection}>
         <div className={styles.sectionHead}>
@@ -164,8 +168,8 @@ export default async function HomePage() {
       <section className={styles.visitSection}>
         <div className={styles.visitRow}>
           <div>
-            <h3 className={styles.visitTitle}>Vem tomar um café e ver de perto</h3>
-            <p className={styles.visitSubtitle}>R. Nova Serrana, 31, Loja — Nossa Sra. de Lourdes, Pará de Minas/MG</p>
+            <h3 className={styles.visitTitle}>{home.visitTitle}</h3>
+            <p className={styles.visitSubtitle}>{home.visitSubtitle}</p>
           </div>
           <div className={styles.visitButtons}>
             <Link href="/contato" className={styles.visitMapBtn}>Ver no mapa</Link>

@@ -17,3 +17,55 @@ export const productFormSchema = z.object({
   tag: z.preprocess((v) => (v === "" ? null : v), z.enum(TAGS).nullable().optional()),
   brand: z.string().optional(),
 });
+
+// Validação do conteúdo editável de Home/Contato (painel /admin/site).
+const requiredText = z.string().trim().min(1, "Campo obrigatório.");
+
+export const homeContentSchema = z.object({
+  heroKicker: requiredText,
+  heroTitleBefore: requiredText,
+  heroTitleRed: requiredText,
+  heroTitleMiddle: requiredText,
+  heroTitleYellow: requiredText,
+  heroTitleAfter: z.string().trim(),
+  heroLead: requiredText,
+  ctaWhatsMessage: requiredText,
+  ctaCatalogLabel: requiredText,
+  bannerMessages: z.array(requiredText).min(1, "Adicione ao menos uma mensagem."),
+  heroStats: z
+    .array(z.object({ value: requiredText, label: requiredText }))
+    .length(3, "São 3 blocos de estatística."),
+  countersTargets: z.object({
+    clientes: numberFromForm(z.number().nonnegative()),
+    anos: numberFromForm(z.number().nonnegative()),
+    vendidos: numberFromForm(z.number().nonnegative()),
+    satisfacao: numberFromForm(z.number().nonnegative()),
+  }),
+  promoBadge: requiredText,
+  promoTitle: requiredText,
+  promoText: requiredText,
+  promoCtaLabel: requiredText,
+  testimonials: z
+    .array(
+      z.object({
+        text: requiredText,
+        name: requiredText,
+        role: requiredText,
+        initial: z.string().trim().min(1).max(3),
+      })
+    )
+    .min(1, "Adicione ao menos um depoimento."),
+  visitTitle: requiredText,
+  visitSubtitle: requiredText,
+});
+
+export const contatoContentSchema = z.object({
+  heroEyebrow: requiredText,
+  heroTitle: requiredText,
+  address: requiredText,
+  phone: requiredText,
+  phoneHref: requiredText,
+  email: z.string().trim().email("E-mail inválido."),
+  hours: requiredText,
+  mapEmbedUrl: z.string().trim().url("URL do mapa inválida."),
+});

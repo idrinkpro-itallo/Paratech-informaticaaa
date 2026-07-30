@@ -3,9 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "@/app/page.module.css";
 
-const TARGETS = { clientes: 10000, anos: 15, vendidos: 50000, satisfacao: 98 };
-
-export default function StatsCounters() {
+export default function StatsCounters({ targets }) {
   const ref = useRef(null);
   const rafRef = useRef(null);
   const startedRef = useRef(false);
@@ -22,10 +20,10 @@ export default function StatsCounters() {
         const t = Math.min(1, (now - start) / duration);
         const ease = 1 - Math.pow(1 - t, 3);
         setCounters({
-          clientes: Math.round(TARGETS.clientes * ease),
-          anos: Math.round(TARGETS.anos * ease),
-          vendidos: Math.round(TARGETS.vendidos * ease),
-          satisfacao: Math.round(TARGETS.satisfacao * ease),
+          clientes: Math.round(targets.clientes * ease),
+          anos: Math.round(targets.anos * ease),
+          vendidos: Math.round(targets.vendidos * ease),
+          satisfacao: Math.round(targets.satisfacao * ease),
         });
         if (t < 1) rafRef.current = requestAnimationFrame(tick);
       };
@@ -47,7 +45,7 @@ export default function StatsCounters() {
       observer.disconnect();
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [targets.clientes, targets.anos, targets.vendidos, targets.satisfacao]);
 
   return (
     <section ref={ref} className={styles.numbersSection}>

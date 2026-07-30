@@ -9,7 +9,7 @@ import { WA_SUPPORT } from "@/lib/products-data";
 
 const ASSUNTOS = ["Orçamento", "Assistência", "Dúvida", "Outro"];
 
-export default function ContatoClient() {
+export default function ContatoClient({ content }) {
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [assunto, setAssunto] = useState("Orçamento");
@@ -26,8 +26,8 @@ export default function ContatoClient() {
       <SiteHeader active="contato" />
 
       <section className={styles.hero}>
-        <div className={styles.eyebrow}>FALE COM A PARATECH</div>
-        <h1 className={styles.title}>Estamos prontos para te atender</h1>
+        <div className={styles.eyebrow}>{content.heroEyebrow}</div>
+        <h1 className={styles.title}>{content.heroTitle}</h1>
       </section>
 
       <section className={styles.content}>
@@ -39,22 +39,25 @@ export default function ContatoClient() {
                 <div>
                   <div className={styles.infoLabel}>Endereço</div>
                   <div className={styles.infoValue}>
-                    R. Nova Serrana, 31, Loja — N. Sra. de Lourdes
-                    <br />
-                    Pará de Minas/MG — CEP 35.660-178
+                    {content.address.split("\n").map((line, i) => (
+                      <span key={i}>
+                        {line}
+                        {i < content.address.split("\n").length - 1 && <br />}
+                      </span>
+                    ))}
                   </div>
                 </div>
                 <div>
                   <div className={styles.infoLabel}>Telefone</div>
-                  <a href="tel:+553732372355" className={styles.infoLink}>(37) 3237-2355</a>
+                  <a href={`tel:${content.phoneHref}`} className={styles.infoLink}>{content.phone}</a>
                 </div>
                 <div>
                   <div className={styles.infoLabel}>E-mail</div>
-                  <a href="mailto:arjtech@hotmail.com" className={styles.infoLink}>arjtech@hotmail.com</a>
+                  <a href={`mailto:${content.email}`} className={styles.infoLink}>{content.email}</a>
                 </div>
                 <div>
                   <div className={styles.infoLabel}>Horário de atendimento</div>
-                  <div className={styles.infoValue}>Segunda a Sábado — 8h às 18h</div>
+                  <div className={styles.infoValue}>{content.hours}</div>
                 </div>
               </div>
               <a
@@ -69,7 +72,7 @@ export default function ContatoClient() {
             <div className={styles.mapCard}>
               <iframe
                 title="Mapa Paratech"
-                src="https://www.google.com/maps?q=R.+Nova+Serrana,31,Para+de+Minas,MG&output=embed"
+                src={content.mapEmbedUrl}
                 loading="lazy"
                 className={styles.mapFrame}
               />

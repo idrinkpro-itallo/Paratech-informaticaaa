@@ -5,6 +5,7 @@ import { getAllProducts } from "@/lib/products";
 import { CATEGORY_META, formatPrice } from "@/lib/products-data";
 import { logout } from "./actions";
 import DeleteButton from "@/components/admin/DeleteButton";
+import AdminNav from "@/components/admin/AdminNav";
 import styles from "./Admin.module.css";
 
 export const metadata = { title: "Admin" };
@@ -26,6 +27,8 @@ export default async function AdminPage() {
           </form>
         </div>
       </header>
+
+      <AdminNav active="produtos" />
 
       <div className={styles.tableWrap}>
         <table className={styles.table}>

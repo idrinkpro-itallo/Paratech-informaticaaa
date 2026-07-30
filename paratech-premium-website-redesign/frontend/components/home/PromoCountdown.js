@@ -6,7 +6,7 @@ import styles from "@/app/page.module.css";
 
 const pad = (n) => String(n).padStart(2, "0");
 
-export default function PromoCountdown() {
+export default function PromoCountdown({ badge, title, text, ctaLabel }) {
   const targetRef = useRef(null);
   const [countdown, setCountdown] = useState({ d: 0, h: 0, m: 0, s: 0 });
 
@@ -33,12 +33,10 @@ export default function PromoCountdown() {
       <div className={styles.promoStripes} aria-hidden="true" />
       <div className={styles.promoGrid}>
         <div>
-          <div className={styles.promoBadge}>OFERTA POR TEMPO LIMITADO</div>
-          <h2 className={styles.promoTitle}>Semana da Tecnologia Paratech</h2>
-          <p className={styles.promoText}>
-            Até 25% OFF em notebooks, SSDs, memórias e impressoras selecionadas. Estoque limitado.
-          </p>
-          <Link href="/catalogo" className={styles.promoCta}>Aproveitar agora</Link>
+          <div className={styles.promoBadge}>{badge}</div>
+          <h2 className={styles.promoTitle}>{title}</h2>
+          <p className={styles.promoText}>{text}</p>
+          <Link href="/catalogo" className={styles.promoCta}>{ctaLabel}</Link>
         </div>
         <div className={styles.countdownRow}>
           <div className={styles.countdownBox}>

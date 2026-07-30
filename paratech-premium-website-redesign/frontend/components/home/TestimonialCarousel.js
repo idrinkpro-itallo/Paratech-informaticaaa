@@ -3,24 +3,18 @@
 import { useEffect, useState } from "react";
 import styles from "@/app/page.module.css";
 
-const TESTIMONIALS = [
-  { text: "Comprei meu notebook e o atendimento foi excelente. Entrega rápida e produto original.", name: "Marcos Silva", role: "Cliente Paratech", initial: "MS" },
-  { text: "A assistência técnica resolveu meu computador no mesmo dia. Recomendo demais!", name: "Fernanda Oliveira", role: "Cliente Paratech", initial: "FO" },
-  { text: "Melhores preços da região em SSD e memórias. Já é a segunda compra que faço.", name: "Rafael Costa", role: "Cliente Paratech", initial: "RC" },
-];
-
-export default function TestimonialCarousel() {
+export default function TestimonialCarousel({ testimonials }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % TESTIMONIALS.length);
+      setIndex((i) => (i + 1) % testimonials.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [testimonials.length]);
 
-  const t = TESTIMONIALS[index];
+  const t = testimonials[index];
 
   return (
     <section className={styles.testimonialsSection}>
@@ -39,7 +33,7 @@ export default function TestimonialCarousel() {
           </div>
         </div>
         <div className={styles.dotsRow} role="tablist" aria-label="Depoimentos">
-          {TESTIMONIALS.map((item, i) => (
+          {testimonials.map((item, i) => (
             <button
               key={item.name}
               type="button"
