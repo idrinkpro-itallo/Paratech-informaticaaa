@@ -64,6 +64,16 @@ export const homeContentSchema = z.object({
   gallery: z
     .array(z.object({ url: z.string().trim(), caption: requiredText }))
     .min(1, "Adicione ao menos uma foto na galeria."),
+  sections: z.object({
+    categorias: z.boolean(),
+    destaque: z.boolean(),
+    diferenciais: z.boolean(),
+    contadores: z.boolean(),
+    promocao: z.boolean(),
+    depoimentos: z.boolean(),
+    galeria: z.boolean(),
+    visite: z.boolean(),
+  }),
 });
 
 export const contatoContentSchema = z.object({

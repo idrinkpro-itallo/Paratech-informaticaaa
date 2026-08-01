@@ -1,5 +1,10 @@
 .wrap {
+  /* 100vh no celular conta com a altura da tela sem a barra de endereço —
+     sobra uma faixa em branco embaixo até a barra recolher. 100dvh segue a
+     altura visível de verdade; a linha de cima fica de fallback pra
+     navegadores sem suporte a dvh. */
   min-height: 100vh;
+  min-height: 100dvh;
   background: #0b0d10;
   color: #fff;
   padding: 32px;
@@ -139,4 +144,118 @@
   padding: 32px;
   text-align: center;
   color: #9aa0a6;
+}
+
+@media (max-width: 640px) {
+  .wrap {
+    padding: 16px;
+  }
+
+  .logo {
+    font-size: 17px;
+  }
+
+  .newBtn,
+  .logoutBtn {
+    padding: 9px 12px;
+    font-size: 12px;
+  }
+
+  .tabs {
+    gap: 2px;
+  }
+
+  .tab {
+    padding: 9px 12px;
+    font-size: 12px;
+  }
+
+  /* Lista de produtos mobile-first: tabela vira uma pilha de cards em vez
+     de exigir rolagem horizontal, que é ruim de usar com o polegar. */
+  .tableWrap {
+    background: transparent;
+    border: none;
+    overflow-x: visible;
+  }
+
+  .table,
+  .table tbody {
+    display: block;
+    width: 100%;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .productRow {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  .table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 0;
+    border-bottom: none;
+    white-space: normal;
+  }
+
+  .table td[data-label]::before {
+    content: attr(data-label);
+    color: #9aa0a6;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    flex-shrink: 0;
+  }
+
+  .table td:first-child {
+    padding-bottom: 10px;
+    justify-content: flex-start;
+  }
+
+  .table td:first-child::before {
+    content: none;
+  }
+
+  .cellName {
+    font-family: var(--font-sora), sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: #fff;
+    justify-content: flex-start !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .cellName::before {
+    content: none !important;
+  }
+
+  .rowActions {
+    justify-content: flex-start;
+    gap: 20px;
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .rowActions::before {
+    content: none !important;
+  }
+
+  .editLink,
+  .rowActions button {
+    font-size: 14px;
+  }
 }

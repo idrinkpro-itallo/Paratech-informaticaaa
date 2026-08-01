@@ -45,20 +45,20 @@ export default async function AdminPage() {
           </thead>
           <tbody>
             {products.map((p) => (
-              <tr key={p.id}>
-                <td>
+              <tr key={p.id} className={styles.productRow}>
+                <td data-label="">
                   {p.imageUrl ? (
                     <Image src={p.imageUrl} alt={p.name} width={40} height={40} style={{ objectFit: "cover", borderRadius: 8 }} />
                   ) : (
                     <div className={styles.thumbFallback} style={{ background: CATEGORY_META[p.category]?.accent }} />
                   )}
                 </td>
-                <td>{p.name}</td>
-                <td>{CATEGORY_META[p.category]?.label ?? p.category}</td>
-                <td>{formatPrice(p.price)}</td>
-                <td>{p.stock}</td>
-                <td>{p.tag ?? "—"}</td>
-                <td className={styles.rowActions}>
+                <td data-label="Nome" className={styles.cellName}>{p.name}</td>
+                <td data-label="Categoria">{CATEGORY_META[p.category]?.label ?? p.category}</td>
+                <td data-label="Preço">{formatPrice(p.price)}</td>
+                <td data-label="Estoque">{p.stock}</td>
+                <td data-label="Tag">{p.tag ?? "—"}</td>
+                <td data-label="" className={styles.rowActions}>
                   <Link href={`/admin/produtos/${p.id}`} className={styles.editLink}>Editar</Link>
                   <DeleteButton productId={p.id} productName={p.name} />
                 </td>

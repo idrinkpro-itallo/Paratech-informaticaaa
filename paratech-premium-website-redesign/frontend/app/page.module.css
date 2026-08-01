@@ -1,3 +1,10 @@
+/* Torna a largura real do conteúdo (não a da janela) a referência dos
+   breakpoints abaixo — assim o mesmo CSS responde certo tanto na página
+   pública quanto encolhido dentro do preview do admin (aba Site). */
+.pageContainer {
+  container-type: inline-size;
+}
+
 @keyframes dashMove {
   0% { transform: translate(0, 0); }
   100% { transform: translate(-42px, -42px); }
@@ -265,7 +272,7 @@
   gap: 8px;
 }
 
-@media (max-width: 960px) {
+@container (max-width: 960px) {
   .heroInner {
     grid-template-columns: 1fr;
     padding: 110px 0 60px;
@@ -275,7 +282,7 @@
     height: 380px;
   }
 }
-@media (max-width: 640px) {
+@container (max-width: 640px) {
   .hero {
     padding: 0 20px;
   }
@@ -500,7 +507,7 @@
   letter-spacing: 1px;
 }
 
-@media (max-width: 900px) {
+@container (max-width: 900px) {
   .promoGrid {
     grid-template-columns: 1fr;
   }
@@ -584,7 +591,7 @@
   background: #E30613;
 }
 
-@media (max-width: 640px) {
+@container (max-width: 640px) {
   .testimonialCard {
     padding: 32px 22px;
   }
@@ -686,7 +693,7 @@
   color: #fff;
 }
 
-@media (max-width: 960px) {
+@container (max-width: 960px) {
   .categoriesGrid, .productsGrid, .featuresGrid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -698,7 +705,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
-@media (max-width: 640px) {
+@container (max-width: 640px) {
   .categoriesSection, .featuresSection, .testimonialsSection, .gallerySection {
     padding-left: 20px;
     padding-right: 20px;

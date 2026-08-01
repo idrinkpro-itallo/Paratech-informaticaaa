@@ -1,3 +1,10 @@
+/* Referência de largura para os breakpoints abaixo é o próprio contêiner,
+   não a janela — funciona tanto na página pública quanto no preview do
+   admin (aba Site), que renderiza este mesmo CSS num espaço mais estreito. */
+.contatoContainer {
+  container-type: inline-size;
+}
+
 .hero {
   padding: 80px 48px 60px;
   background: radial-gradient(circle at 20% 0%, #1c2128 0%, #0B0D10 60%, #050607 100%);
@@ -151,12 +158,12 @@
   text-align: center;
 }
 
-@media (max-width: 900px) {
+@container (max-width: 900px) {
   .grid {
     grid-template-columns: 1fr;
   }
 }
-@media (max-width: 640px) {
+@container (max-width: 640px) {
   .hero, .content {
     padding-left: 24px;
     padding-right: 24px;

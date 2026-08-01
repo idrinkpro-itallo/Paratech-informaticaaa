@@ -29,10 +29,13 @@ export default async function HomePage() {
     .map((id) => products.find((p) => p.id === id))
     .filter(Boolean);
 
+  const sections = home.sections;
+
   return (
     <>
       <SiteHeader active="home" />
 
+      <div className={styles.pageContainer}>
       <section className={styles.hero}>
         <div className={styles.heroGrid} aria-hidden="true" />
         <div className={styles.blurRed} aria-hidden="true" />
@@ -77,110 +80,123 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="categorias" className={styles.categoriesSection}>
-        <div className={styles.sectionHead}>
-          <div className={styles.eyebrow}>CATEGORIAS</div>
-          <h2 className={styles.sectionTitle}>Encontre o que sua empresa precisa</h2>
-        </div>
-        <div className={styles.categoriesGrid}>
-          {categories.map((c) => (
-            <CategoryTile key={c.id} category={c} />
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.featuredSection}>
-        <div className={styles.featuredInner}>
-          <div className={styles.featuredHead}>
-            <div>
-              <div className={styles.eyebrow}>PRODUTOS EM DESTAQUE</div>
-              <h2 className={styles.sectionTitle}>Os mais procurados</h2>
-            </div>
-            <Link href="/catalogo" className={styles.viewAllLink}>Ver catálogo completo →</Link>
+      {sections.categorias && (
+        <section id="categorias" className={styles.categoriesSection}>
+          <div className={styles.sectionHead}>
+            <div className={styles.eyebrow}>CATEGORIAS</div>
+            <h2 className={styles.sectionTitle}>Encontre o que sua empresa precisa</h2>
           </div>
-          <div className={styles.productsGrid}>
-            {featuredProducts.map((p) => (
-              <ProductCard key={p.id} product={p} />
+          <div className={styles.categoriesGrid}>
+            {categories.map((c) => (
+              <CategoryTile key={c.id} category={c} />
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <section className={styles.featuresSection}>
-        <div className={styles.sectionHead}>
-          <div className={styles.eyebrow}>POR QUE A PARATECH</div>
-          <h2 className={styles.sectionTitle}>Diferenciais que fazem a diferença</h2>
-        </div>
-        <div className={styles.featuresGrid}>
-          {home.features.map((f, i) => (
-            <div key={i} className={styles.featureCard}>
-              <div className={styles.featureIconWrap} style={{ background: FEATURE_ICONS[i].iconBg }}>
-                {FEATURE_ICONS[i].icon}
+      {sections.destaque && (
+        <section className={styles.featuredSection}>
+          <div className={styles.featuredInner}>
+            <div className={styles.featuredHead}>
+              <div>
+                <div className={styles.eyebrow}>PRODUTOS EM DESTAQUE</div>
+                <h2 className={styles.sectionTitle}>Os mais procurados</h2>
               </div>
-              <div className={styles.featureTitle}>{f.title}</div>
-              <div className={styles.featureDesc}>{f.desc}</div>
+              <Link href="/catalogo" className={styles.viewAllLink}>Ver catálogo completo →</Link>
             </div>
-          ))}
-        </div>
-      </section>
+            <div className={styles.productsGrid}>
+              {featuredProducts.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
-      <StatsCounters targets={home.countersTargets} />
-
-      <PromoCountdown
-        badge={home.promoBadge}
-        title={home.promoTitle}
-        text={home.promoText}
-        ctaLabel={home.promoCtaLabel}
-      />
-
-      <TestimonialCarousel testimonials={home.testimonials} />
-
-      <section className={styles.gallerySection}>
-        <div className={styles.sectionHead}>
-          <div className={styles.eyebrow}>GALERIA</div>
-          <h2 className={styles.sectionTitle}>Nossa loja e equipe</h2>
-        </div>
-        <div className={styles.galleryGrid}>
-          {home.gallery.map((photo, i) =>
-            photo.url ? (
-              <div key={i} className={styles.galleryPhoto}>
-                <Image
-                  src={photo.url}
-                  alt={photo.caption}
-                  fill
-                  sizes="(max-width: 640px) 50vw, 33vw"
-                  style={{ objectFit: "cover" }}
-                />
-                <span className={styles.galleryCaption}>{photo.caption}</span>
+      {sections.diferenciais && (
+        <section className={styles.featuresSection}>
+          <div className={styles.sectionHead}>
+            <div className={styles.eyebrow}>POR QUE A PARATECH</div>
+            <h2 className={styles.sectionTitle}>Diferenciais que fazem a diferença</h2>
+          </div>
+          <div className={styles.featuresGrid}>
+            {home.features.map((f, i) => (
+              <div key={i} className={styles.featureCard}>
+                <div className={styles.featureIconWrap} style={{ background: FEATURE_ICONS[i].iconBg }}>
+                  {FEATURE_ICONS[i].icon}
+                </div>
+                <div className={styles.featureTitle}>{f.title}</div>
+                <div className={styles.featureDesc}>{f.desc}</div>
               </div>
-            ) : (
-              <div key={i} className={styles.galleryPlaceholder}>{photo.caption}</div>
-            )
-          )}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      )}
 
-      <section className={styles.visitSection}>
-        <div className={styles.visitRow}>
-          <div>
-            <h3 className={styles.visitTitle}>{home.visitTitle}</h3>
-            <p className={styles.visitSubtitle}>{home.visitSubtitle}</p>
+      {sections.contadores && <StatsCounters targets={home.countersTargets} />}
+
+      {sections.promocao && (
+        <PromoCountdown
+          badge={home.promoBadge}
+          title={home.promoTitle}
+          text={home.promoText}
+          ctaLabel={home.promoCtaLabel}
+        />
+      )}
+
+      {sections.depoimentos && <TestimonialCarousel testimonials={home.testimonials} />}
+
+      {sections.galeria && (
+        <section className={styles.gallerySection}>
+          <div className={styles.sectionHead}>
+            <div className={styles.eyebrow}>GALERIA</div>
+            <h2 className={styles.sectionTitle}>Nossa loja e equipe</h2>
           </div>
-          <div className={styles.visitButtons}>
-            <Link href="/contato" className={styles.visitMapBtn}>Ver no mapa</Link>
-            <a
-              href={`https://wa.me/${WA_SUPPORT}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.visitWhatsBtn}
-            >
-              Falar no WhatsApp
-            </a>
+          <div className={styles.galleryGrid}>
+            {home.gallery.map((photo, i) =>
+              photo.url ? (
+                <div key={i} className={styles.galleryPhoto}>
+                  <Image
+                    src={photo.url}
+                    alt={photo.caption}
+                    fill
+                    sizes="(max-width: 640px) 50vw, 33vw"
+                    style={{ objectFit: "cover" }}
+                  />
+                  <span className={styles.galleryCaption}>{photo.caption}</span>
+                </div>
+              ) : (
+                <div key={i} className={styles.galleryPlaceholder}>{photo.caption}</div>
+              )
+            )}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {sections.visite && (
+        <section className={styles.visitSection}>
+          <div className={styles.visitRow}>
+            <div>
+              <h3 className={styles.visitTitle}>{home.visitTitle}</h3>
+              <p className={styles.visitSubtitle}>{home.visitSubtitle}</p>
+            </div>
+            <div className={styles.visitButtons}>
+              <Link href="/contato" className={styles.visitMapBtn}>Ver no mapa</Link>
+              <a
+                href={`https://wa.me/${WA_SUPPORT}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.visitWhatsBtn}
+              >
+                Falar no WhatsApp
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
 
       <SiteFooterFull categories={categories} />
+      </div>
       <WhatsAppFab showCatalogLink />
     </>
   );

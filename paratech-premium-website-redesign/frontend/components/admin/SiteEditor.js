@@ -116,10 +116,20 @@ function Field({ label, children }) {
   );
 }
 
-function Section({ title, children }) {
+function Section({ title, children, visible, onToggleVisible }) {
+  const toggleable = typeof onToggleVisible === "function";
   return (
-    <div className={styles.section}>
-      <div className={styles.sectionTitle}>{title}</div>
+    <div className={`${styles.section} ${toggleable && !visible ? styles.sectionHidden : ""}`}>
+      <div className={styles.sectionTitleRow}>
+        <div className={styles.sectionTitle}>{title}</div>
+        {toggleable && (
+          <label className={styles.visToggle}>
+            <input type="checkbox" checked={visible} onChange={onToggleVisible} />
+            <span className={styles.visSwitch} aria-hidden="true" />
+            <span className={styles.visLabel}>{visible ? "Visível no site" : "Oculta no site"}</span>
+          </label>
+        )}
+      </div>
       {children}
     </div>
   );
@@ -158,6 +168,9 @@ function HomeForm({ home, setHome, products }) {
   const removeTestimonial = (index) =>
     setHome((h) => ({ ...h, testimonials: h.testimonials.filter((_, i) => i !== index) }));
 
+  const toggleSection = (key) => () =>
+    setHome((h) => ({ ...h, sections: { ...h.sections, [key]: !h.sections[key] } }));
+
   return (
     <>
       <Section title="Hero">
@@ -191,10 +204,22 @@ function HomeForm({ home, setHome, products }) {
         </div>
       </Section>
 
-      <Section title="Produtos em destaque (banner do hero)">
+      <Section title="Categorias" visible={home.sections.categorias} onToggleVisible={toggleSection("categorias")}>
+        <p className={styles.helpText}>
+          Grade gerada automaticamente a partir das categorias com produtos ativos (edite categorias em
+          Produtos). Aqui você só decide se essa seção aparece na Home.
+        </p>
+      </Section>
+
+      <Section
+        title="Produtos em destaque (banner do hero)"
+        visible={home.sections.destaque}
+        onToggleVisible={toggleSection("destaque")}
+      >
         <p className={styles.helpText}>
           Escolha quais produtos giram nos cards do hero da Home. Clique para selecionar; a ordem de seleção define
-          a ordem de exibição — use as setas para reordenar.
+          a ordem de exibição — use as setas para reordenar. A seção &ldquo;Os mais procurados&rdquo; abaixo do hero
+          usa a mesma lista e pode ser desligada ao lado (os cards do hero continuam sempre visíveis).
         </p>
         <FeaturedProductsPicker
           products={products}
@@ -226,7 +251,7 @@ function HomeForm({ home, setHome, products }) {
         </div>
       </Section>
 
-      <Section title="Contadores animados">
+      <Section title="Contadores animados" visible={home.sections.contadores} onToggleVisible={toggleSection("contadores")}>
         <div className={styles.row4}>
           <Field label="Clientes atendidos">
             <input type="number" className={styles.input} value={home.countersTargets.clientes} onChange={setTarget("clientes")} />
@@ -243,7 +268,7 @@ function HomeForm({ home, setHome, products }) {
         </div>
       </Section>
 
-      <Section title="Promoção">
+      <Section title="Promoção" visible={home.sections.promocao} onToggleVisible={toggleSection("promocao")}>
         <div className={styles.row2}>
           <Field label="Selo">
             <input className={styles.input} value={home.promoBadge} onChange={set("promoBadge")} />
@@ -260,7 +285,7 @@ function HomeForm({ home, setHome, products }) {
         </Field>
       </Section>
 
-      <Section title="Depoimentos">
+      <Section title="Depoimentos" visible={home.sections.depoimentos} onToggleVisible={toggleSection("depoimentos")}>
         {home.testimonials.map((t, i) => (
           <div key={i} className={styles.testimonialRow}>
             <textarea
@@ -288,7 +313,11 @@ function HomeForm({ home, setHome, products }) {
         <button type="button" className={styles.addBtn} onClick={addTestimonial}>+ Adicionar depoimento</button>
       </Section>
 
-      <Section title="Diferenciais (por que a Paratech)">
+      <Section
+        title="Diferenciais (por que a Paratech)"
+        visible={home.sections.diferenciais}
+        onToggleVisible={toggleSection("diferenciais")}
+      >
         <p className={styles.helpText}>Os 8 cards ficam na mesma ordem/ícone; só o texto é editável.</p>
         <div className={styles.featuresEditGrid}>
           {home.features.map((f, i) => (
@@ -313,12 +342,12 @@ function HomeForm({ home, setHome, products }) {
         </div>
       </Section>
 
-      <Section title="Galeria de fotos">
+      <Section title="Galeria de fotos" visible={home.sections.galeria} onToggleVisible={toggleSection("galeria")}>
         <p className={styles.helpText}>Envie as fotos da loja/equipe. Sem foto, o slot mostra só a legenda.</p>
         <GalleryEditor gallery={home.gallery} setHome={setHome} />
       </Section>
 
-      <Section title="Visite a loja">
+      <Section title="Visite a loja" visible={home.sections.visite} onToggleVisible={toggleSection("visite")}>
         <Field label="Título">
           <input className={styles.input} value={home.visitTitle} onChange={set("visitTitle")} />
         </Field>
@@ -505,46 +534,51 @@ function HomePreview({ home, products, categories }) {
   const featuredProducts = home.featuredProductIds
     .map((id) => products.find((p) => p.id === id))
     .filter(Boolean);
+  const sections = home.sections;
 
   return (
-    <div className={pageStyles.hero} style={{ position: "relative", overflow: "hidden", borderRadius: 16 }}>
-      <div className={pageStyles.heroGrid} aria-hidden="true" />
-      <div className={pageStyles.blurRed} aria-hidden="true" />
-      <div className={pageStyles.blurYellow} aria-hidden="true" />
-      <div className={pageStyles.heroInner}>
-        <div className={pageStyles.bannerStrip}>
-          {home.bannerMessages.map((msg, i) => (
-            <span key={i} className={pageStyles.bannerSlide} style={{ animationDelay: `${i * 3}s` }}>
-              {msg}
-            </span>
-          ))}
-        </div>
-        <div>
-          <div className={pageStyles.badge}>{home.heroKicker}</div>
-          <h1 className={pageStyles.heroTitle}>
-            {home.heroTitleBefore} <span style={{ color: "#E30613" }}>{home.heroTitleRed}</span> {home.heroTitleMiddle}{" "}
-            <span style={{ color: "#FFD400" }}>{home.heroTitleYellow}</span>
-            {home.heroTitleAfter}
-          </h1>
-          <p className={pageStyles.heroLead}>{home.heroLead}</p>
-          <div className={pageStyles.ctaRow}>
-            <span className={pageStyles.ctaWhats}>Falar no WhatsApp</span>
-            <span className={pageStyles.ctaCatalog}>{home.ctaCatalogLabel}</span>
-          </div>
-          <div className={pageStyles.statsRow}>
-            {home.heroStats.map((s, i) => (
-              <div key={i}>
-                <div className={pageStyles.statNum}>{s.value}</div>
-                <div className={pageStyles.statLabel}>{s.label}</div>
-              </div>
+    <div className={pageStyles.pageContainer} style={{ borderRadius: 16, overflow: "hidden" }}>
+      {/* min-height do hero é em vh (viewport real) no site público; dentro do
+          preview isso deixa uma faixa em branco enorme, então limitamos aqui. */}
+      <section className={pageStyles.hero} style={{ minHeight: "auto" }}>
+        <div className={pageStyles.heroGrid} aria-hidden="true" />
+        <div className={pageStyles.blurRed} aria-hidden="true" />
+        <div className={pageStyles.blurYellow} aria-hidden="true" />
+        <div className={pageStyles.heroInner}>
+          <div className={pageStyles.bannerStrip}>
+            {home.bannerMessages.map((msg, i) => (
+              <span key={i} className={pageStyles.bannerSlide} style={{ animationDelay: `${i * 3}s` }}>
+                {msg}
+              </span>
             ))}
           </div>
+          <div>
+            <div className={pageStyles.badge}>{home.heroKicker}</div>
+            <h1 className={pageStyles.heroTitle}>
+              {home.heroTitleBefore} <span style={{ color: "#E30613" }}>{home.heroTitleRed}</span> {home.heroTitleMiddle}{" "}
+              <span style={{ color: "#FFD400" }}>{home.heroTitleYellow}</span>
+              {home.heroTitleAfter}
+            </h1>
+            <p className={pageStyles.heroLead}>{home.heroLead}</p>
+            <div className={pageStyles.ctaRow}>
+              <span className={pageStyles.ctaWhats}>Falar no WhatsApp</span>
+              <span className={pageStyles.ctaCatalog}>{home.ctaCatalogLabel}</span>
+            </div>
+            <div className={pageStyles.statsRow}>
+              {home.heroStats.map((s, i) => (
+                <div key={i}>
+                  <div className={pageStyles.statNum}>{s.value}</div>
+                  <div className={pageStyles.statLabel}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <HeroProductBanner products={featuredProducts} />
         </div>
+      </section>
 
-        <HeroProductBanner products={featuredProducts} />
-      </div>
-
-      {categories.length > 0 && (
+      {sections.categorias && categories.length > 0 && (
         <section className={pageStyles.categoriesSection}>
           <div className={pageStyles.sectionHead}>
             <div className={pageStyles.eyebrow}>CATEGORIAS</div>
@@ -558,7 +592,7 @@ function HomePreview({ home, products, categories }) {
         </section>
       )}
 
-      {featuredProducts.length > 0 && (
+      {sections.destaque && featuredProducts.length > 0 && (
         <section className={pageStyles.featuredSection}>
           <div className={pageStyles.featuredInner}>
             <div className={pageStyles.featuredHead}>
@@ -577,124 +611,136 @@ function HomePreview({ home, products, categories }) {
         </section>
       )}
 
-      <section className={pageStyles.featuresSection}>
-        <div className={pageStyles.sectionHead}>
-          <div className={pageStyles.eyebrow}>POR QUE A PARATECH</div>
-          <h2 className={pageStyles.sectionTitle}>Diferenciais que fazem a diferença</h2>
-        </div>
-        <div className={pageStyles.featuresGrid}>
-          {home.features.map((f, i) => (
-            <div key={i} className={pageStyles.featureCard}>
-              <div className={pageStyles.featureIconWrap} style={{ background: FEATURE_ICONS[i].iconBg }}>
-                {FEATURE_ICONS[i].icon}
-              </div>
-              <div className={pageStyles.featureTitle}>{f.title}</div>
-              <div className={pageStyles.featureDesc}>{f.desc}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className={pageStyles.numbersSection}>
-        <div className={pageStyles.numbersGrid}>
-          <div>
-            <div className={pageStyles.numberValue}>+{Number(home.countersTargets.clientes || 0).toLocaleString("pt-BR")}</div>
-            <div className={pageStyles.numberLabel}>Clientes atendidos</div>
+      {sections.diferenciais && (
+        <section className={pageStyles.featuresSection}>
+          <div className={pageStyles.sectionHead}>
+            <div className={pageStyles.eyebrow}>POR QUE A PARATECH</div>
+            <h2 className={pageStyles.sectionTitle}>Diferenciais que fazem a diferença</h2>
           </div>
-          <div>
-            <div className={pageStyles.numberValue}>+{home.countersTargets.anos}</div>
-            <div className={pageStyles.numberLabel}>Anos de experiência</div>
-          </div>
-          <div>
-            <div className={pageStyles.numberValue}>+{Number(home.countersTargets.vendidos || 0).toLocaleString("pt-BR")}</div>
-            <div className={pageStyles.numberLabel}>Produtos vendidos</div>
-          </div>
-          <div>
-            <div className={pageStyles.numberValue}>{home.countersTargets.satisfacao}%</div>
-            <div className={pageStyles.numberLabel}>Clientes satisfeitos</div>
-          </div>
-        </div>
-      </section>
-
-      <section className={pageStyles.promoSection}>
-        <div className={pageStyles.promoStripes} aria-hidden="true" />
-        <div className={pageStyles.promoGrid}>
-          <div>
-            <div className={pageStyles.promoBadge}>{home.promoBadge}</div>
-            <h2 className={pageStyles.promoTitle}>{home.promoTitle}</h2>
-            <p className={pageStyles.promoText}>{home.promoText}</p>
-            <span className={pageStyles.promoCta}>{home.promoCtaLabel}</span>
-          </div>
-          <div className={pageStyles.countdownRow}>
-            {["DIAS", "HORAS", "MIN", "SEG"].map((label) => (
-              <div key={label} className={pageStyles.countdownBox}>
-                <div className={pageStyles.countdownNum}>--</div>
-                <div className={pageStyles.countdownLabel}>{label}</div>
+          <div className={pageStyles.featuresGrid}>
+            {home.features.map((f, i) => (
+              <div key={i} className={pageStyles.featureCard}>
+                <div className={pageStyles.featureIconWrap} style={{ background: FEATURE_ICONS[i].iconBg }}>
+                  {FEATURE_ICONS[i].icon}
+                </div>
+                <div className={pageStyles.featureTitle}>{f.title}</div>
+                <div className={pageStyles.featureDesc}>{f.desc}</div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <section className={pageStyles.testimonialsSection}>
-        <div className={pageStyles.sectionHead}>
-          <div className={pageStyles.eyebrow}>DEPOIMENTOS</div>
-          <h2 className={pageStyles.sectionTitle}>Quem confia na Paratech</h2>
-        </div>
-        <div className={pageStyles.testimonialCard}>
-          <div className={pageStyles.stars} aria-hidden="true">★★★★★</div>
-          <p className={pageStyles.quote}>&ldquo;{home.testimonials[0]?.text}&rdquo;</p>
-          <div className={pageStyles.personRow}>
-            <div className={pageStyles.avatar} aria-hidden="true">{home.testimonials[0]?.initial}</div>
-            <div className={pageStyles.personInfo}>
-              <div className={pageStyles.personName}>{home.testimonials[0]?.name}</div>
-              <div className={pageStyles.personRole}>{home.testimonials[0]?.role}</div>
+      {sections.contadores && (
+        <section className={pageStyles.numbersSection}>
+          <div className={pageStyles.numbersGrid}>
+            <div>
+              <div className={pageStyles.numberValue}>+{Number(home.countersTargets.clientes || 0).toLocaleString("pt-BR")}</div>
+              <div className={pageStyles.numberLabel}>Clientes atendidos</div>
+            </div>
+            <div>
+              <div className={pageStyles.numberValue}>+{home.countersTargets.anos}</div>
+              <div className={pageStyles.numberLabel}>Anos de experiência</div>
+            </div>
+            <div>
+              <div className={pageStyles.numberValue}>+{Number(home.countersTargets.vendidos || 0).toLocaleString("pt-BR")}</div>
+              <div className={pageStyles.numberLabel}>Produtos vendidos</div>
+            </div>
+            <div>
+              <div className={pageStyles.numberValue}>{home.countersTargets.satisfacao}%</div>
+              <div className={pageStyles.numberLabel}>Clientes satisfeitos</div>
             </div>
           </div>
-          <div className={pageStyles.dotsRow}>
-            {home.testimonials.map((t, i) => (
-              <span key={i} className={`${pageStyles.dot} ${i === 0 ? pageStyles.dotActive : ""}`} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <section className={pageStyles.gallerySection}>
-        <div className={pageStyles.sectionHead}>
-          <div className={pageStyles.eyebrow}>GALERIA</div>
-          <h2 className={pageStyles.sectionTitle}>Nossa loja e equipe</h2>
-        </div>
-        <div className={pageStyles.galleryGrid}>
-          {home.gallery.map((photo, i) =>
-            photo.url ? (
-              <div key={i} className={pageStyles.galleryPhoto}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={photo.url}
-                  alt={photo.caption}
-                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-                />
-                <span className={pageStyles.galleryCaption}>{photo.caption}</span>
+      {sections.promocao && (
+        <section className={pageStyles.promoSection}>
+          <div className={pageStyles.promoStripes} aria-hidden="true" />
+          <div className={pageStyles.promoGrid}>
+            <div>
+              <div className={pageStyles.promoBadge}>{home.promoBadge}</div>
+              <h2 className={pageStyles.promoTitle}>{home.promoTitle}</h2>
+              <p className={pageStyles.promoText}>{home.promoText}</p>
+              <span className={pageStyles.promoCta}>{home.promoCtaLabel}</span>
+            </div>
+            <div className={pageStyles.countdownRow}>
+              {["DIAS", "HORAS", "MIN", "SEG"].map((label) => (
+                <div key={label} className={pageStyles.countdownBox}>
+                  <div className={pageStyles.countdownNum}>--</div>
+                  <div className={pageStyles.countdownLabel}>{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.depoimentos && (
+        <section className={pageStyles.testimonialsSection}>
+          <div className={pageStyles.sectionHead}>
+            <div className={pageStyles.eyebrow}>DEPOIMENTOS</div>
+            <h2 className={pageStyles.sectionTitle}>Quem confia na Paratech</h2>
+          </div>
+          <div className={pageStyles.testimonialCard}>
+            <div className={pageStyles.stars} aria-hidden="true">★★★★★</div>
+            <p className={pageStyles.quote}>&ldquo;{home.testimonials[0]?.text}&rdquo;</p>
+            <div className={pageStyles.personRow}>
+              <div className={pageStyles.avatar} aria-hidden="true">{home.testimonials[0]?.initial}</div>
+              <div className={pageStyles.personInfo}>
+                <div className={pageStyles.personName}>{home.testimonials[0]?.name}</div>
+                <div className={pageStyles.personRole}>{home.testimonials[0]?.role}</div>
               </div>
-            ) : (
-              <div key={i} className={pageStyles.galleryPlaceholder}>{photo.caption}</div>
-            )
-          )}
-        </div>
-      </section>
+            </div>
+            <div className={pageStyles.dotsRow}>
+              {home.testimonials.map((t, i) => (
+                <span key={i} className={`${pageStyles.dot} ${i === 0 ? pageStyles.dotActive : ""}`} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
-      <section className={pageStyles.visitSection}>
-        <div className={pageStyles.visitRow}>
-          <div>
-            <h3 className={pageStyles.visitTitle}>{home.visitTitle}</h3>
-            <p className={pageStyles.visitSubtitle}>{home.visitSubtitle}</p>
+      {sections.galeria && (
+        <section className={pageStyles.gallerySection}>
+          <div className={pageStyles.sectionHead}>
+            <div className={pageStyles.eyebrow}>GALERIA</div>
+            <h2 className={pageStyles.sectionTitle}>Nossa loja e equipe</h2>
           </div>
-          <div className={pageStyles.visitButtons}>
-            <span className={pageStyles.visitMapBtn}>Ver no mapa</span>
-            <span className={pageStyles.visitWhatsBtn}>Falar no WhatsApp</span>
+          <div className={pageStyles.galleryGrid}>
+            {home.gallery.map((photo, i) =>
+              photo.url ? (
+                <div key={i} className={pageStyles.galleryPhoto}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={photo.url}
+                    alt={photo.caption}
+                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                  <span className={pageStyles.galleryCaption}>{photo.caption}</span>
+                </div>
+              ) : (
+                <div key={i} className={pageStyles.galleryPlaceholder}>{photo.caption}</div>
+              )
+            )}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {sections.visite && (
+        <section className={pageStyles.visitSection}>
+          <div className={pageStyles.visitRow}>
+            <div>
+              <h3 className={pageStyles.visitTitle}>{home.visitTitle}</h3>
+              <p className={pageStyles.visitSubtitle}>{home.visitSubtitle}</p>
+            </div>
+            <div className={pageStyles.visitButtons}>
+              <span className={pageStyles.visitMapBtn}>Ver no mapa</span>
+              <span className={pageStyles.visitWhatsBtn}>Falar no WhatsApp</span>
+            </div>
+          </div>
+        </section>
+      )}
 
       <SiteFooterFull categories={categories} />
     </div>
@@ -703,7 +749,7 @@ function HomePreview({ home, products, categories }) {
 
 function ContatoPreview({ contato }) {
   return (
-    <div style={{ borderRadius: 16, overflow: "hidden" }}>
+    <div className={contatoStyles.contatoContainer} style={{ borderRadius: 16, overflow: "hidden" }}>
       <section className={contatoStyles.hero}>
         <div className={contatoStyles.eyebrow}>{contato.heroEyebrow}</div>
         <h1 className={contatoStyles.title}>{contato.heroTitle}</h1>

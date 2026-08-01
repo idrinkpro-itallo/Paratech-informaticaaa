@@ -25,6 +25,7 @@ export default function ContatoClient({ content }) {
     <>
       <SiteHeader active="contato" />
 
+      <div className={styles.contatoContainer}>
       <section className={styles.hero}>
         <div className={styles.eyebrow}>{content.heroEyebrow}</div>
         <h1 className={styles.title}>{content.heroTitle}</h1>
@@ -136,6 +137,7 @@ export default function ContatoClient({ content }) {
       </section>
 
       <SiteFooterSimple links={[{ href: "/", label: "Início" }, { href: "/catalogo", label: "Catálogo" }]} />
+      </div>
       <WhatsAppFab showCatalogLink />
     </>
   );

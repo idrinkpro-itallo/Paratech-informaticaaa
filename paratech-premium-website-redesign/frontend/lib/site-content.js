@@ -57,6 +57,18 @@ export const HOME_CONTENT_DEFAULT = {
     { url: "", caption: "foto: atendimento" },
     { url: "", caption: "foto: estoque" },
   ],
+  // Liga/desliga seções inteiras da Home sem apagar o conteúdo — hero e
+  // rodapé são estruturais e não entram aqui (sempre visíveis).
+  sections: {
+    categorias: true,
+    destaque: true,
+    diferenciais: true,
+    contadores: true,
+    promocao: true,
+    depoimentos: true,
+    galeria: true,
+    visite: true,
+  },
 };
 
 export const CONTATO_CONTENT_DEFAULT = {
