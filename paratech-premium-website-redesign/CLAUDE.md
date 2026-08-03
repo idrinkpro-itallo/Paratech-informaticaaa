@@ -77,3 +77,14 @@ Não há carrinho nem checkout — **tudo converte para WhatsApp**:
 - NUNCA faça `git push` para `main`, `git merge` para `main`, nem `vercel --prod` sem aprovação explícita na conversa.
 - Fluxo padrão: alterar código → subir servidor local → mostrar a URL e o que mudou → aguardar aprovação → só então commitar na `teste` e (se solicitado) abrir PR ou merge pra `main`.
 - Se o servidor local já estiver rodando, não suba outra instância — avisar a porta em uso.
+
+## Deploy (Vercel) — remotes git
+
+Existem **dois remotes** configurados neste repo, e só um deles dispara o deploy:
+
+- `origin` → `git@github.com:IDRINKPRO/paratechinfo.git` — repositório oficial de backup/histórico. **A Vercel NÃO está conectada aqui.** Push só nele não gera deploy.
+- `paratech-itallo` → `github-paratech-itallo:idrinkpro-itallo/Paratech-informaticaaa.git` — **este** é o repo conectado ao projeto Vercel `paratech-informaticaaa` (conta `idrinkpro-6682s-projects`, root directory = `frontend`). Push na `main` deste remote é o que efetivamente builda e publica produção.
+
+Ao levar `teste` → `main` para deploy: dar `git push origin main` **e** `git push paratech-itallo main`. Confirmar qual remote recebeu o push antes de dizer que o deploy começou — não presumir.
+
+A conexão MCP da Vercel usada pelo Claude Code é uma config de conta (fora do repo); se ela não enxergar o projeto acima, é preciso reconectar o conector Vercel na conta certa — não é algo resolvível por arquivo de projeto.
