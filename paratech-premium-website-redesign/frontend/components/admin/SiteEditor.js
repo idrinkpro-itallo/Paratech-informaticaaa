@@ -24,6 +24,7 @@ const HERO_VARIANTS = [
   { id: "produto", label: "Peça em Destaque" },
   { id: "benchmark", label: "Benchmark ao Vivo" },
   { id: "antesDepois", label: "Antes/Depois" },
+  { id: "classico", label: "Clássico" },
 ];
 
 const emptyTestimonial = () => ({ text: "", name: "", role: "Cliente Paratech", initial: "" });
@@ -509,10 +510,10 @@ function HomeForm({
   );
 }
 
-// Editor do Hero da Home: os 3 modelos ficam sempre configurados ao mesmo
-// tempo (hero.produto/benchmark/antesDepois); as abas abaixo só escolhem
-// qual está sendo editado no momento — trocar de modelo na Home é o botão
-// "Usar este modelo na Home", que grava hero.variant.
+// Editor do Hero da Home: os 4 modelos ficam sempre configurados ao mesmo
+// tempo (hero.produto/benchmark/antesDepois/classico); as abas abaixo só
+// escolhem qual está sendo editado no momento — trocar de modelo na Home é
+// o botão "Usar este modelo na Home", que grava hero.variant.
 function HeroEditor({ hero, setHome, products }) {
   const [tab, setTab] = useState(hero.variant);
 
@@ -524,7 +525,7 @@ function HeroEditor({ hero, setHome, products }) {
   return (
     <Section title="Hero da Home">
       <p className={styles.helpText}>
-        Os 3 modelos ficam sempre salvos — escolha uma aba para editar o conteúdo dela e use o botão para decidir
+        Os 4 modelos ficam sempre salvos — escolha uma aba para editar o conteúdo dela e use o botão para decidir
         qual aparece na Home.
       </p>
       <div className={styles.heroThemeToggle} role="tablist" aria-label="Modelo de hero a editar">
@@ -560,6 +561,9 @@ function HeroEditor({ hero, setHome, products }) {
       )}
       {tab === "antesDepois" && (
         <AntesDepoisFields content={hero.antesDepois} setContent={setVariantContent("antesDepois")} products={products} />
+      )}
+      {tab === "classico" && (
+        <ClassicoFields content={hero.classico} setContent={setVariantContent("classico")} products={products} />
       )}
     </Section>
   );
@@ -772,6 +776,88 @@ function AntesDepoisFields({ content, setContent, products }) {
           <input className={styles.input} value={content.ctaLabel} onChange={set("ctaLabel")} />
         </Field>
       </div>
+    </>
+  );
+}
+
+function ClassicoFields({ content, setContent, products }) {
+  const set = (key) => (e) => setContent((c) => ({ ...c, [key]: e.target.value }));
+  const setStat = (index, key) => (e) =>
+    setContent((c) => ({ ...c, stats: c.stats.map((s, i) => (i === index ? { ...s, [key]: e.target.value } : s)) }));
+  const setSlide = (index, key) => (e) =>
+    setContent((c) => ({ ...c, slides: c.slides.map((s, i) => (i === index ? { ...s, [key]: e.target.value } : s)) }));
+  const setSlideProduct = (index) => (e) =>
+    setContent((c) => ({
+      ...c,
+      slides: c.slides.map((s, i) => (i === index ? { ...s, productId: Number(e.target.value) } : s)),
+    }));
+
+  return (
+    <>
+      <label className={styles.visToggle}>
+        <input
+          type="checkbox"
+          checked={content.theme === "escuro"}
+          onChange={(e) => setContent((c) => ({ ...c, theme: e.target.checked ? "escuro" : "claro" }))}
+        />
+        <span className={styles.visSwitch} aria-hidden="true" />
+        <span className={styles.visLabel}>Tema escuro (desligado = fundo claro, texto preto)</span>
+      </label>
+      <Field label="Selo (acima do título)">
+        <input className={styles.input} value={content.kicker} onChange={set("kicker")} />
+      </Field>
+      <div className={styles.row3}>
+        <Field label="Texto antes">
+          <input className={styles.input} value={content.titleBefore} onChange={set("titleBefore")} />
+        </Field>
+        <Field label="Palavra em vermelho/preto">
+          <input className={styles.input} value={content.titleRed} onChange={set("titleRed")} />
+        </Field>
+        <Field label="Texto do meio">
+          <input className={styles.input} value={content.titleMiddle} onChange={set("titleMiddle")} />
+        </Field>
+      </div>
+      <div className={styles.row2}>
+        <Field label="Palavra em amarelo/cinza">
+          <input className={styles.input} value={content.titleYellow} onChange={set("titleYellow")} />
+        </Field>
+        <Field label="Texto depois (pontuação, etc.)">
+          <input className={styles.input} value={content.titleAfter} onChange={set("titleAfter")} />
+        </Field>
+      </div>
+      <Field label="Texto de apoio (parágrafo)">
+        <textarea className={styles.input} rows={3} value={content.lead} onChange={set("lead")} />
+      </Field>
+      <div className={styles.row2}>
+        <Field label="Mensagem do botão WhatsApp">
+          <input className={styles.input} value={content.ctaWhatsMessage} onChange={set("ctaWhatsMessage")} />
+        </Field>
+        <Field label="Texto do botão Catálogo">
+          <input className={styles.input} value={content.ctaCatalogLabel} onChange={set("ctaCatalogLabel")} />
+        </Field>
+      </div>
+      <div className={styles.row3}>
+        {content.stats.map((s, i) => (
+          <div key={i} className={styles.statPair}>
+            <input className={styles.input} placeholder="Valor" value={s.value} onChange={setStat(i, "value")} />
+            <input className={styles.input} placeholder="Legenda" value={s.label} onChange={setStat(i, "label")} />
+          </div>
+        ))}
+      </div>
+      <Field label="Card lateral: produtos em rotação (4 slides)">
+        <div className={styles.helpText}>Cada slide mostra um produto com uma frase de destaque própria.</div>
+        {content.slides.map((s, i) => (
+          <div key={i} className={styles.row3} style={{ marginBottom: 10 }}>
+            <select className={styles.input} value={s.productId} onChange={setSlideProduct(i)}>
+              {products.map((p) => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
+            <input className={styles.input} placeholder="Selo do slide" value={s.kicker} onChange={setSlide(i, "kicker")} />
+            <input className={styles.input} placeholder="Frase de destaque" value={s.headline} onChange={setSlide(i, "headline")} />
+          </div>
+        ))}
+      </Field>
     </>
   );
 }

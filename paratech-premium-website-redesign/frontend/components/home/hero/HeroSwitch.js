@@ -1,8 +1,9 @@
 import HeroProduto from "./HeroProduto";
 import HeroBenchmark from "./HeroBenchmark";
 import HeroAntesDepois from "./HeroAntesDepois";
+import HeroClassico from "./HeroClassico";
 
-// Escolhe qual dos 3 modelos de Hero renderizar a partir de hero.variant
+// Escolhe qual dos 4 modelos de Hero renderizar a partir de hero.variant
 // (editável na aba Site do /admin). Usado tanto na Home pública quanto no
 // preview ao vivo do admin, pra garantir que os dois sempre renderizem
 // exatamente o mesmo componente.
@@ -14,6 +15,9 @@ export default function HeroSwitch({ hero, products }) {
   }
   if (hero.variant === "antesDepois") {
     return <HeroAntesDepois content={hero.antesDepois} product={findProduct(hero.antesDepois.featuredProductId)} />;
+  }
+  if (hero.variant === "classico") {
+    return <HeroClassico content={hero.classico} products={products} />;
   }
   return <HeroProduto content={hero.produto} product={findProduct(hero.produto.featuredProductId)} />;
 }

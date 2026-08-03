@@ -6,11 +6,35 @@
 import { prisma } from "@/lib/db";
 
 export const HOME_CONTENT_DEFAULT = {
-  // Qual dos 3 modelos de Hero está ativo na Home + o conteúdo (texto, tema
-  // de cor, produto em destaque) de cada um — os 3 ficam sempre configurados
+  // Qual dos 4 modelos de Hero está ativo na Home + o conteúdo (texto, tema
+  // de cor, produto em destaque) de cada um — os 4 ficam sempre configurados
   // ao mesmo tempo, então trocar "variant" no admin não apaga nada.
   hero: {
     variant: "produto",
+    classico: {
+      theme: "claro",
+      kicker: "TECNOLOGIA · PARÁ DE MINAS/MG",
+      titleBefore: "A Tecnologia que",
+      titleRed: "Move",
+      titleMiddle: "o seu",
+      titleYellow: "Negócio",
+      titleAfter: ".",
+      lead:
+        "Notebooks, computadores, periféricos, impressoras e acessórios com atendimento especializado e entrega rápida. Peça pelo WhatsApp e receba sem sair de casa.",
+      ctaWhatsMessage: "Olá! Quero falar sobre produtos da Paratech.",
+      ctaCatalogLabel: "Ver Catálogo",
+      stats: [
+        { value: "+15 anos", label: "de mercado" },
+        { value: "+10.000", label: "clientes atendidos" },
+        { value: "98%", label: "satisfação" },
+      ],
+      slides: [
+        { productId: 1, kicker: "Campeão de vendas na Paratech", headline: "Rápido no trabalho. Leve na mochila. Sem travar nunca." },
+        { productId: 3, kicker: "Oferta que não volta", headline: "Tela grande, imagem perfeita, preço que ninguém segura." },
+        { productId: 10, kicker: "Seu PC pedindo esse upgrade", headline: "Adeus, tela de carregando. Bem-vindo, SSD." },
+        { productId: 6, kicker: "A que nunca para de imprimir", headline: "Impressão rápida todo santo dia, sem pesar no bolso." },
+      ],
+    },
     produto: {
       theme: "vermelho",
       kicker: "TECNOLOGIA · PARÁ DE MINAS/MG",

@@ -23,7 +23,25 @@ const requiredText = z.string().trim().min(1, "Campo obrigatório.");
 
 export const homeContentSchema = z.object({
   hero: z.object({
-    variant: z.enum(["produto", "benchmark", "antesDepois"]),
+    variant: z.enum(["produto", "benchmark", "antesDepois", "classico"]),
+    classico: z.object({
+      theme: z.enum(["claro", "escuro"]),
+      kicker: requiredText,
+      titleBefore: requiredText,
+      titleRed: requiredText,
+      titleMiddle: requiredText,
+      titleYellow: requiredText,
+      titleAfter: z.string().trim(),
+      lead: requiredText,
+      ctaWhatsMessage: requiredText,
+      ctaCatalogLabel: requiredText,
+      stats: z
+        .array(z.object({ value: requiredText, label: requiredText }))
+        .length(3, "São 3 blocos de estatística."),
+      slides: z
+        .array(z.object({ productId: numberFromForm(z.number()), kicker: requiredText, headline: requiredText }))
+        .length(4, "São 4 produtos no card rotativo."),
+    }),
     produto: z.object({
       theme: z.enum(["vermelho", "ambar", "gelo", "violeta"]),
       kicker: requiredText,

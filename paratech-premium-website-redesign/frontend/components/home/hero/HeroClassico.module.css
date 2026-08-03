@@ -1,0 +1,362 @@
+@keyframes dashMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-42px, -42px); }
+}
+@keyframes heroImgFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.hero {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  background: radial-gradient(circle at 20% 20%, #1c2128 0%, #0B0D10 55%, #050607 100%);
+  overflow: hidden;
+  padding: 0 48px;
+}
+.heroGrid {
+  position: absolute;
+  inset: -42px;
+  background-image:
+    linear-gradient(rgba(255, 212, 0, .06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 212, 0, .06) 1px, transparent 1px);
+  background-size: 42px 42px;
+  animation: dashMove 8s linear infinite;
+  opacity: .5;
+  will-change: transform;
+}
+.blurRed {
+  position: absolute;
+  top: -120px;
+  right: -80px;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(227, 6, 19, .35), transparent 70%);
+  filter: blur(10px);
+}
+.blurYellow {
+  position: absolute;
+  bottom: -140px;
+  left: 10%;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 212, 0, .18), transparent 70%);
+  filter: blur(10px);
+}
+.heroInner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 48px;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 120px 0 80px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 212, 0, .12);
+  border: 1px solid rgba(255, 212, 0, .35);
+  color: #FFD400;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  margin-bottom: 24px;
+}
+.heroTitle {
+  font-family: var(--font-sora), Sora, sans-serif;
+  font-weight: 800;
+  font-size: clamp(34px, 5.2vw, 68px);
+  line-height: 1.15;
+  color: #fff;
+  margin: 0 0 22px;
+}
+.heroLead {
+  font-size: 18px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, .72);
+  max-width: 520px;
+  margin: 0 0 34px;
+}
+.ctaRow {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.ctaWhats, .ctaCatalog {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 16px 26px;
+  border-radius: 12px;
+  transition: transform .3s cubic-bezier(.2, .8, .2, 1), box-shadow .3s cubic-bezier(.2, .8, .2, 1);
+}
+.ctaWhats {
+  background: #25D366;
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(37, 211, 102, .35);
+}
+.ctaWhats:hover {
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(37, 211, 102, .5);
+}
+.ctaCatalog {
+  background: #E30613;
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(227, 6, 19, .35);
+}
+.ctaCatalog:hover {
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(227, 6, 19, .55);
+}
+.ctaWhats:focus-visible, .ctaCatalog:focus-visible {
+  outline: 3px solid #ffd400;
+  outline-offset: 3px;
+}
+.statsRow {
+  display: flex;
+  gap: 36px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+.statNum {
+  font-family: var(--font-sora), Sora, sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  color: #FFD400;
+}
+.statLabel {
+  font-size: 12px;
+  color: rgba(255, 255, 255, .55);
+}
+
+/* ── Tema claro (fundo branco, texto preto) ──────────────────────────────
+   Não é só dessaturar o hero escuro, é um tema claro completo. O CTA do
+   WhatsApp mantém o verde (cor funcional da ação, não da marca); as tags
+   fixas de produto (Novo/Promoção/Mais vendido) também mantêm cor, por
+   serem sinalização de conversão, não decoração. */
+.heroClaro {
+  background: radial-gradient(circle at 20% 20%, #ffffff 0%, #f5f5f3 55%, #ececea 100%);
+}
+.heroClaro .heroGrid {
+  background-image:
+    linear-gradient(rgba(22, 24, 27, .06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 24, 27, .06) 1px, transparent 1px);
+}
+.heroClaro .blurRed {
+  background: radial-gradient(circle, rgba(22, 24, 27, .06), transparent 70%);
+}
+.heroClaro .blurYellow {
+  background: radial-gradient(circle, rgba(22, 24, 27, .04), transparent 70%);
+}
+.heroClaro .badge {
+  background: rgba(22, 24, 27, .05);
+  border-color: rgba(22, 24, 27, .18);
+  color: #16181B;
+}
+.heroClaro .heroTitle {
+  color: #16181B;
+}
+.heroClaro .heroLead {
+  color: rgba(22, 24, 27, .68);
+}
+.heroClaro .ctaCatalog {
+  background: #16181B;
+  box-shadow: 0 10px 30px rgba(22, 24, 27, .25);
+}
+.heroClaro .ctaCatalog:hover {
+  box-shadow: 0 16px 40px rgba(22, 24, 27, .4);
+}
+.heroClaro .statNum {
+  color: #16181B;
+}
+.heroClaro .statLabel {
+  color: rgba(22, 24, 27, .55);
+}
+.heroClaro .heroBannerHeadline {
+  color: #16181B;
+}
+.heroClaro .heroBannerPrice {
+  color: rgba(22, 24, 27, .55);
+}
+.heroClaro .heroBannerCard {
+  box-shadow: 0 24px 50px rgba(22, 24, 27, .18);
+}
+.heroClaro .dot {
+  background: rgba(22, 24, 27, .22);
+}
+.heroClaro .dotActive {
+  background: #16181B;
+}
+
+/* ── Card lateral: vitrine rotativa de produtos em destaque ─────────────── */
+.heroBanner {
+  position: relative;
+  height: 660px;
+}
+.heroBannerSlide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  padding-bottom: 40px;
+  transition: opacity .6s ease;
+}
+.heroBannerCard {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 32px 36px;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+  overflow: hidden;
+}
+.heroBannerGlow {
+  position: absolute;
+  top: 14%;
+  left: 50%;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(36px);
+  opacity: .55;
+}
+.heroBannerImageWrap {
+  position: relative;
+  z-index: 2;
+  width: 390px;
+  height: 390px;
+  margin-bottom: 22px;
+  animation: heroImgFloat 5s ease-in-out infinite;
+}
+.heroBannerTag {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+.heroBannerKicker {
+  position: relative;
+  z-index: 2;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.heroBannerHeadline {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-sora), Sora, sans-serif;
+  font-weight: 800;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.25;
+  color: #fff;
+  max-width: 380px;
+  margin: 0 0 12px;
+}
+.heroBannerPrice {
+  position: relative;
+  z-index: 2;
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(255, 255, 255, .55);
+  margin-bottom: 20px;
+}
+.heroBannerCtaRow {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.heroBannerDots {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .3);
+  transition: background .2s ease;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.dotActive {
+  background: #E30613;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroGrid, .heroBannerImageWrap {
+    animation: none !important;
+  }
+  .heroBannerSlide {
+    transition: none;
+  }
+}
+
+@container (max-width: 960px) {
+  .heroInner {
+    grid-template-columns: 1fr;
+    padding: 110px 0 60px;
+    text-align: left;
+  }
+  .heroBanner {
+    height: 520px;
+  }
+  .heroBannerImageWrap {
+    width: 290px;
+    height: 290px;
+  }
+}
+@container (max-width: 640px) {
+  .hero {
+    padding: 0 20px;
+  }
+  .statsRow {
+    gap: 22px;
+  }
+  .heroBanner {
+    height: 450px;
+  }
+  .heroBannerCard {
+    padding: 32px 20px 30px;
+    border-radius: 22px;
+  }
+  .heroBannerImageWrap {
+    width: 225px;
+    height: 225px;
+  }
+}
