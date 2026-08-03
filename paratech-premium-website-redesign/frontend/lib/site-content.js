@@ -6,6 +6,9 @@
 import { prisma } from "@/lib/db";
 
 export const HOME_CONTENT_DEFAULT = {
+  // "color" = paleta vermelho/amarelo da marca; "grayscale" = hero e banner
+  // rotativo em preto e branco, editável pelo botão na aba Site do /admin.
+  heroTheme: "grayscale",
   heroKicker: "TECNOLOGIA · PARÁ DE MINAS/MG",
   heroTitleBefore: "A Tecnologia que",
   heroTitleRed: "Move",

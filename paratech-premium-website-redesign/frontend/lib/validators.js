@@ -22,6 +22,7 @@ export const productFormSchema = z.object({
 const requiredText = z.string().trim().min(1, "Campo obrigatório.");
 
 export const homeContentSchema = z.object({
+  heroTheme: z.enum(["color", "grayscale"]),
   heroKicker: requiredText,
   heroTitleBefore: requiredText,
   heroTitleRed: requiredText,

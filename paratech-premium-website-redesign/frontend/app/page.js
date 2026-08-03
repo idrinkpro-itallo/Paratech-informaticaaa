@@ -30,13 +30,14 @@ export default async function HomePage() {
     .filter(Boolean);
 
   const sections = home.sections;
+  const mono = home.heroTheme === "grayscale";
 
   return (
     <>
-      <SiteHeader active="home" />
+      <SiteHeader active="home" forceDark={mono} />
 
       <div className={styles.pageContainer}>
-      <section className={styles.hero}>
+      <section className={`${styles.hero} ${mono ? styles.heroMono : ""}`}>
         <div className={styles.heroGrid} aria-hidden="true" />
         <div className={styles.blurRed} aria-hidden="true" />
         <div className={styles.blurYellow} aria-hidden="true" />
@@ -52,8 +53,8 @@ export default async function HomePage() {
           <div>
             <div className={styles.badge}>{home.heroKicker}</div>
             <h1 className={styles.heroTitle}>
-              {home.heroTitleBefore} <span style={{ color: "#E30613" }}>{home.heroTitleRed}</span> {home.heroTitleMiddle}{" "}
-              <span style={{ color: "#FFD400" }}>{home.heroTitleYellow}</span>
+              {home.heroTitleBefore} <span style={{ color: mono ? "#16181B" : "#E30613" }}>{home.heroTitleRed}</span> {home.heroTitleMiddle}{" "}
+              <span style={{ color: mono ? "#5B6168" : "#FFD400" }}>{home.heroTitleYellow}</span>
               {home.heroTitleAfter}
             </h1>
             <p className={styles.heroLead}>{home.heroLead}</p>
@@ -80,7 +81,7 @@ export default async function HomePage() {
             )}
           </div>
 
-          <HeroProductBanner products={featuredProducts} />
+          <HeroProductBanner products={featuredProducts} mono={mono} />
         </div>
       </section>
 

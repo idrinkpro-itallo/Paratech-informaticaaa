@@ -15,7 +15,7 @@ const NAV_LINKS = [
   { key: "contato", href: "/contato", label: "Contato" },
 ];
 
-export default function SiteHeader({ active = null }) {
+export default function SiteHeader({ active = null, forceDark = false }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -26,10 +26,14 @@ export default function SiteHeader({ active = null }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Logo e links do header são sempre brancos (assumem fundo escuro por
+  // baixo); no hero em preto e branco o fundo é claro, então o header
+  // precisa de um fundo escuro sólido mesmo no topo, sem esperar o scroll.
+  const dark = scrolled || forceDark;
   const headerStyle = {
-    background: scrolled ? "rgba(11,13,16,0.78)" : "transparent",
-    backdropFilter: scrolled ? "blur(16px)" : "none",
-    borderBottom: scrolled ? "1px solid rgba(255,255,255,0.08)" : "none",
+    background: dark ? "rgba(11,13,16,0.78)" : "transparent",
+    backdropFilter: dark ? "blur(16px)" : "none",
+    borderBottom: dark ? "1px solid rgba(255,255,255,0.08)" : "none",
   };
 
   return (

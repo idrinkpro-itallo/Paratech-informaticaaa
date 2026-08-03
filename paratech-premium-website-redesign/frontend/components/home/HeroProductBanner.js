@@ -14,7 +14,13 @@ const BANNER_COPY = {
 
 const AUTOPLAY_MS = 6000;
 
-export default function HeroProductBanner({ products }) {
+// Paleta fixa usada no lugar de CATEGORY_META quando o hero está no modo
+// preto e branco (heroTheme: "grayscale") — card claro com contorno e
+// sombra em tinta, mesmo tratamento pra todo slide, independente da
+// categoria do produto em destaque.
+const MONO_PALETTE = { c1: "#ffffff", c2: "#f1f1ef", accent: "#16181B", glow: "rgba(22, 24, 27, .14)" };
+
+export default function HeroProductBanner({ products, mono = false }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -39,6 +45,7 @@ export default function HeroProductBanner({ products }) {
     >
       {products.map((p, i) => {
         const meta = CATEGORY_META[p.category];
+        const palette = mono ? MONO_PALETTE : meta;
         const copy = BANNER_COPY[p.id] || { kicker: meta.label, headline: meta.tagline };
         const tag = tagStyle(p.tag);
         const active = i === index;
@@ -52,13 +59,13 @@ export default function HeroProductBanner({ products }) {
             <div
               className={styles.heroBannerCard}
               style={{
-                background: `linear-gradient(160deg, ${meta.c1}, ${meta.c2})`,
-                borderColor: `${meta.accent}40`,
+                background: `linear-gradient(160deg, ${palette.c1}, ${palette.c2})`,
+                borderColor: `${palette.accent}40`,
               }}
             >
               <div
                 className={styles.heroBannerGlow}
-                style={{ background: meta.accent, boxShadow: `0 0 140px 70px ${meta.glow}` }}
+                style={{ background: palette.accent, boxShadow: `0 0 140px 70px ${palette.glow}` }}
                 aria-hidden="true"
               />
               {tag && (
@@ -73,12 +80,12 @@ export default function HeroProductBanner({ products }) {
                     alt={p.name}
                     fill
                     sizes="(max-width: 960px) 70vw, 360px"
-                    style={{ objectFit: "contain" }}
+                    style={{ objectFit: "contain", filter: mono ? "grayscale(1) contrast(1.05)" : undefined }}
                     priority={i === 0}
                   />
                 )}
               </div>
-              <div className={styles.heroBannerKicker} style={{ color: meta.accent }}>{copy.kicker}</div>
+              <div className={styles.heroBannerKicker} style={{ color: palette.accent }}>{copy.kicker}</div>
               <h3 className={styles.heroBannerHeadline}>{copy.headline}</h3>
               <div className={styles.heroBannerPrice}>Preço sob consulta</div>
               <div className={styles.heroBannerCtaRow}>

@@ -348,6 +348,31 @@
   margin: 0;
 }
 
+/* Alterna o hero (e o banner rotativo) entre colorido e preto e branco */
+.heroThemeToggle {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.heroThemeBtn {
+  background: #16181b;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #9aa0a6;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.heroThemeBtnActive {
+  background: #23262b;
+  border-color: #ffd400;
+  color: #ffd400;
+}
+
 /* Lista de categorias (mostrar/ocultar) dentro da seção Categorias */
 .categoryToggleList {
   display: flex;

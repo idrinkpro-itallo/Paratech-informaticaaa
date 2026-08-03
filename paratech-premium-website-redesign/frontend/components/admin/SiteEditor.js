@@ -225,9 +225,37 @@ function HomeForm({ home, setHome, products, categories, onToggleCategory, categ
   const toggleSection = (key) => () =>
     setHome((h) => ({ ...h, sections: { ...h.sections, [key]: !h.sections[key] } }));
 
+  const setHeroTheme = (theme) => setHome((h) => ({ ...h, heroTheme: theme }));
+
   return (
     <>
       <Section title="Hero">
+        <Field label="Estilo visual">
+          <div className={styles.heroThemeToggle} role="radiogroup" aria-label="Estilo visual do hero">
+            <button
+              type="button"
+              role="radio"
+              aria-checked={home.heroTheme === "color"}
+              className={`${styles.heroThemeBtn} ${home.heroTheme === "color" ? styles.heroThemeBtnActive : ""}`}
+              onClick={() => setHeroTheme("color")}
+            >
+              Colorido (vermelho/amarelo)
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={home.heroTheme === "grayscale"}
+              className={`${styles.heroThemeBtn} ${home.heroTheme === "grayscale" ? styles.heroThemeBtnActive : ""}`}
+              onClick={() => setHeroTheme("grayscale")}
+            >
+              Preto e branco
+            </button>
+          </div>
+          <p className={styles.helpText}>
+            Troca os acentos do hero e do banner rotativo de produtos para uma paleta em preto e branco. O botão do
+            WhatsApp continua verde (cor de ação, não de marca).
+          </p>
+        </Field>
         <Field label="Selo (acima do título)">
           <input className={styles.input} value={home.heroKicker} onChange={set("heroKicker")} />
         </Field>
@@ -609,12 +637,13 @@ function HomePreview({ home, products, categories }) {
     .map((id) => products.find((p) => p.id === id))
     .filter(Boolean);
   const sections = home.sections;
+  const mono = home.heroTheme === "grayscale";
 
   return (
     <div className={pageStyles.pageContainer} style={{ borderRadius: 16, overflow: "hidden" }}>
       {/* min-height do hero é em vh (viewport real) no site público; dentro do
           preview isso deixa uma faixa em branco enorme, então limitamos aqui. */}
-      <section className={pageStyles.hero} style={{ minHeight: "auto" }}>
+      <section className={`${pageStyles.hero} ${mono ? pageStyles.heroMono : ""}`} style={{ minHeight: "auto" }}>
         <div className={pageStyles.heroGrid} aria-hidden="true" />
         <div className={pageStyles.blurRed} aria-hidden="true" />
         <div className={pageStyles.blurYellow} aria-hidden="true" />
@@ -631,8 +660,8 @@ function HomePreview({ home, products, categories }) {
           <div>
             <div className={pageStyles.badge}>{home.heroKicker}</div>
             <h1 className={pageStyles.heroTitle}>
-              {home.heroTitleBefore} <span style={{ color: "#E30613" }}>{home.heroTitleRed}</span> {home.heroTitleMiddle}{" "}
-              <span style={{ color: "#FFD400" }}>{home.heroTitleYellow}</span>
+              {home.heroTitleBefore} <span style={{ color: mono ? "#16181B" : "#E30613" }}>{home.heroTitleRed}</span> {home.heroTitleMiddle}{" "}
+              <span style={{ color: mono ? "#5B6168" : "#FFD400" }}>{home.heroTitleYellow}</span>
               {home.heroTitleAfter}
             </h1>
             <p className={pageStyles.heroLead}>{home.heroLead}</p>
@@ -652,7 +681,7 @@ function HomePreview({ home, products, categories }) {
             )}
           </div>
 
-          <HeroProductBanner products={featuredProducts} />
+          <HeroProductBanner products={featuredProducts} mono={mono} />
         </div>
       </section>
 
