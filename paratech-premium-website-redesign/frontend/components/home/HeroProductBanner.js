@@ -6,10 +6,10 @@ import styles from "@/app/page.module.css";
 import { CATEGORY_META, WA_SALES, waLink, tagStyle } from "@/lib/products-data";
 
 const BANNER_COPY = {
-  1: { kicker: "O queridinho da Paratech", headline: "Trabalhe rápido. Estude fácil. Viva sem travar." },
-  3: { kicker: "Tela nova, o mesmo orçamento", headline: "Cada detalhe, mais nítido." },
-  10: { kicker: "Boot instantâneo, sem enrolação", headline: "Seu PC merece essa velocidade." },
-  6: { kicker: "Confiança pra imprimir todo dia", headline: "Imprima na velocidade do seu negócio." },
+  1: { kicker: "Campeão de vendas na Paratech", headline: "Rápido no trabalho. Leve na mochila. Sem travar nunca." },
+  3: { kicker: "Oferta que não volta", headline: "Tela grande, imagem perfeita, preço que ninguém segura." },
+  10: { kicker: "Seu PC pedindo esse upgrade", headline: "Adeus, tela de carregando. Bem-vindo, SSD." },
+  6: { kicker: "A que nunca para de imprimir", headline: "Impressão rápida todo santo dia, sem pesar no bolso." },
 };
 
 const AUTOPLAY_MS = 6000;
@@ -50,40 +50,48 @@ export default function HeroProductBanner({ products }) {
             aria-hidden={active ? undefined : true}
           >
             <div
-              className={styles.heroBannerGlow}
-              style={{ background: meta.accent, boxShadow: `0 0 120px 60px ${meta.glow}` }}
-              aria-hidden="true"
-            />
-            {tag && (
-              <div className={styles.heroBannerTag} style={{ background: tag.bg, color: tag.color }}>
-                {p.tag}
-              </div>
-            )}
-            <div className={styles.heroBannerImageWrap}>
-              {p.imageUrl && (
-                <Image
-                  src={p.imageUrl}
-                  alt={p.name}
-                  fill
-                  sizes="(max-width: 960px) 60vw, 260px"
-                  style={{ objectFit: "contain" }}
-                  priority={i === 0}
-                />
+              className={styles.heroBannerCard}
+              style={{
+                background: `linear-gradient(160deg, ${meta.c1}, ${meta.c2})`,
+                borderColor: `${meta.accent}40`,
+              }}
+            >
+              <div
+                className={styles.heroBannerGlow}
+                style={{ background: meta.accent, boxShadow: `0 0 140px 70px ${meta.glow}` }}
+                aria-hidden="true"
+              />
+              {tag && (
+                <div className={styles.heroBannerTag} style={{ background: tag.bg, color: tag.color }}>
+                  {p.tag}
+                </div>
               )}
-            </div>
-            <div className={styles.heroBannerKicker} style={{ color: meta.accent }}>{copy.kicker}</div>
-            <h3 className={styles.heroBannerHeadline}>{copy.headline}</h3>
-            <div className={styles.heroBannerPrice}>Preço sob consulta</div>
-            <div className={styles.heroBannerCtaRow}>
-              <a
-                href={waLink(WA_SALES, `Quero um orçamento para: ${p.name}`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-quote"
-                tabIndex={active ? 0 : -1}
-              >
-                Solicitar Orçamento
-              </a>
+              <div className={styles.heroBannerImageWrap}>
+                {p.imageUrl && (
+                  <Image
+                    src={p.imageUrl}
+                    alt={p.name}
+                    fill
+                    sizes="(max-width: 960px) 70vw, 360px"
+                    style={{ objectFit: "contain" }}
+                    priority={i === 0}
+                  />
+                )}
+              </div>
+              <div className={styles.heroBannerKicker} style={{ color: meta.accent }}>{copy.kicker}</div>
+              <h3 className={styles.heroBannerHeadline}>{copy.headline}</h3>
+              <div className={styles.heroBannerPrice}>Preço sob consulta</div>
+              <div className={styles.heroBannerCtaRow}>
+                <a
+                  href={waLink(WA_SALES, `Quero um orçamento para: ${p.name}`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-quote"
+                  tabIndex={active ? 0 : -1}
+                >
+                  Solicitar Orçamento
+                </a>
+              </div>
             </div>
           </div>
         );

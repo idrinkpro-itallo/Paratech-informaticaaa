@@ -91,10 +91,10 @@
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 56px;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 48px;
   align-items: center;
-  max-width: 1360px;
+  max-width: 1400px;
   margin: 0 auto;
   width: 100%;
   padding: 120px 0 80px;
@@ -183,41 +183,51 @@
 /* Hero product banner — rotating "vitrine" of featured products */
 .heroBanner {
   position: relative;
-  height: 460px;
+  height: 620px;
 }
 .heroBannerSlide {
   position: absolute;
   inset: 0;
   display: flex;
+  padding-bottom: 40px;
+  transition: opacity .6s ease;
+}
+.heroBannerCard {
+  position: relative;
+  flex: 1;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 24px 44px;
-  transition: opacity .6s ease;
+  padding: 40px 32px 36px;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+  overflow: hidden;
 }
 .heroBannerGlow {
   position: absolute;
-  top: 18%;
+  top: 14%;
   left: 50%;
-  width: 200px;
-  height: 200px;
+  width: 260px;
+  height: 260px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  filter: blur(30px);
-  opacity: .5;
+  filter: blur(36px);
+  opacity: .55;
 }
 .heroBannerImageWrap {
   position: relative;
   z-index: 2;
-  width: 220px;
-  height: 220px;
-  margin-bottom: 18px;
+  width: 320px;
+  height: 320px;
+  margin-bottom: 22px;
   animation: heroImgFloat 5s ease-in-out infinite;
 }
 .heroBannerTag {
   position: absolute;
-  top: 0;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
@@ -230,21 +240,21 @@
   position: relative;
   z-index: 2;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .heroBannerHeadline {
   position: relative;
   z-index: 2;
   font-family: var(--font-sora), Sora, sans-serif;
   font-weight: 800;
-  font-size: clamp(20px, 2.4vw, 27px);
+  font-size: clamp(22px, 2.6vw, 30px);
   line-height: 1.25;
   color: #fff;
-  max-width: 340px;
-  margin: 0 0 10px;
+  max-width: 380px;
+  margin: 0 0 12px;
 }
 .heroBannerPrice {
   position: relative;
@@ -252,7 +262,7 @@
   font-size: 13px;
   font-style: italic;
   color: rgba(255, 255, 255, .55);
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 .heroBannerCtaRow {
   position: relative;
@@ -279,7 +289,11 @@
     text-align: left;
   }
   .heroBanner {
-    height: 380px;
+    height: 480px;
+  }
+  .heroBannerImageWrap {
+    width: 240px;
+    height: 240px;
   }
 }
 @container (max-width: 640px) {
@@ -290,11 +304,15 @@
     gap: 22px;
   }
   .heroBanner {
-    height: 340px;
+    height: 420px;
+  }
+  .heroBannerCard {
+    padding: 32px 20px 30px;
+    border-radius: 22px;
   }
   .heroBannerImageWrap {
-    width: 170px;
-    height: 170px;
+    width: 190px;
+    height: 190px;
   }
 }
 
