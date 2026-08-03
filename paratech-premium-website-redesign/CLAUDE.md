@@ -69,3 +69,11 @@ Não há carrinho nem checkout — **tudo converte para WhatsApp**:
 - Filtros compostos: categoria E preço máximo E busca por nome; ordenação por relevância/preço/nome; estado vazio "Nenhum produto encontrado para esses filtros."
 - Tags de produto com estilo fixo: `Novo` (amarelo/preto), `Promoção` (vermelho/branco), `Mais vendido` (grafite/amarelo).
 - Todo o conteúdo é **português brasileiro** — manter idioma em textos novos.
+
+## Regra de branch e preview (sempre ativa)
+
+- NUNCA trabalhe ou faça commit direto na branch `main`. Toda alteração de código acontece na branch `teste` (verifique com `git branch --show-current` antes de qualquer commit; se não estiver em `teste`, troque antes de continuar).
+- Após qualquer alteração de código, rode o servidor local (`npm run dev`) e informe a URL (geralmente `http://localhost:3000`) para revisão visual ANTES de qualquer commit ou push.
+- NUNCA faça `git push` para `main`, `git merge` para `main`, nem `vercel --prod` sem aprovação explícita na conversa.
+- Fluxo padrão: alterar código → subir servidor local → mostrar a URL e o que mudou → aguardar aprovação → só então commitar na `teste` e (se solicitado) abrir PR ou merge pra `main`.
+- Se o servidor local já estiver rodando, não suba outra instância — avisar a porta em uso.
