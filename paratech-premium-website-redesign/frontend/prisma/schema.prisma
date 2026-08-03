@@ -28,6 +28,7 @@ model Category {
   c2       String
   accent   String
   glow     String
+  visible  Boolean   @default(true)
   products Product[]
 }
 

@@ -34,42 +34,44 @@ export default function ContatoClient({ content }) {
       <section className={styles.content}>
         <div className={styles.grid}>
           <div className={styles.leftCol}>
-            <div className={styles.card}>
-              <div className={styles.cardTitle}>Informações</div>
-              <div className={styles.infoList}>
-                <div>
-                  <div className={styles.infoLabel}>Endereço</div>
-                  <div className={styles.infoValue}>
-                    {content.address.split("\n").map((line, i) => (
-                      <span key={i}>
-                        {line}
-                        {i < content.address.split("\n").length - 1 && <br />}
-                      </span>
-                    ))}
+            {content.sections.informacoes && (
+              <div className={styles.card}>
+                <div className={styles.cardTitle}>Informações</div>
+                <div className={styles.infoList}>
+                  <div>
+                    <div className={styles.infoLabel}>Endereço</div>
+                    <div className={styles.infoValue}>
+                      {content.address.split("\n").map((line, i) => (
+                        <span key={i}>
+                          {line}
+                          {i < content.address.split("\n").length - 1 && <br />}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <div className={styles.infoLabel}>Telefone</div>
+                    <a href={`tel:${content.phoneHref}`} className={styles.infoLink}>{content.phone}</a>
+                  </div>
+                  <div>
+                    <div className={styles.infoLabel}>E-mail</div>
+                    <a href={`mailto:${content.email}`} className={styles.infoLink}>{content.email}</a>
+                  </div>
+                  <div>
+                    <div className={styles.infoLabel}>Horário de atendimento</div>
+                    <div className={styles.infoValue}>{content.hours}</div>
                   </div>
                 </div>
-                <div>
-                  <div className={styles.infoLabel}>Telefone</div>
-                  <a href={`tel:${content.phoneHref}`} className={styles.infoLink}>{content.phone}</a>
-                </div>
-                <div>
-                  <div className={styles.infoLabel}>E-mail</div>
-                  <a href={`mailto:${content.email}`} className={styles.infoLink}>{content.email}</a>
-                </div>
-                <div>
-                  <div className={styles.infoLabel}>Horário de atendimento</div>
-                  <div className={styles.infoValue}>{content.hours}</div>
-                </div>
+                <a
+                  href={`https://wa.me/${WA_SUPPORT}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.whatsBtn}
+                >
+                  Falar no WhatsApp agora
+                </a>
               </div>
-              <a
-                href={`https://wa.me/${WA_SUPPORT}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.whatsBtn}
-              >
-                Falar no WhatsApp agora
-              </a>
-            </div>
+            )}
             <div className={styles.mapCard}>
               <iframe
                 title="Mapa Paratech"

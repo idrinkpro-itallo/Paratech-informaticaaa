@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { put } from "@vercel/blob";
 import { verifySession } from "@/lib/dal";
+import { prisma } from "@/lib/db";
 import { saveSiteContent } from "@/lib/site-content";
 import { homeContentSchema, contatoContentSchema } from "@/lib/validators";
 
@@ -34,6 +35,24 @@ export async function uploadGalleryPhotoAction(formData) {
     addRandomSuffix: true,
   });
   return { ok: true, url: blob.url };
+}
+
+// Visibilidade de categoria é gravada direto na tabela Category (afeta Home,
+// Catálogo e rodapé ao mesmo tempo), fora do fluxo de rascunho + "Publicar
+// alterações" do conteúdo de Home/Contato — por isso aplica na hora.
+export async function toggleCategoryVisibilityAction(categoryId, visible) {
+  await verifySession();
+
+  await prisma.category.update({
+    where: { id: categoryId },
+    data: { visible: Boolean(visible) },
+  });
+
+  revalidatePath("/");
+  revalidatePath("/catalogo");
+  revalidatePath("/admin/site");
+
+  return { ok: true };
 }
 
 export async function saveSiteContentAction(section, payload) {

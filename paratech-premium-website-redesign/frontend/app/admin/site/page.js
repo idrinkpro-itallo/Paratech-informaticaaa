@@ -1,6 +1,6 @@
 import { verifySession } from "@/lib/dal";
 import { getSiteContent } from "@/lib/site-content";
-import { getAllProducts, getActiveCategories } from "@/lib/products";
+import { getAllProducts, getAllCategoriesForAdmin } from "@/lib/products";
 import { logout } from "@/app/admin/actions";
 import AdminNav from "@/components/admin/AdminNav";
 import SiteEditor from "@/components/admin/SiteEditor";
@@ -14,7 +14,7 @@ export default async function AdminSitePage() {
     getSiteContent("home"),
     getSiteContent("contato"),
     getAllProducts(),
-    getActiveCategories(),
+    getAllCategoriesForAdmin(),
   ]);
 
   return (

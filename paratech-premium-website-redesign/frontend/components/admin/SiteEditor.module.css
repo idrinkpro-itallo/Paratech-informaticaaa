@@ -348,6 +348,31 @@
   margin: 0;
 }
 
+/* Lista de categorias (mostrar/ocultar) dentro da seção Categorias */
+.categoryToggleList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.categoryToggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: #16181b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.categoryToggleName {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+
 /* Device toggle (preview pane) */
 .previewLabel {
   justify-content: space-between;

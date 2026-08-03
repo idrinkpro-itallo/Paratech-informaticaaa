@@ -65,8 +65,10 @@ export const homeContentSchema = z.object({
     .array(z.object({ url: z.string().trim(), caption: requiredText }))
     .min(1, "Adicione ao menos uma foto na galeria."),
   sections: z.object({
+    banner: z.boolean(),
     categorias: z.boolean(),
     destaque: z.boolean(),
+    numeros: z.boolean(),
     diferenciais: z.boolean(),
     contadores: z.boolean(),
     promocao: z.boolean(),
@@ -85,4 +87,7 @@ export const contatoContentSchema = z.object({
   email: z.string().trim().email("E-mail inválido."),
   hours: requiredText,
   mapEmbedUrl: z.string().trim().url("URL do mapa inválida."),
+  sections: z.object({
+    informacoes: z.boolean(),
+  }),
 });

@@ -42,11 +42,13 @@ export default async function HomePage() {
         <div className={styles.blurYellow} aria-hidden="true" />
 
         <div className={styles.heroInner}>
-          <div className={styles.bannerStrip}>
-            {home.bannerMessages.map((msg, i) => (
-              <span key={i} className={styles.bannerSlide} style={{ animationDelay: `${i * 3}s` }}>{msg}</span>
-            ))}
-          </div>
+          {sections.banner && (
+            <div className={styles.bannerStrip}>
+              {home.bannerMessages.map((msg, i) => (
+                <span key={i} className={styles.bannerSlide} style={{ animationDelay: `${i * 3}s` }}>{msg}</span>
+              ))}
+            </div>
+          )}
           <div>
             <div className={styles.badge}>{home.heroKicker}</div>
             <h1 className={styles.heroTitle}>
@@ -66,14 +68,16 @@ export default async function HomePage() {
               </a>
               <Link href="/catalogo" className={styles.ctaCatalog}>{home.ctaCatalogLabel}</Link>
             </div>
-            <div className={styles.statsRow}>
-              {home.heroStats.map((s, i) => (
-                <div key={i}>
-                  <div className={styles.statNum}>{s.value}</div>
-                  <div className={styles.statLabel}>{s.label}</div>
-                </div>
-              ))}
-            </div>
+            {sections.numeros && (
+              <div className={styles.statsRow}>
+                {home.heroStats.map((s, i) => (
+                  <div key={i}>
+                    <div className={styles.statNum}>{s.value}</div>
+                    <div className={styles.statLabel}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <HeroProductBanner products={featuredProducts} />

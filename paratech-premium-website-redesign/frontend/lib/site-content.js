@@ -57,11 +57,15 @@ export const HOME_CONTENT_DEFAULT = {
     { url: "", caption: "foto: atendimento" },
     { url: "", caption: "foto: estoque" },
   ],
-  // Liga/desliga seções inteiras da Home sem apagar o conteúdo — hero e
-  // rodapé são estruturais e não entram aqui (sempre visíveis).
+  // Liga/desliga seções inteiras da Home sem apagar o conteúdo — o título,
+  // texto e CTA do hero e o rodapé são estruturais e não entram aqui (sempre
+  // visíveis); a faixa rotativa e os números logo abaixo do CTA já são
+  // blocos independentes e podem ser desligados.
   sections: {
+    banner: true,
     categorias: true,
     destaque: true,
+    numeros: true,
     diferenciais: true,
     contadores: true,
     promocao: true,
@@ -80,6 +84,12 @@ export const CONTATO_CONTENT_DEFAULT = {
   email: "arjtech@hotmail.com",
   hours: "Segunda a Sábado — 8h às 18h",
   mapEmbedUrl: "https://www.google.com/maps?q=R.+Nova+Serrana,31,Para+de+Minas,MG&output=embed",
+  // Título e mapa são estruturais (sempre visíveis); o card de endereço/
+  // telefone/e-mail pode ser desligado sem quebrar o layout (o mapa e o
+  // formulário continuam na página).
+  sections: {
+    informacoes: true,
+  },
 };
 
 const DEFAULTS = { home: HOME_CONTENT_DEFAULT, contato: CONTATO_CONTENT_DEFAULT };

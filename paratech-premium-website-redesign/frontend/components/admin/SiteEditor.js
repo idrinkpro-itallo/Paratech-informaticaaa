@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { saveSiteContentAction, uploadGalleryPhotoAction } from "@/app/admin/site/actions";
+import { saveSiteContentAction, uploadGalleryPhotoAction, toggleCategoryVisibilityAction } from "@/app/admin/site/actions";
 import HeroProductBanner from "@/components/home/HeroProductBanner";
 import { FEATURE_ICONS } from "@/components/home/FeatureIcons";
 import ProductCard from "@/components/ProductCard";
@@ -17,18 +17,37 @@ export default function SiteEditor({ initialHome, initialContato, products = [],
   const [section, setSection] = useState("home");
   const [home, setHome] = useState(initialHome);
   const [contato, setContato] = useState(initialContato);
+  const [categoryList, setCategoryList] = useState(categories);
+  const [categoryErrors, setCategoryErrors] = useState({});
   const [status, setStatus] = useState({ home: null, contato: null });
   const [device, setDevice] = useState("desktop");
   const [pending, startTransition] = useTransition();
+  const [categoryPending, startCategoryTransition] = useTransition();
 
   const data = section === "home" ? home : contato;
   const setData = section === "home" ? setHome : setContato;
   const current = status[section];
 
+  // Categorias ocultas somem da Home, do Catálogo e do rodapé ao mesmo tempo
+  // — o preview usa a mesma lista filtrada pra refletir isso na hora.
+  const visibleCategories = useMemo(() => categoryList.filter((c) => c.visible), [categoryList]);
+
   const handleSave = () => {
     startTransition(async () => {
       const result = await saveSiteContentAction(section, data);
       setStatus((s) => ({ ...s, [section]: result }));
+    });
+  };
+
+  const handleToggleCategory = (id, nextVisible) => {
+    setCategoryList((list) => list.map((c) => (c.id === id ? { ...c, visible: nextVisible } : c)));
+    setCategoryErrors((e) => ({ ...e, [id]: null }));
+    startCategoryTransition(async () => {
+      const result = await toggleCategoryVisibilityAction(id, nextVisible);
+      if (result?.error) {
+        setCategoryList((list) => list.map((c) => (c.id === id ? { ...c, visible: !nextVisible } : c)));
+        setCategoryErrors((e) => ({ ...e, [id]: result.error }));
+      }
     });
   };
 
@@ -67,7 +86,15 @@ export default function SiteEditor({ initialHome, initialContato, products = [],
       <div className={styles.split}>
         <div className={styles.formPane}>
           {section === "home" ? (
-            <HomeForm home={home} setHome={setHome} products={products} />
+            <HomeForm
+              home={home}
+              setHome={setHome}
+              products={products}
+              categories={categoryList}
+              onToggleCategory={handleToggleCategory}
+              categoryPending={categoryPending}
+              categoryErrors={categoryErrors}
+            />
           ) : (
             <ContatoForm contato={contato} setContato={setContato} />
           )}
@@ -95,7 +122,7 @@ export default function SiteEditor({ initialHome, initialContato, products = [],
           <div className={device === "mobile" ? styles.phoneShell : undefined}>
             <div className={`${styles.previewFrame} ${device === "mobile" ? styles.previewFrameMobile : ""}`}>
               {section === "home" ? (
-                <HomePreview home={home} products={products} categories={categories} />
+                <HomePreview home={home} products={products} categories={visibleCategories} />
               ) : (
                 <ContatoPreview contato={contato} />
               )}
@@ -135,7 +162,34 @@ function Section({ title, children, visible, onToggleVisible }) {
   );
 }
 
-function HomeForm({ home, setHome, products }) {
+function CategoryVisibilityList({ categories, pending, errors, onToggle }) {
+  if (!categories.length) {
+    return <p className={styles.helpText}>Nenhuma categoria com produtos cadastrados ainda.</p>;
+  }
+
+  return (
+    <div className={styles.categoryToggleList}>
+      {categories.map((c) => (
+        <div key={c.id} className={styles.categoryToggleRow}>
+          <span className={styles.categoryToggleName}>{c.label}</span>
+          <label className={styles.visToggle}>
+            <input
+              type="checkbox"
+              checked={c.visible}
+              disabled={pending}
+              onChange={() => onToggle(c.id, !c.visible)}
+            />
+            <span className={styles.visSwitch} aria-hidden="true" />
+            <span className={styles.visLabel}>{c.visible ? "Visível" : "Oculta"}</span>
+          </label>
+          {errors?.[c.id] && <span className={styles.statusError}>{errors[c.id]}</span>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function HomeForm({ home, setHome, products, categories, onToggleCategory, categoryPending, categoryErrors }) {
   const set = (key) => (e) => setHome((h) => ({ ...h, [key]: e.target.value }));
 
   const setStat = (index, key) => (e) =>
@@ -206,9 +260,16 @@ function HomeForm({ home, setHome, products }) {
 
       <Section title="Categorias" visible={home.sections.categorias} onToggleVisible={toggleSection("categorias")}>
         <p className={styles.helpText}>
-          Grade gerada automaticamente a partir das categorias com produtos ativos (edite categorias em
-          Produtos). Aqui você só decide se essa seção aparece na Home.
+          Grade gerada automaticamente a partir das categorias com produtos cadastrados. Desligue a chave acima
+          pra tirar a seção inteira da Home, ou oculte categorias específicas abaixo — vale pra Home, Catálogo e
+          rodapé ao mesmo tempo (os produtos continuam cadastrados, só somem da navegação por categoria).
         </p>
+        <CategoryVisibilityList
+          categories={categories}
+          pending={categoryPending}
+          errors={categoryErrors}
+          onToggle={onToggleCategory}
+        />
       </Section>
 
       <Section
@@ -228,7 +289,11 @@ function HomeForm({ home, setHome, products }) {
         />
       </Section>
 
-      <Section title="Faixa de destaques (rotativa)">
+      <Section
+        title="Faixa de destaques (rotativa)"
+        visible={home.sections.banner}
+        onToggleVisible={toggleSection("banner")}
+      >
         {home.bannerMessages.map((msg, i) => (
           <div key={i} className={styles.listRow}>
             <input className={styles.input} value={msg} onChange={setBanner(i)} />
@@ -240,7 +305,7 @@ function HomeForm({ home, setHome, products }) {
         <button type="button" className={styles.addBtn} onClick={addBanner}>+ Adicionar mensagem</button>
       </Section>
 
-      <Section title="Números do hero">
+      <Section title="Números do hero" visible={home.sections.numeros} onToggleVisible={toggleSection("numeros")}>
         <div className={styles.row3}>
           {home.heroStats.map((s, i) => (
             <div key={i} className={styles.statPair}>
@@ -488,6 +553,8 @@ function GalleryUploadSlot({ photo, onCaptionChange, onUploaded, onRemove, disab
 
 function ContatoForm({ contato, setContato }) {
   const set = (key) => (e) => setContato((c) => ({ ...c, [key]: e.target.value }));
+  const toggleSection = (key) => () =>
+    setContato((c) => ({ ...c, sections: { ...c.sections, [key]: !c.sections[key] } }));
 
   return (
     <>
@@ -502,7 +569,11 @@ function ContatoForm({ contato, setContato }) {
         </div>
       </Section>
 
-      <Section title="Informações">
+      <Section
+        title="Informações"
+        visible={contato.sections.informacoes}
+        onToggleVisible={toggleSection("informacoes")}
+      >
         <Field label="Endereço">
           <textarea className={styles.input} rows={2} value={contato.address} onChange={set("address")} />
         </Field>
@@ -522,6 +593,9 @@ function ContatoForm({ contato, setContato }) {
             <input className={styles.input} value={contato.hours} onChange={set("hours")} />
           </Field>
         </div>
+      </Section>
+
+      <Section title="Mapa">
         <Field label="URL do mapa (Google Maps embed)">
           <input className={styles.input} value={contato.mapEmbedUrl} onChange={set("mapEmbedUrl")} />
         </Field>
@@ -545,13 +619,15 @@ function HomePreview({ home, products, categories }) {
         <div className={pageStyles.blurRed} aria-hidden="true" />
         <div className={pageStyles.blurYellow} aria-hidden="true" />
         <div className={pageStyles.heroInner}>
-          <div className={pageStyles.bannerStrip}>
-            {home.bannerMessages.map((msg, i) => (
-              <span key={i} className={pageStyles.bannerSlide} style={{ animationDelay: `${i * 3}s` }}>
-                {msg}
-              </span>
-            ))}
-          </div>
+          {sections.banner && (
+            <div className={pageStyles.bannerStrip}>
+              {home.bannerMessages.map((msg, i) => (
+                <span key={i} className={pageStyles.bannerSlide} style={{ animationDelay: `${i * 3}s` }}>
+                  {msg}
+                </span>
+              ))}
+            </div>
+          )}
           <div>
             <div className={pageStyles.badge}>{home.heroKicker}</div>
             <h1 className={pageStyles.heroTitle}>
@@ -564,14 +640,16 @@ function HomePreview({ home, products, categories }) {
               <span className={pageStyles.ctaWhats}>Falar no WhatsApp</span>
               <span className={pageStyles.ctaCatalog}>{home.ctaCatalogLabel}</span>
             </div>
-            <div className={pageStyles.statsRow}>
-              {home.heroStats.map((s, i) => (
-                <div key={i}>
-                  <div className={pageStyles.statNum}>{s.value}</div>
-                  <div className={pageStyles.statLabel}>{s.label}</div>
-                </div>
-              ))}
-            </div>
+            {sections.numeros && (
+              <div className={pageStyles.statsRow}>
+                {home.heroStats.map((s, i) => (
+                  <div key={i}>
+                    <div className={pageStyles.statNum}>{s.value}</div>
+                    <div className={pageStyles.statLabel}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <HeroProductBanner products={featuredProducts} />
@@ -755,35 +833,37 @@ function ContatoPreview({ contato }) {
         <h1 className={contatoStyles.title}>{contato.heroTitle}</h1>
       </section>
       <section className={contatoStyles.content}>
-        <div className={contatoStyles.card}>
-          <div className={contatoStyles.cardTitle}>Informações</div>
-          <div className={contatoStyles.infoList}>
-            <div>
-              <div className={contatoStyles.infoLabel}>Endereço</div>
-              <div className={contatoStyles.infoValue}>
-                {contato.address.split("\n").map((line, i) => (
-                  <span key={i}>
-                    {line}
-                    <br />
-                  </span>
-                ))}
+        {contato.sections.informacoes && (
+          <div className={contatoStyles.card}>
+            <div className={contatoStyles.cardTitle}>Informações</div>
+            <div className={contatoStyles.infoList}>
+              <div>
+                <div className={contatoStyles.infoLabel}>Endereço</div>
+                <div className={contatoStyles.infoValue}>
+                  {contato.address.split("\n").map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div className={contatoStyles.infoLabel}>Telefone</div>
+                <span className={contatoStyles.infoLink}>{contato.phone}</span>
+              </div>
+              <div>
+                <div className={contatoStyles.infoLabel}>E-mail</div>
+                <span className={contatoStyles.infoLink}>{contato.email}</span>
+              </div>
+              <div>
+                <div className={contatoStyles.infoLabel}>Horário de atendimento</div>
+                <div className={contatoStyles.infoValue}>{contato.hours}</div>
               </div>
             </div>
-            <div>
-              <div className={contatoStyles.infoLabel}>Telefone</div>
-              <span className={contatoStyles.infoLink}>{contato.phone}</span>
-            </div>
-            <div>
-              <div className={contatoStyles.infoLabel}>E-mail</div>
-              <span className={contatoStyles.infoLink}>{contato.email}</span>
-            </div>
-            <div>
-              <div className={contatoStyles.infoLabel}>Horário de atendimento</div>
-              <div className={contatoStyles.infoValue}>{contato.hours}</div>
-            </div>
+            <span className={contatoStyles.whatsBtn}>Falar no WhatsApp agora</span>
           </div>
-          <span className={contatoStyles.whatsBtn}>Falar no WhatsApp agora</span>
-        </div>
+        )}
         <div className={contatoStyles.mapCard}>
           {contato.mapEmbedUrl ? (
             <iframe title="Mapa" src={contato.mapEmbedUrl} loading="lazy" className={contatoStyles.mapFrame} />

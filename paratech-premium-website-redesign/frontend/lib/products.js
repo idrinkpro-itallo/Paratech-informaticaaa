@@ -32,16 +32,29 @@ export async function getProductById(id) {
   return product ? serialize(product) : null;
 }
 
-// Categorias com pelo menos um produto, na ordem declarada em CATEGORY_META
-// — mesma regra que o CATEGORIES derivado antigo seguia (chips do Catálogo,
-// grade da Home e links do rodapé usam isso).
+// Categorias com pelo menos um produto e não ocultadas pelo admin, na ordem
+// declarada em CATEGORY_META — mesma regra que o CATEGORIES derivado antigo
+// seguia (chips do Catálogo, grade da Home e links do rodapé usam isso).
 export async function getActiveCategories() {
   const categories = await prisma.category.findMany({
-    where: { products: { some: {} } },
+    where: { visible: true, products: { some: {} } },
     select: { id: true },
   });
   const activeIds = new Set(categories.map((c) => c.id));
   return Object.keys(CATEGORY_META)
     .filter((id) => activeIds.has(id))
     .map((id) => ({ id, label: CATEGORY_META[id].label }));
+}
+
+// Todas as categorias com produtos (visíveis ou não), pra tela de admin
+// decidir o que mostrar/ocultar no site — mesma ordem de CATEGORY_META.
+export async function getAllCategoriesForAdmin() {
+  const categories = await prisma.category.findMany({
+    where: { products: { some: {} } },
+    select: { id: true, visible: true },
+  });
+  const byId = new Map(categories.map((c) => [c.id, c.visible]));
+  return Object.keys(CATEGORY_META)
+    .filter((id) => byId.has(id))
+    .map((id) => ({ id, label: CATEGORY_META[id].label, visible: byId.get(id) }));
 }
