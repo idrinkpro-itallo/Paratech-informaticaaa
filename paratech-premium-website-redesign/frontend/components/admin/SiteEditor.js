@@ -6,8 +6,12 @@ import {
   uploadGalleryPhotoAction,
   toggleCategoryVisibilityAction,
   updateCategoryCoverImageAction,
+  createCategoryAction,
 } from "@/app/admin/site/actions";
-import HeroProductBanner from "@/components/home/HeroProductBanner";
+import BannerTicker from "@/components/home/BannerTicker";
+import HeroSwitch from "@/components/home/hero/HeroSwitch";
+import { PRODUTO_THEMES, BENCHMARK_THEMES, ANTES_DEPOIS_THEMES } from "@/lib/hero-themes";
+import { CATEGORY_COLOR_PRESETS } from "@/lib/category-presets";
 import { FEATURE_ICONS } from "@/components/home/FeatureIcons";
 import ProductCard from "@/components/ProductCard";
 import CategoryTile from "@/components/CategoryTile";
@@ -15,6 +19,12 @@ import { SiteFooterFull } from "@/components/SiteFooter";
 import pageStyles from "@/app/page.module.css";
 import contatoStyles from "@/components/contato/Contato.module.css";
 import styles from "./SiteEditor.module.css";
+
+const HERO_VARIANTS = [
+  { id: "produto", label: "Peça em Destaque" },
+  { id: "benchmark", label: "Benchmark ao Vivo" },
+  { id: "antesDepois", label: "Antes/Depois" },
+];
 
 const emptyTestimonial = () => ({ text: "", name: "", role: "Cliente Paratech", initial: "" });
 
@@ -70,6 +80,10 @@ export default function SiteEditor({ initialHome, initialContato, products = [],
     });
   };
 
+  const handleCategoryCreated = (category) => {
+    setCategoryList((list) => [...list, category]);
+  };
+
   return (
     <div className={styles.wrap}>
       <div className={styles.toolbar}>
@@ -112,6 +126,7 @@ export default function SiteEditor({ initialHome, initialContato, products = [],
               categories={categoryList}
               onToggleCategory={handleToggleCategory}
               onUploadCategoryImage={handleCategoryImageUpload}
+              onCategoryCreated={handleCategoryCreated}
               categoryPending={categoryPending}
               categoryErrors={categoryErrors}
             />
@@ -182,11 +197,7 @@ function Section({ title, children, visible, onToggleVisible }) {
   );
 }
 
-function CategoryVisibilityList({ categories, pending, errors, onToggle, onUploadImage }) {
-  if (!categories.length) {
-    return <p className={styles.helpText}>Nenhuma categoria com produtos cadastrados ainda.</p>;
-  }
-
+function CategoryVisibilityList({ categories, pending, errors, onToggle, onUploadImage, onCategoryCreated }) {
   const handleFileChange = (id) => (e) => {
     const file = e.target.files?.[0];
     e.target.value = "";
@@ -194,7 +205,10 @@ function CategoryVisibilityList({ categories, pending, errors, onToggle, onUploa
   };
 
   return (
-    <div className={styles.categoryToggleList}>
+    <>
+      <AddCategoryForm onCreated={onCategoryCreated} />
+      {!categories.length && <p className={styles.helpText}>Nenhuma categoria cadastrada ainda.</p>}
+      <div className={styles.categoryToggleList}>
       {categories.map((c) => (
         <div key={c.id} className={styles.categoryToggleRow}>
           <div className={styles.categoryToggleInfo}>
@@ -230,7 +244,66 @@ function CategoryVisibilityList({ categories, pending, errors, onToggle, onUploa
           {errors?.[c.id] && <span className={styles.statusError}>{errors[c.id]}</span>}
         </div>
       ))}
-    </div>
+      </div>
+    </>
+  );
+}
+
+function AddCategoryForm({ onCreated }) {
+  const [label, setLabel] = useState("");
+  const [preset, setPreset] = useState(CATEGORY_COLOR_PRESETS[0].id);
+  const [error, setError] = useState(null);
+  const [pending, startTransition] = useTransition();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!label.trim()) {
+      setError("Informe o nome da categoria.");
+      return;
+    }
+    setError(null);
+    const formData = new FormData();
+    formData.set("label", label.trim());
+    formData.set("preset", preset);
+    startTransition(async () => {
+      const result = await createCategoryAction(formData);
+      if (result?.error) {
+        setError(result.error);
+        return;
+      }
+      onCreated(result.category);
+      setLabel("");
+    });
+  };
+
+  return (
+    <form className={styles.addCategoryForm} onSubmit={handleSubmit}>
+      <input
+        className={styles.input}
+        placeholder="Nome da nova categoria (ex.: Cadeiras Gamer)"
+        value={label}
+        onChange={(e) => setLabel(e.target.value)}
+        disabled={pending}
+      />
+      <div className={styles.swatchRow}>
+        {CATEGORY_COLOR_PRESETS.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            className={`${styles.swatchBtn} ${preset === p.id ? styles.swatchBtnActive : ""}`}
+            onClick={() => setPreset(p.id)}
+            title={p.name}
+          >
+            <span className={styles.swatchDot} style={{ background: p.accent }} aria-hidden="true" />
+            {p.name}
+          </button>
+        ))}
+      </div>
+      <button type="submit" className={styles.addBtn} disabled={pending}>
+        {pending ? "Criando..." : "+ Adicionar categoria"}
+      </button>
+      {error && <span className={styles.statusError}>{error}</span>}
+    </form>
   );
 }
 
@@ -241,16 +314,11 @@ function HomeForm({
   categories,
   onToggleCategory,
   onUploadCategoryImage,
+  onCategoryCreated,
   categoryPending,
   categoryErrors,
 }) {
   const set = (key) => (e) => setHome((h) => ({ ...h, [key]: e.target.value }));
-
-  const setStat = (index, key) => (e) =>
-    setHome((h) => {
-      const heroStats = h.heroStats.map((s, i) => (i === index ? { ...s, [key]: e.target.value } : s));
-      return { ...h, heroStats };
-    });
 
   const setTarget = (key) => (e) =>
     setHome((h) => ({ ...h, countersTargets: { ...h.countersTargets, [key]: e.target.value } }));
@@ -279,73 +347,16 @@ function HomeForm({
   const toggleSection = (key) => () =>
     setHome((h) => ({ ...h, sections: { ...h.sections, [key]: !h.sections[key] } }));
 
-  const setHeroTheme = (theme) => setHome((h) => ({ ...h, heroTheme: theme }));
-
   return (
     <>
-      <Section title="Hero">
-        <Field label="Estilo visual">
-          <div className={styles.heroThemeToggle} role="radiogroup" aria-label="Estilo visual do hero">
-            <button
-              type="button"
-              role="radio"
-              aria-checked={home.heroTheme === "color"}
-              className={`${styles.heroThemeBtn} ${home.heroTheme === "color" ? styles.heroThemeBtnActive : ""}`}
-              onClick={() => setHeroTheme("color")}
-            >
-              Colorido (vermelho/amarelo)
-            </button>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={home.heroTheme === "grayscale"}
-              className={`${styles.heroThemeBtn} ${home.heroTheme === "grayscale" ? styles.heroThemeBtnActive : ""}`}
-              onClick={() => setHeroTheme("grayscale")}
-            >
-              Preto e branco
-            </button>
-          </div>
-          <p className={styles.helpText}>
-            Troca os acentos do hero e do banner rotativo de produtos para uma paleta em preto e branco. O botão do
-            WhatsApp continua verde (cor de ação, não de marca).
-          </p>
-        </Field>
-        <Field label="Selo (acima do título)">
-          <input className={styles.input} value={home.heroKicker} onChange={set("heroKicker")} />
-        </Field>
-        <div className={styles.row4}>
-          <Field label="Texto antes">
-            <input className={styles.input} value={home.heroTitleBefore} onChange={set("heroTitleBefore")} />
-          </Field>
-          <Field label="Palavra em vermelho">
-            <input className={styles.input} value={home.heroTitleRed} onChange={set("heroTitleRed")} />
-          </Field>
-          <Field label="Texto do meio">
-            <input className={styles.input} value={home.heroTitleMiddle} onChange={set("heroTitleMiddle")} />
-          </Field>
-          <Field label="Palavra em amarelo">
-            <input className={styles.input} value={home.heroTitleYellow} onChange={set("heroTitleYellow")} />
-          </Field>
-        </div>
-        <Field label="Texto de apoio (parágrafo)">
-          <textarea className={styles.input} rows={3} value={home.heroLead} onChange={set("heroLead")} />
-        </Field>
-        <div className={styles.row2}>
-          <Field label="Mensagem do botão WhatsApp">
-            <input className={styles.input} value={home.ctaWhatsMessage} onChange={set("ctaWhatsMessage")} />
-          </Field>
-          <Field label="Texto do botão Catálogo">
-            <input className={styles.input} value={home.ctaCatalogLabel} onChange={set("ctaCatalogLabel")} />
-          </Field>
-        </div>
-      </Section>
+      <HeroEditor hero={home.hero} setHome={setHome} products={products} />
 
       <Section title="Categorias" visible={home.sections.categorias} onToggleVisible={toggleSection("categorias")}>
         <p className={styles.helpText}>
-          Grade gerada automaticamente a partir das categorias com produtos cadastrados. Desligue a chave acima
-          pra tirar a seção inteira da Home, ou oculte categorias específicas abaixo — vale pra Home, Catálogo e
-          rodapé ao mesmo tempo (os produtos continuam cadastrados, só somem da navegação por categoria). Use
-          "Trocar imagem" pra substituir o gradiente do tile por uma foto de capa.
+          Grade gerada automaticamente a partir das categorias cadastradas. Desligue a chave acima pra tirar a
+          seção inteira da Home, ou oculte categorias específicas abaixo — vale pra Home, Catálogo e rodapé ao
+          mesmo tempo. Use "Trocar imagem" pra substituir o gradiente do tile por uma foto de capa. Categorias
+          novas só aparecem no site depois de ter pelo menos um produto cadastrado nelas.
         </p>
         <CategoryVisibilityList
           categories={categories}
@@ -353,18 +364,19 @@ function HomeForm({
           errors={categoryErrors}
           onToggle={onToggleCategory}
           onUploadImage={onUploadCategoryImage}
+          onCategoryCreated={onCategoryCreated}
         />
       </Section>
 
       <Section
-        title="Produtos em destaque (banner do hero)"
+        title="Produtos em destaque (Os mais procurados)"
         visible={home.sections.destaque}
         onToggleVisible={toggleSection("destaque")}
       >
         <p className={styles.helpText}>
-          Escolha quais produtos giram nos cards do hero da Home. Clique para selecionar; a ordem de seleção define
-          a ordem de exibição — use as setas para reordenar. A seção &ldquo;Os mais procurados&rdquo; abaixo do hero
-          usa a mesma lista e pode ser desligada ao lado (os cards do hero continuam sempre visíveis).
+          Escolha quais produtos aparecem na grade &ldquo;Os mais procurados&rdquo;, abaixo do hero. Clique para
+          selecionar; a ordem de seleção define a ordem de exibição — use as setas para reordenar. O produto
+          exibido dentro do hero em si é escolhido separadamente, na seção &ldquo;Hero da Home&rdquo; acima.
         </p>
         <FeaturedProductsPicker
           products={products}
@@ -387,17 +399,6 @@ function HomeForm({
           </div>
         ))}
         <button type="button" className={styles.addBtn} onClick={addBanner}>+ Adicionar mensagem</button>
-      </Section>
-
-      <Section title="Números do hero" visible={home.sections.numeros} onToggleVisible={toggleSection("numeros")}>
-        <div className={styles.row3}>
-          {home.heroStats.map((s, i) => (
-            <div key={i} className={styles.statPair}>
-              <input className={styles.input} placeholder="Valor" value={s.value} onChange={setStat(i, "value")} />
-              <input className={styles.input} placeholder="Legenda" value={s.label} onChange={setStat(i, "label")} />
-            </div>
-          ))}
-        </div>
       </Section>
 
       <Section title="Contadores animados" visible={home.sections.contadores} onToggleVisible={toggleSection("contadores")}>
@@ -504,6 +505,273 @@ function HomeForm({
           <input className={styles.input} value={home.visitSubtitle} onChange={set("visitSubtitle")} />
         </Field>
       </Section>
+    </>
+  );
+}
+
+// Editor do Hero da Home: os 3 modelos ficam sempre configurados ao mesmo
+// tempo (hero.produto/benchmark/antesDepois); as abas abaixo só escolhem
+// qual está sendo editado no momento — trocar de modelo na Home é o botão
+// "Usar este modelo na Home", que grava hero.variant.
+function HeroEditor({ hero, setHome, products }) {
+  const [tab, setTab] = useState(hero.variant);
+
+  const setVariantContent = (variant) => (updater) =>
+    setHome((h) => ({ ...h, hero: { ...h.hero, [variant]: updater(h.hero[variant]) } }));
+
+  const activateVariant = (variant) => setHome((h) => ({ ...h, hero: { ...h.hero, variant } }));
+
+  return (
+    <Section title="Hero da Home">
+      <p className={styles.helpText}>
+        Os 3 modelos ficam sempre salvos — escolha uma aba para editar o conteúdo dela e use o botão para decidir
+        qual aparece na Home.
+      </p>
+      <div className={styles.heroThemeToggle} role="tablist" aria-label="Modelo de hero a editar">
+        {HERO_VARIANTS.map((v) => (
+          <button
+            key={v.id}
+            type="button"
+            role="tab"
+            aria-selected={tab === v.id}
+            className={`${styles.heroThemeBtn} ${tab === v.id ? styles.heroThemeBtnActive : ""}`}
+            onClick={() => setTab(v.id)}
+          >
+            {v.label}
+          </button>
+        ))}
+      </div>
+
+      <div className={styles.heroActiveRow}>
+        {hero.variant === tab ? (
+          <span className={styles.heroActiveBadge}>✓ Ativo na Home agora</span>
+        ) : (
+          <button type="button" className={styles.addBtn} onClick={() => activateVariant(tab)}>
+            Usar este modelo na Home
+          </button>
+        )}
+      </div>
+
+      {tab === "produto" && (
+        <ProdutoFields content={hero.produto} setContent={setVariantContent("produto")} products={products} />
+      )}
+      {tab === "benchmark" && (
+        <BenchmarkFields content={hero.benchmark} setContent={setVariantContent("benchmark")} />
+      )}
+      {tab === "antesDepois" && (
+        <AntesDepoisFields content={hero.antesDepois} setContent={setVariantContent("antesDepois")} products={products} />
+      )}
+    </Section>
+  );
+}
+
+function ThemeSwatches({ themes, value, onChange, colorKey = "accent" }) {
+  return (
+    <div className={styles.swatchRow} role="radiogroup" aria-label="Tema de cor">
+      {themes.map((t) => (
+        <button
+          key={t.id}
+          type="button"
+          role="radio"
+          aria-checked={value === t.id}
+          className={`${styles.swatchBtn} ${value === t.id ? styles.swatchBtnActive : ""}`}
+          onClick={() => onChange(t.id)}
+          title={t.name}
+        >
+          <span className={styles.swatchDot} style={{ background: t[colorKey] }} aria-hidden="true" />
+          {t.name}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function SingleProductPicker({ products, value, onChange }) {
+  if (!products.length) {
+    return <p className={styles.helpText}>Nenhum produto cadastrado ainda.</p>;
+  }
+  return (
+    <div className={styles.productsPickerGrid}>
+      {products.map((p) => {
+        const selected = value === p.id;
+        return (
+          <div key={p.id} className={`${styles.productPickCard} ${selected ? styles.productPickActive : ""}`}>
+            <button type="button" className={styles.productPickToggle} onClick={() => onChange(p.id)}>
+              <span className={styles.productPickThumb}>
+                {p.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={p.imageUrl} alt="" className={styles.productPickImg} />
+                ) : (
+                  p.name.slice(0, 1)
+                )}
+              </span>
+              <span className={styles.productPickName}>{p.name}</span>
+            </button>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ProdutoFields({ content, setContent, products }) {
+  const set = (key) => (e) => setContent((c) => ({ ...c, [key]: e.target.value }));
+  const setBool = (key) => (e) => setContent((c) => ({ ...c, [key]: e.target.checked }));
+  const setStat = (index, key) => (e) =>
+    setContent((c) => ({ ...c, stats: c.stats.map((s, i) => (i === index ? { ...s, [key]: e.target.value } : s)) }));
+
+  return (
+    <>
+      <Field label="Tema de cor">
+        <ThemeSwatches themes={PRODUTO_THEMES} value={content.theme} onChange={(id) => setContent((c) => ({ ...c, theme: id }))} />
+      </Field>
+      <Field label="Produto em destaque">
+        <SingleProductPicker
+          products={products}
+          value={content.featuredProductId}
+          onChange={(id) => setContent((c) => ({ ...c, featuredProductId: id }))}
+        />
+      </Field>
+      <Field label="Selo (acima do título)">
+        <input className={styles.input} value={content.kicker} onChange={set("kicker")} />
+      </Field>
+      <div className={styles.row3}>
+        <Field label="Texto antes">
+          <input className={styles.input} value={content.titleBefore} onChange={set("titleBefore")} />
+        </Field>
+        <Field label="Palavra riscada">
+          <input className={styles.input} value={content.titleStrike} onChange={set("titleStrike")} />
+        </Field>
+        <Field label="Palavra revelada (cor do tema)">
+          <input className={styles.input} value={content.titleAfter} onChange={set("titleAfter")} />
+        </Field>
+      </div>
+      <Field label="Texto de apoio (parágrafo)">
+        <textarea className={styles.input} rows={3} value={content.lead} onChange={set("lead")} />
+      </Field>
+      <Field label="Selo flutuante (ex.: oferta)">
+        <input className={styles.input} value={content.badgeText} onChange={set("badgeText")} />
+      </Field>
+      <div className={styles.row2}>
+        <Field label="Mensagem do botão WhatsApp">
+          <input className={styles.input} value={content.ctaWhatsMessage} onChange={set("ctaWhatsMessage")} />
+        </Field>
+        <Field label="Texto do botão Catálogo">
+          <input className={styles.input} value={content.ctaCatalogLabel} onChange={set("ctaCatalogLabel")} />
+        </Field>
+      </div>
+      <label className={styles.visToggle}>
+        <input type="checkbox" checked={content.showStats} onChange={setBool("showStats")} />
+        <span className={styles.visSwitch} aria-hidden="true" />
+        <span className={styles.visLabel}>Mostrar números (+15 anos, etc.)</span>
+      </label>
+      {content.showStats && (
+        <div className={styles.row3}>
+          {content.stats.map((s, i) => (
+            <div key={i} className={styles.statPair}>
+              <input className={styles.input} placeholder="Valor" value={s.value} onChange={setStat(i, "value")} />
+              <input className={styles.input} placeholder="Legenda" value={s.label} onChange={setStat(i, "label")} />
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  );
+}
+
+function BenchmarkFields({ content, setContent }) {
+  const set = (key) => (e) => setContent((c) => ({ ...c, [key]: e.target.value }));
+
+  return (
+    <>
+      <Field label="Tema de cor">
+        <ThemeSwatches themes={BENCHMARK_THEMES} value={content.theme} onChange={(id) => setContent((c) => ({ ...c, theme: id }))} colorKey="digit" />
+      </Field>
+      <Field label="Selo (acima do título)">
+        <input className={styles.input} value={content.kicker} onChange={set("kicker")} />
+      </Field>
+      <Field label="Título">
+        <input className={styles.input} value={content.title} onChange={set("title")} />
+      </Field>
+      <Field label="Texto de apoio (parágrafo)">
+        <textarea className={styles.input} rows={3} value={content.lead} onChange={set("lead")} />
+      </Field>
+      <div className={styles.row2}>
+        <Field label="Mensagem do botão WhatsApp">
+          <input className={styles.input} value={content.ctaWhatsMessage} onChange={set("ctaWhatsMessage")} />
+        </Field>
+        <Field label="Texto do botão">
+          <input className={styles.input} value={content.ctaLabel} onChange={set("ctaLabel")} />
+        </Field>
+      </div>
+      <div className={styles.row2}>
+        <Field label="Rótulo da métrica">
+          <input className={styles.input} value={content.metricLabel} onChange={set("metricLabel")} />
+        </Field>
+        <Field label="Unidade">
+          <input className={styles.input} value={content.metricUnit} onChange={set("metricUnit")} />
+        </Field>
+      </div>
+      <Field label="Valor da métrica (número que sobe no odômetro)">
+        <input type="number" className={styles.input} value={content.metricValue} onChange={set("metricValue")} />
+      </Field>
+      <div className={styles.row2}>
+        <Field label="Rótulo comparativo (ex.: HD antigo)">
+          <input className={styles.input} value={content.compareLabel} onChange={set("compareLabel")} />
+        </Field>
+        <Field label="Barra comparativa (% do valor principal)">
+          <input type="number" min={0} max={100} className={styles.input} value={content.comparePercent} onChange={set("comparePercent")} />
+        </Field>
+      </div>
+      <Field label="Texto de ganho (ex.: +34x mais rápido)">
+        <input className={styles.input} value={content.gainLabel} onChange={set("gainLabel")} />
+      </Field>
+    </>
+  );
+}
+
+function AntesDepoisFields({ content, setContent, products }) {
+  const set = (key) => (e) => setContent((c) => ({ ...c, [key]: e.target.value }));
+
+  return (
+    <>
+      <Field label="Tema de cor (lado 'depois')">
+        <ThemeSwatches themes={ANTES_DEPOIS_THEMES} value={content.theme} onChange={(id) => setContent((c) => ({ ...c, theme: id }))} />
+      </Field>
+      <Field label="Produto em destaque (aparece nos dois lados: cinza e colorido)">
+        <SingleProductPicker
+          products={products}
+          value={content.featuredProductId}
+          onChange={(id) => setContent((c) => ({ ...c, featuredProductId: id }))}
+        />
+      </Field>
+      <div className={styles.row2}>
+        <Field label="Título (lado cinza)">
+          <input className={styles.input} value={content.titleBefore} onChange={set("titleBefore")} />
+        </Field>
+        <Field label="Título (lado colorido)">
+          <input className={styles.input} value={content.titleAfter} onChange={set("titleAfter")} />
+        </Field>
+      </div>
+      <Field label="Subtítulo (opcional)">
+        <input className={styles.input} value={content.subtitle} onChange={set("subtitle")} />
+      </Field>
+      <div className={styles.row2}>
+        <Field label="Rótulo do lado esquerdo">
+          <input className={styles.input} value={content.beforeLabel} onChange={set("beforeLabel")} />
+        </Field>
+        <Field label="Rótulo do lado direito">
+          <input className={styles.input} value={content.afterLabel} onChange={set("afterLabel")} />
+        </Field>
+      </div>
+      <div className={styles.row2}>
+        <Field label="Mensagem do botão WhatsApp">
+          <input className={styles.input} value={content.ctaWhatsMessage} onChange={set("ctaWhatsMessage")} />
+        </Field>
+        <Field label="Texto do botão">
+          <input className={styles.input} value={content.ctaLabel} onChange={set("ctaLabel")} />
+        </Field>
+      </div>
     </>
   );
 }
@@ -693,53 +961,11 @@ function HomePreview({ home, products, categories }) {
     .map((id) => products.find((p) => p.id === id))
     .filter(Boolean);
   const sections = home.sections;
-  const mono = home.heroTheme === "grayscale";
 
   return (
     <div className={pageStyles.pageContainer} style={{ borderRadius: 16, overflow: "hidden" }}>
-      {/* min-height do hero é em vh (viewport real) no site público; dentro do
-          preview isso deixa uma faixa em branco enorme, então limitamos aqui. */}
-      <section className={`${pageStyles.hero} ${mono ? pageStyles.heroMono : ""}`} style={{ minHeight: "auto" }}>
-        <div className={pageStyles.heroGrid} aria-hidden="true" />
-        <div className={pageStyles.blurRed} aria-hidden="true" />
-        <div className={pageStyles.blurYellow} aria-hidden="true" />
-        <div className={pageStyles.heroInner}>
-          {sections.banner && (
-            <div className={pageStyles.bannerStrip}>
-              {home.bannerMessages.map((msg, i) => (
-                <span key={i} className={pageStyles.bannerSlide} style={{ animationDelay: `${i * 3}s` }}>
-                  {msg}
-                </span>
-              ))}
-            </div>
-          )}
-          <div>
-            <div className={pageStyles.badge}>{home.heroKicker}</div>
-            <h1 className={pageStyles.heroTitle}>
-              {home.heroTitleBefore} <span style={{ color: mono ? "#16181B" : "#E30613" }}>{home.heroTitleRed}</span> {home.heroTitleMiddle}{" "}
-              <span style={{ color: mono ? "#5B6168" : "#FFD400" }}>{home.heroTitleYellow}</span>
-              {home.heroTitleAfter}
-            </h1>
-            <p className={pageStyles.heroLead}>{home.heroLead}</p>
-            <div className={pageStyles.ctaRow}>
-              <span className={pageStyles.ctaWhats}>Falar no WhatsApp</span>
-              <span className={pageStyles.ctaCatalog}>{home.ctaCatalogLabel}</span>
-            </div>
-            {sections.numeros && (
-              <div className={pageStyles.statsRow}>
-                {home.heroStats.map((s, i) => (
-                  <div key={i}>
-                    <div className={pageStyles.statNum}>{s.value}</div>
-                    <div className={pageStyles.statLabel}>{s.label}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <HeroProductBanner products={featuredProducts} mono={mono} />
-        </div>
-      </section>
+      {sections.banner && <BannerTicker messages={home.bannerMessages} />}
+      <HeroSwitch hero={home.hero} products={products} />
 
       {sections.categorias && categories.length > 0 && (
         <section className={pageStyles.categoriesSection}>

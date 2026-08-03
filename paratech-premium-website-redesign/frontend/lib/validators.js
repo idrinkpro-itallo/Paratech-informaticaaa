@@ -22,20 +22,51 @@ export const productFormSchema = z.object({
 const requiredText = z.string().trim().min(1, "Campo obrigatório.");
 
 export const homeContentSchema = z.object({
-  heroTheme: z.enum(["color", "grayscale"]),
-  heroKicker: requiredText,
-  heroTitleBefore: requiredText,
-  heroTitleRed: requiredText,
-  heroTitleMiddle: requiredText,
-  heroTitleYellow: requiredText,
-  heroTitleAfter: z.string().trim(),
-  heroLead: requiredText,
-  ctaWhatsMessage: requiredText,
-  ctaCatalogLabel: requiredText,
+  hero: z.object({
+    variant: z.enum(["produto", "benchmark", "antesDepois"]),
+    produto: z.object({
+      theme: z.enum(["vermelho", "ambar", "gelo", "violeta"]),
+      kicker: requiredText,
+      titleBefore: requiredText,
+      titleStrike: requiredText,
+      titleAfter: requiredText,
+      lead: requiredText,
+      badgeText: z.string().trim(),
+      ctaWhatsMessage: requiredText,
+      ctaCatalogLabel: requiredText,
+      featuredProductId: numberFromForm(z.number()),
+      showStats: z.boolean(),
+      stats: z
+        .array(z.object({ value: requiredText, label: requiredText }))
+        .length(3, "São 3 blocos de estatística."),
+    }),
+    benchmark: z.object({
+      theme: z.enum(["ambar", "alerta", "lima", "roxo"]),
+      kicker: requiredText,
+      title: requiredText,
+      lead: requiredText,
+      ctaLabel: requiredText,
+      ctaWhatsMessage: requiredText,
+      metricLabel: requiredText,
+      metricValue: numberFromForm(z.number().positive()),
+      metricUnit: requiredText,
+      compareLabel: requiredText,
+      comparePercent: numberFromForm(z.number().min(0).max(100)),
+      gainLabel: requiredText,
+    }),
+    antesDepois: z.object({
+      theme: z.enum(["classico", "ambar", "ciano", "magenta"]),
+      titleBefore: requiredText,
+      titleAfter: requiredText,
+      subtitle: z.string().trim(),
+      ctaLabel: requiredText,
+      ctaWhatsMessage: requiredText,
+      featuredProductId: numberFromForm(z.number()),
+      beforeLabel: requiredText,
+      afterLabel: requiredText,
+    }),
+  }),
   bannerMessages: z.array(requiredText).min(1, "Adicione ao menos uma mensagem."),
-  heroStats: z
-    .array(z.object({ value: requiredText, label: requiredText }))
-    .length(3, "São 3 blocos de estatística."),
   countersTargets: z.object({
     clientes: numberFromForm(z.number().nonnegative()),
     anos: numberFromForm(z.number().nonnegative()),
@@ -69,7 +100,6 @@ export const homeContentSchema = z.object({
     banner: z.boolean(),
     categorias: z.boolean(),
     destaque: z.boolean(),
-    numeros: z.boolean(),
     diferenciais: z.boolean(),
     contadores: z.boolean(),
     promocao: z.boolean(),

@@ -6,28 +6,61 @@
 import { prisma } from "@/lib/db";
 
 export const HOME_CONTENT_DEFAULT = {
-  // "color" = paleta vermelho/amarelo da marca; "grayscale" = hero e banner
-  // rotativo em preto e branco, editável pelo botão na aba Site do /admin.
-  heroTheme: "grayscale",
-  heroKicker: "TECNOLOGIA · PARÁ DE MINAS/MG",
-  heroTitleBefore: "A Tecnologia que",
-  heroTitleRed: "Move",
-  heroTitleMiddle: "o seu",
-  heroTitleYellow: "Negócio",
-  heroTitleAfter: ".",
-  heroLead:
-    "Notebooks, computadores, periféricos, impressoras e acessórios com atendimento especializado e entrega rápida. Peça pelo WhatsApp e receba sem sair de casa.",
-  ctaWhatsMessage: "Olá! Quero falar sobre produtos da Paratech.",
-  ctaCatalogLabel: "Ver Catálogo",
+  // Qual dos 3 modelos de Hero está ativo na Home + o conteúdo (texto, tema
+  // de cor, produto em destaque) de cada um — os 3 ficam sempre configurados
+  // ao mesmo tempo, então trocar "variant" no admin não apaga nada.
+  hero: {
+    variant: "produto",
+    produto: {
+      theme: "vermelho",
+      kicker: "TECNOLOGIA · PARÁ DE MINAS/MG",
+      titleBefore: "Adeus, tela de",
+      titleStrike: "carregando",
+      titleAfter: "SSD",
+      lead:
+        "Notebooks, computadores, periféricos, impressoras e acessórios com atendimento especializado e entrega rápida. Peça pelo WhatsApp e receba sem sair de casa.",
+      badgeText: "OFERTA POR TEMPO LIMITADO",
+      ctaWhatsMessage: "Olá! Quero falar sobre produtos da Paratech.",
+      ctaCatalogLabel: "Ver Catálogo",
+      featuredProductId: 10,
+      showStats: true,
+      stats: [
+        { value: "+15 anos", label: "de mercado" },
+        { value: "+10.000", label: "clientes atendidos" },
+        { value: "98%", label: "satisfação" },
+      ],
+    },
+    benchmark: {
+      theme: "ambar",
+      kicker: "BENCHMARK REAL",
+      title: "A impressora que não para de imprimir.",
+      lead:
+        "Documento, boleto, trabalho de última hora — tudo saindo rápido, sem fila e sem gastar uma fortuna com tinta.",
+      ctaLabel: "Solicitar Orçamento",
+      ctaWhatsMessage: "Olá! Quero saber mais sobre as impressoras da Paratech.",
+      metricLabel: "VELOCIDADE DE IMPRESSÃO",
+      metricValue: 1320,
+      metricUnit: "pág/h",
+      compareLabel: "Jato de tinta comum",
+      comparePercent: 38,
+      gainLabel: "+2,6x mais rápido",
+    },
+    antesDepois: {
+      theme: "ciano",
+      titleBefore: "Tela pequena,",
+      titleAfter: "monitor novo.",
+      subtitle: "ARRASTE PARA COMPARAR",
+      ctaLabel: "Solicitar Orçamento",
+      ctaWhatsMessage: "Olá! Quero saber mais sobre monitores da Paratech.",
+      featuredProductId: 3,
+      beforeLabel: "Antes",
+      afterLabel: "Depois",
+    },
+  },
   bannerMessages: [
     "Entrega rápida em Pará de Minas e região",
     "Atendimento direto pelo WhatsApp, sem robô",
     "+15 anos de experiência em tecnologia",
-  ],
-  heroStats: [
-    { value: "+15 anos", label: "de mercado" },
-    { value: "+10.000", label: "clientes atendidos" },
-    { value: "98%", label: "satisfação" },
   ],
   countersTargets: { clientes: 10000, anos: 15, vendidos: 50000, satisfacao: 98 },
   promoBadge: "OFERTA POR TEMPO LIMITADO",
@@ -60,15 +93,14 @@ export const HOME_CONTENT_DEFAULT = {
     { url: "", caption: "foto: atendimento" },
     { url: "", caption: "foto: estoque" },
   ],
-  // Liga/desliga seções inteiras da Home sem apagar o conteúdo — o título,
-  // texto e CTA do hero e o rodapé são estruturais e não entram aqui (sempre
-  // visíveis); a faixa rotativa e os números logo abaixo do CTA já são
-  // blocos independentes e podem ser desligados.
+  // Liga/desliga seções inteiras da Home sem apagar o conteúdo — o hero e o
+  // rodapé são estruturais e não entram aqui (sempre visíveis); a faixa
+  // rotativa já é um bloco independente e pode ser desligada. Os números do
+  // hero são exclusivos do modelo "Peça em destaque" (hero.produto.showStats).
   sections: {
     banner: true,
     categorias: true,
     destaque: true,
-    numeros: true,
     diferenciais: true,
     contadores: true,
     promocao: true,

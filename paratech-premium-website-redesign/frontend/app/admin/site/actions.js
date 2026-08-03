@@ -6,6 +6,7 @@ import { verifySession } from "@/lib/dal";
 import { prisma } from "@/lib/db";
 import { saveSiteContent } from "@/lib/site-content";
 import { homeContentSchema, contatoContentSchema } from "@/lib/validators";
+import { CATEGORY_COLOR_PRESETS } from "@/lib/category-presets";
 
 const SCHEMAS = { home: homeContentSchema, contato: contatoContentSchema };
 const REVALIDATE_PATHS = { home: ["/"], contato: ["/contato"] };
@@ -87,6 +88,61 @@ export async function updateCategoryCoverImageAction(categoryId, formData) {
   revalidatePath("/admin/site");
 
   return { ok: true, url: blob.url };
+}
+
+function slugify(label) {
+  return label
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+// Cria uma categoria nova a partir do botão "+ Adicionar categoria" (aba
+// Site do /admin). As 14 categorias originais têm identidade desenhada à
+// mão em CATEGORY_META; uma categoria criada aqui usa a paleta escolhida
+// (CATEGORY_COLOR_PRESETS) direto nas colunas c1/c2/accent/glow da tabela —
+// getActiveCategories cai nesses valores quando o id não está em
+// CATEGORY_META. Fica oculta da Home/Catálogo até ter produto (mesma regra
+// de qualquer categoria vazia).
+export async function createCategoryAction(formData) {
+  await verifySession();
+
+  const label = String(formData.get("label") || "").trim();
+  if (!label) return { error: "Informe o nome da categoria." };
+
+  const preset =
+    CATEGORY_COLOR_PRESETS.find((p) => p.id === String(formData.get("preset"))) || CATEGORY_COLOR_PRESETS[0];
+
+  let id = slugify(label);
+  if (!id) return { error: "Nome inválido — use letras ou números." };
+
+  const existing = await prisma.category.findUnique({ where: { id } });
+  if (existing) id = `${id}-${Date.now().toString(36)}`;
+
+  const category = await prisma.category.create({
+    data: {
+      id,
+      label,
+      tagline: "",
+      iconKey: "generic-box",
+      c1: preset.c1,
+      c2: preset.c2,
+      accent: preset.accent,
+      glow: preset.glow,
+      visible: true,
+    },
+  });
+
+  revalidatePath("/");
+  revalidatePath("/catalogo");
+  revalidatePath("/admin/site");
+
+  return {
+    ok: true,
+    category: { id: category.id, label: category.label, visible: category.visible, coverImage: null },
+  };
 }
 
 export async function saveSiteContentAction(section, payload) {

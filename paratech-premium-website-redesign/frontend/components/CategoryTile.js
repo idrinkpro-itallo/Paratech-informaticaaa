@@ -4,7 +4,10 @@ import styles from "./CategoryTile.module.css";
 import { CATEGORY_META } from "@/lib/products-data";
 
 export default function CategoryTile({ category }) {
-  const meta = CATEGORY_META[category.id];
+  // Categorias fora das 14 originais (criadas pelo admin) não têm entrada em
+  // CATEGORY_META — nesse caso a própria `category` já carrega c1/c2/accent/
+  // glow/tagline (ver getActiveCategories em lib/products.js).
+  const meta = CATEGORY_META[category.id] || category;
   const gradient = `linear-gradient(160deg, ${meta.c1}, ${meta.c2})`;
 
   return (

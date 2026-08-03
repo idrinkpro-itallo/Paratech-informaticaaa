@@ -2,12 +2,12 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
-import { CATEGORY_META, STOCK_META } from "@/lib/products-data";
+import { STOCK_META } from "@/lib/products-data";
 import styles from "./ProductForm.module.css";
 
 const TAGS = ["Novo", "Promoção", "Mais vendido"];
 
-export default function ProductForm({ action, product, submitLabel }) {
+export default function ProductForm({ action, product, submitLabel, categories = [] }) {
   const [state, formAction, pending] = useActionState(action, undefined);
 
   return (
@@ -27,8 +27,8 @@ export default function ProductForm({ action, product, submitLabel }) {
           <span>Categoria</span>
           <select name="categoryId" defaultValue={product?.category ?? ""} required className={styles.input}>
             <option value="" disabled>Selecione...</option>
-            {Object.entries(CATEGORY_META).map(([id, meta]) => (
-              <option key={id} value={id}>{meta.label}</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>{c.label}</option>
             ))}
           </select>
         </label>

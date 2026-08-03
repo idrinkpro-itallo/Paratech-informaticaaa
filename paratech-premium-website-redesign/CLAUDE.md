@@ -70,6 +70,22 @@ Não há carrinho nem checkout — **tudo converte para WhatsApp**:
 - Tags de produto com estilo fixo: `Novo` (amarelo/preto), `Promoção` (vermelho/branco), `Mais vendido` (grafite/amarelo).
 - Todo o conteúdo é **português brasileiro** — manter idioma em textos novos.
 
+## Hero da Home: 3 modelos + temas de cor (frontend/)
+
+A Home (`frontend/app/page.js`) não tem mais um hero fixo — ela renderiza `<HeroSwitch hero={home.hero} products={products} />` (`frontend/components/home/hero/HeroSwitch.js`), que escolhe entre 3 componentes conforme `home.hero.variant`:
+
+| Variant | Componente | Conceito |
+|---|---|---|
+| `produto` | `HeroProduto.js` | Produto flutuando com spotlight, headline com troca de palavra (risca/revela) |
+| `benchmark` | `HeroBenchmark.js` | Odômetro que conta até o valor real (MB/s etc.), trilhas de circuito animadas |
+| `antesDepois` | `HeroAntesDepois.js` | Slider arrastável comparando a mesma foto do produto em cinza (antes) e em cor (depois) |
+
+Os 3 ficam **sempre configurados ao mesmo tempo** em `SiteContent.data` (seção `home`) — `hero.produto`, `hero.benchmark` e `hero.antesDepois` guardam texto, produto em destaque e tema de cada um; só `hero.variant` decide qual aparece no site. Trocar de modelo no admin nunca apaga o conteúdo dos outros dois.
+
+Cada modelo tem sua própria lista de **temas de cor** alternativos em `frontend/lib/hero-themes.js` (`PRODUTO_THEMES`, `BENCHMARK_THEMES`, `ANTES_DEPOIS_THEMES`) — paletas extras além do vermelho/amarelo padrão (âmbar, ciano, violeta, lima, magenta etc.), pensadas para dar identidade própria a cada modelo sem sair do universo tech/hardware. O verde do WhatsApp nunca entra nesses temas — é cor de ação fixa.
+
+Defaults e validação: `frontend/lib/site-content.js` (`HOME_CONTENT_DEFAULT.hero`) e `frontend/lib/validators.js` (`homeContentSchema.hero`). Editor: `frontend/components/admin/SiteEditor.js` → `HeroEditor` (aba Site do `/admin`) — 3 abas (uma por modelo), seletor de tema por swatches, e o preview ao vivo usa o **mesmo** `HeroSwitch`, garantindo que o admin veja exatamente o que vai pro site.
+
 ## Regra de branch e preview (sempre ativa)
 
 - NUNCA trabalhe ou faça commit direto na branch `main`. Toda alteração de código acontece na branch `teste` (verifique com `git branch --show-current` antes de qualquer commit; se não estiver em `teste`, troque antes de continuar).

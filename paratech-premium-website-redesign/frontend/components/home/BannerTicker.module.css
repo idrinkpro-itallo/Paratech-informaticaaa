@@ -1,0 +1,44 @@
+.wrap {
+  position: relative;
+  z-index: 2;
+  padding: 108px 48px 0;
+  background: #0b0d10;
+}
+
+.strip {
+  position: relative;
+  height: 32px;
+  overflow: hidden;
+  background: rgba(227, 6, 19, .12);
+  border: 1px solid rgba(227, 6, 19, .25);
+  border-radius: 8px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  opacity: 0;
+  animation: bannerCycle 9s infinite;
+  color: #ffd400;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .3px;
+}
+
+@keyframes bannerCycle {
+  0% { opacity: 0; }
+  4% { opacity: 1; }
+  30% { opacity: 1; }
+  36% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@container (max-width: 640px) {
+  .wrap { padding: 96px 20px 0; }
+}

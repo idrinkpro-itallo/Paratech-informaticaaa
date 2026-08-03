@@ -1,0 +1,191 @@
+.hero {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  background: #050607;
+  overflow: hidden;
+  padding: 112px 48px 64px;
+  color: #fff;
+}
+
+.circuit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.circuit path {
+  fill: none;
+  stroke: var(--trace);
+  stroke-width: 2.5;
+  stroke-dasharray: 14 10;
+  animation: dashFlow 16s linear infinite;
+}
+@keyframes dashFlow {
+  to { stroke-dashoffset: -480; }
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.kicker {
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--digit);
+  margin-bottom: 20px;
+}
+
+.title {
+  font-family: var(--font-sora), sans-serif;
+  font-weight: 800;
+  font-size: clamp(32px, 4.2vw, 52px);
+  line-height: 1.15;
+  margin: 0 0 20px;
+  color: #fff;
+}
+
+.lead {
+  font-size: 17px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, .68);
+  max-width: 480px;
+  margin: 0 0 32px;
+}
+
+.ctaRow { display: flex; }
+
+.cta {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-sora), sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 16px 28px;
+  border-radius: 10px;
+  background: #e30613;
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(227, 6, 19, .35);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.cta:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(227, 6, 19, .5); }
+.cta:focus-visible { outline: 3px solid #ffd400; outline-offset: 3px; }
+.cta span { position: relative; z-index: 1; }
+.cta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .4), transparent);
+  transform: skewX(-20deg);
+  transition: left .55s ease;
+}
+.cta:hover::before { left: 130%; }
+
+.card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 20px;
+  padding: 32px;
+  backdrop-filter: blur(6px);
+}
+
+.cardLabel {
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .5);
+  margin-bottom: 8px;
+}
+
+.metric {
+  font-family: var(--font-sora), sans-serif;
+  font-weight: 800;
+  font-size: clamp(48px, 7vw, 84px);
+  line-height: 1;
+  color: var(--digit);
+  text-shadow: 0 0 34px var(--digitGlow);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 24px;
+}
+.unit {
+  font-size: .32em;
+  margin-left: 8px;
+  color: rgba(255, 255, 255, .55);
+  font-weight: 700;
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.barRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.barTag {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, .68);
+}
+.barTrack {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .08);
+  overflow: hidden;
+}
+.barFillMain {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--digit);
+  transition: width 1.1s cubic-bezier(.2, .8, .2, 1);
+}
+.barFillCompare {
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .3);
+  transition: width 1.1s cubic-bezier(.2, .8, .2, 1);
+}
+
+.gain {
+  font-family: var(--font-sora), sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: .3px;
+  color: var(--gain);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .circuit path { animation: none; }
+  .cta::before { transition: none; display: none; }
+  .barFillMain, .barFillCompare { transition: none; }
+}
+
+@container (max-width: 960px) {
+  .inner { grid-template-columns: 1fr; }
+  .card { order: -1; }
+  .hero { padding: 100px 24px 48px; }
+}
