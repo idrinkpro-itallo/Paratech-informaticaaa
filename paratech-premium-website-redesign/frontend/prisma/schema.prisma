@@ -20,16 +20,17 @@ datasource db {
 // um ícone SVG desenhado à mão em components/icons/CategoryIcon.js indexado
 // pelo `id`; categorias novas usam um dos ícones genéricos de `iconKey`.
 model Category {
-  id       String    @id
-  label    String
-  tagline  String    @default("")
-  iconKey  String    @default("generic-box")
-  c1       String
-  c2       String
-  accent   String
-  glow     String
-  visible  Boolean   @default(true)
-  products Product[]
+  id         String    @id
+  label      String
+  tagline    String    @default("")
+  iconKey    String    @default("generic-box")
+  c1         String
+  c2         String
+  accent     String
+  glow       String
+  visible    Boolean   @default(true)
+  coverImage String?
+  products   Product[]
 }
 
 // Conteúdo editável da Home e do Contato (hero, promoção, depoimentos,

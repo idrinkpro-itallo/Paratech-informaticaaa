@@ -1,7 +1,12 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { saveSiteContentAction, uploadGalleryPhotoAction, toggleCategoryVisibilityAction } from "@/app/admin/site/actions";
+import {
+  saveSiteContentAction,
+  uploadGalleryPhotoAction,
+  toggleCategoryVisibilityAction,
+  updateCategoryCoverImageAction,
+} from "@/app/admin/site/actions";
 import HeroProductBanner from "@/components/home/HeroProductBanner";
 import { FEATURE_ICONS } from "@/components/home/FeatureIcons";
 import ProductCard from "@/components/ProductCard";
@@ -51,6 +56,20 @@ export default function SiteEditor({ initialHome, initialContato, products = [],
     });
   };
 
+  const handleCategoryImageUpload = (id, file) => {
+    setCategoryErrors((e) => ({ ...e, [id]: null }));
+    startCategoryTransition(async () => {
+      const formData = new FormData();
+      formData.set("image", file);
+      const result = await updateCategoryCoverImageAction(id, formData);
+      if (result?.error) {
+        setCategoryErrors((e) => ({ ...e, [id]: result.error }));
+        return;
+      }
+      setCategoryList((list) => list.map((c) => (c.id === id ? { ...c, coverImage: result.url } : c)));
+    });
+  };
+
   return (
     <div className={styles.wrap}>
       <div className={styles.toolbar}>
@@ -92,6 +111,7 @@ export default function SiteEditor({ initialHome, initialContato, products = [],
               products={products}
               categories={categoryList}
               onToggleCategory={handleToggleCategory}
+              onUploadCategoryImage={handleCategoryImageUpload}
               categoryPending={categoryPending}
               categoryErrors={categoryErrors}
             />
@@ -162,26 +182,51 @@ function Section({ title, children, visible, onToggleVisible }) {
   );
 }
 
-function CategoryVisibilityList({ categories, pending, errors, onToggle }) {
+function CategoryVisibilityList({ categories, pending, errors, onToggle, onUploadImage }) {
   if (!categories.length) {
     return <p className={styles.helpText}>Nenhuma categoria com produtos cadastrados ainda.</p>;
   }
+
+  const handleFileChange = (id) => (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (file) onUploadImage(id, file);
+  };
 
   return (
     <div className={styles.categoryToggleList}>
       {categories.map((c) => (
         <div key={c.id} className={styles.categoryToggleRow}>
-          <span className={styles.categoryToggleName}>{c.label}</span>
-          <label className={styles.visToggle}>
-            <input
-              type="checkbox"
-              checked={c.visible}
-              disabled={pending}
-              onChange={() => onToggle(c.id, !c.visible)}
-            />
-            <span className={styles.visSwitch} aria-hidden="true" />
-            <span className={styles.visLabel}>{c.visible ? "Visível" : "Oculta"}</span>
-          </label>
+          <div className={styles.categoryToggleInfo}>
+            {c.coverImage ? (
+              <img src={c.coverImage} alt="" className={styles.categoryToggleThumb} />
+            ) : (
+              <div className={styles.categoryToggleThumbEmpty} aria-hidden="true" />
+            )}
+            <span className={styles.categoryToggleName}>{c.label}</span>
+          </div>
+          <div className={styles.categoryToggleActions}>
+            <label className={styles.categoryImageBtn}>
+              {pending ? "Enviando..." : "Trocar imagem"}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                disabled={pending}
+                onChange={handleFileChange(c.id)}
+                hidden
+              />
+            </label>
+            <label className={styles.visToggle}>
+              <input
+                type="checkbox"
+                checked={c.visible}
+                disabled={pending}
+                onChange={() => onToggle(c.id, !c.visible)}
+              />
+              <span className={styles.visSwitch} aria-hidden="true" />
+              <span className={styles.visLabel}>{c.visible ? "Visível" : "Oculta"}</span>
+            </label>
+          </div>
           {errors?.[c.id] && <span className={styles.statusError}>{errors[c.id]}</span>}
         </div>
       ))}
@@ -189,7 +234,16 @@ function CategoryVisibilityList({ categories, pending, errors, onToggle }) {
   );
 }
 
-function HomeForm({ home, setHome, products, categories, onToggleCategory, categoryPending, categoryErrors }) {
+function HomeForm({
+  home,
+  setHome,
+  products,
+  categories,
+  onToggleCategory,
+  onUploadCategoryImage,
+  categoryPending,
+  categoryErrors,
+}) {
   const set = (key) => (e) => setHome((h) => ({ ...h, [key]: e.target.value }));
 
   const setStat = (index, key) => (e) =>
@@ -290,13 +344,15 @@ function HomeForm({ home, setHome, products, categories, onToggleCategory, categ
         <p className={styles.helpText}>
           Grade gerada automaticamente a partir das categorias com produtos cadastrados. Desligue a chave acima
           pra tirar a seção inteira da Home, ou oculte categorias específicas abaixo — vale pra Home, Catálogo e
-          rodapé ao mesmo tempo (os produtos continuam cadastrados, só somem da navegação por categoria).
+          rodapé ao mesmo tempo (os produtos continuam cadastrados, só somem da navegação por categoria). Use
+          "Trocar imagem" pra substituir o gradiente do tile por uma foto de capa.
         </p>
         <CategoryVisibilityList
           categories={categories}
           pending={categoryPending}
           errors={categoryErrors}
           onToggle={onToggleCategory}
+          onUploadImage={onUploadCategoryImage}
         />
       </Section>
 

@@ -38,12 +38,12 @@ export async function getProductById(id) {
 export async function getActiveCategories() {
   const categories = await prisma.category.findMany({
     where: { visible: true, products: { some: {} } },
-    select: { id: true },
+    select: { id: true, coverImage: true },
   });
-  const activeIds = new Set(categories.map((c) => c.id));
+  const byId = new Map(categories.map((c) => [c.id, c.coverImage]));
   return Object.keys(CATEGORY_META)
-    .filter((id) => activeIds.has(id))
-    .map((id) => ({ id, label: CATEGORY_META[id].label }));
+    .filter((id) => byId.has(id))
+    .map((id) => ({ id, label: CATEGORY_META[id].label, coverImage: byId.get(id) }));
 }
 
 // Todas as categorias com produtos (visíveis ou não), pra tela de admin
@@ -51,10 +51,15 @@ export async function getActiveCategories() {
 export async function getAllCategoriesForAdmin() {
   const categories = await prisma.category.findMany({
     where: { products: { some: {} } },
-    select: { id: true, visible: true },
+    select: { id: true, visible: true, coverImage: true },
   });
-  const byId = new Map(categories.map((c) => [c.id, c.visible]));
+  const byId = new Map(categories.map((c) => [c.id, c]));
   return Object.keys(CATEGORY_META)
     .filter((id) => byId.has(id))
-    .map((id) => ({ id, label: CATEGORY_META[id].label, visible: byId.get(id) }));
+    .map((id) => ({
+      id,
+      label: CATEGORY_META[id].label,
+      visible: byId.get(id).visible,
+      coverImage: byId.get(id).coverImage,
+    }));
 }

@@ -55,6 +55,40 @@ export async function toggleCategoryVisibilityAction(categoryId, visible) {
   return { ok: true };
 }
 
+// Imagem de capa da categoria substitui o gradiente/ícone na grade da Home
+// — grava direto na tabela Category, mesmo fluxo "aplica na hora" da
+// visibilidade acima (fora do rascunho + "Publicar alterações" do conteúdo).
+export async function updateCategoryCoverImageAction(categoryId, formData) {
+  await verifySession();
+
+  const file = formData.get("image");
+  if (!file || typeof file === "string" || file.size === 0) {
+    return { error: "Selecione uma imagem." };
+  }
+  if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
+    return { error: "Formato de imagem inválido. Envie JPEG, PNG, WEBP ou GIF." };
+  }
+  if (file.size > MAX_IMAGE_BYTES) {
+    return { error: "Imagem maior que 5 MB." };
+  }
+
+  const blob = await put(`site/categorias/${categoryId}-${Date.now()}-${file.name}`, file, {
+    access: "public",
+    addRandomSuffix: true,
+  });
+
+  await prisma.category.update({
+    where: { id: categoryId },
+    data: { coverImage: blob.url },
+  });
+
+  revalidatePath("/");
+  revalidatePath("/catalogo");
+  revalidatePath("/admin/site");
+
+  return { ok: true, url: blob.url };
+}
+
 export async function saveSiteContentAction(section, payload) {
   await verifySession();
 

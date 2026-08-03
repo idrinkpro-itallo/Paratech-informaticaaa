@@ -9,13 +9,24 @@ export default function CategoryTile({ category }) {
 
   return (
     <Link href={`/catalogo#${category.id}`} className="pv-card">
-      <div className={`pv-visual ${styles.visual}`} style={{ background: gradient }}>
-        <div className="pv-particles"><span></span><span></span><span></span><span></span><span></span></div>
-        <div className="pv-icon-glow" style={{ background: meta.accent, boxShadow: `0 0 60px 26px ${meta.glow}` }} />
-        <div className="pv-icon-wrap" style={{ color: meta.accent }}>
-          <CategoryIcon category={category.id} />
+      {category.coverImage ? (
+        <div
+          className={`pv-visual ${styles.visual}`}
+          style={{
+            backgroundImage: `url(${category.coverImage})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+      ) : (
+        <div className={`pv-visual ${styles.visual}`} style={{ background: gradient }}>
+          <div className="pv-particles"><span></span><span></span><span></span><span></span><span></span></div>
+          <div className="pv-icon-glow" style={{ background: meta.accent, boxShadow: `0 0 60px 26px ${meta.glow}` }} />
+          <div className="pv-icon-wrap" style={{ color: meta.accent }}>
+            <CategoryIcon category={category.id} />
+          </div>
         </div>
-      </div>
+      )}
       <div className={styles.body}>
         <div className={styles.title}>{category.label}</div>
         <div className={styles.desc}>{meta.tagline}</div>
