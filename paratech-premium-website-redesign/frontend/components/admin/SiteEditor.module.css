@@ -775,3 +775,88 @@
     max-height: 80dvh;
   }
 }
+
+/* Editar direto pelo celular: a barra de abas/publicar fica fixa no topo
+   (o formulário é longo — sem isso, salvar ou trocar Home/Contato exigia
+   rolar até o início toda hora), campos de texto vão a 16px (Safari zoom
+   automático em inputs <16px) e alvos de toque ficam maiores. Só aqui na
+   aba Site do admin — o resto do admin não muda. */
+@media (max-width: 767px) {
+  .wrap {
+    padding-bottom: 24px;
+  }
+
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: #0b0d10;
+    padding-top: 4px;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    flex-direction: column;
+    align-items: stretch;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .subtabs {
+    justify-content: stretch;
+  }
+
+  .subtab {
+    flex: 1;
+    text-align: center;
+    padding: 10px 12px;
+  }
+
+  .toolbarRight {
+    justify-content: space-between;
+  }
+
+  .saveBtn {
+    flex: 1;
+    padding: 13px 18px;
+    font-size: 14px;
+  }
+
+  /* 16px evita o zoom automático do Safari ao focar um campo de texto. */
+  .input {
+    font-size: 16px;
+  }
+
+  .heroThemeBtn,
+  .swatchBtn,
+  .addBtn,
+  .removeBtn,
+  .uploadBtn,
+  .categoryImageBtn {
+    padding: 10px 14px;
+  }
+
+  .deviceBtn {
+    padding: 8px 12px;
+  }
+
+  .section {
+    padding: 16px;
+  }
+
+  .categoryToggleRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .categoryToggleActions {
+    justify-content: space-between;
+  }
+
+  .featuresEditGrid,
+  .galleryEditGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .previewFrame {
+    max-height: 65vh;
+    max-height: 65dvh;
+  }
+}
