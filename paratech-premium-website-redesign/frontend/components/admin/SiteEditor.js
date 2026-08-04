@@ -1060,8 +1060,8 @@ function HomePreview({ home, products, categories }) {
             <h2 className={pageStyles.sectionTitle}>Encontre o que sua empresa precisa</h2>
           </div>
           <div className={pageStyles.categoriesGrid}>
-            {categories.map((c) => (
-              <CategoryTile key={c.id} category={c} />
+            {categories.map((c, i) => (
+              <CategoryTile key={c.id} category={c} index={i} />
             ))}
           </div>
         </section>

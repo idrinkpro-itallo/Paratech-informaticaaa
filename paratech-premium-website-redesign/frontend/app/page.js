@@ -50,7 +50,7 @@ export default async function HomePage() {
           <div className={styles.categoriesGrid}>
             {categories.map((c, i) => (
               <Reveal as="div" key={c.id} delay={i * 60}>
-                <CategoryTile category={c} />
+                <CategoryTile category={c} index={i} />
               </Reveal>
             ))}
           </div>
