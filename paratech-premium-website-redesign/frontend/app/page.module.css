@@ -428,3 +428,107 @@
     font-size: 28px;
   }
 }
+
+/* ── Narrativa mobile: uma seção, uma tela ──────────────────────────────
+   No celular a Home vira uma sequência de painéis full-screen com
+   scroll-snap (ver html { scroll-snap-type } em globals.css). Cada seção
+   centraliza seu conteúdo verticalmente dentro de 100dvh — o Hero em si
+   já é 100dvh via seu próprio módulo (Hero*.module.css). Acima de 767px
+   (tablet/desktop) a página volta ao scroll contínuo normal. */
+@media (max-width: 767px) {
+  .categoriesSection,
+  .featuredSection,
+  .featuresSection,
+  .numbersSection,
+  .promoSection,
+  .testimonialsSection,
+  .gallerySection,
+  .visitSection {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .categoriesSection,
+  .featuresSection,
+  .testimonialsSection,
+  .gallerySection {
+    padding: 96px 24px 40px;
+  }
+  .featuredSection {
+    padding-top: 96px;
+    padding-bottom: 40px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .numbersSection {
+    padding: 40px 24px;
+  }
+  .promoSection {
+    padding: 40px 24px;
+  }
+  .visitSection {
+    padding: 40px 24px;
+  }
+
+  .sectionHead {
+    margin-bottom: 36px;
+  }
+  .eyebrow {
+    font-size: 12px;
+  }
+  .sectionTitle {
+    font-size: clamp(28px, 8vw, 36px);
+    line-height: 1.15;
+  }
+
+  /* Grade de destaque: 1 card por vez, maior e mais fotográfico. */
+  .featuredHead {
+    margin-bottom: 28px;
+  }
+  .productsGrid {
+    gap: 18px;
+  }
+
+  .promoGrid {
+    text-align: center;
+  }
+  .promoTitle {
+    font-size: clamp(28px, 8vw, 34px);
+  }
+  .countdownRow {
+    gap: 10px;
+  }
+  .countdownBox {
+    min-width: 68px;
+    padding: 14px 10px;
+  }
+
+  .galleryGrid {
+    gap: 14px;
+  }
+  .galleryPhoto,
+  .galleryPlaceholder {
+    height: 46vh;
+  }
+
+  .visitRow {
+    flex-direction: column;
+    text-align: center;
+    gap: 22px;
+  }
+  .visitButtons {
+    width: 100%;
+    flex-direction: column;
+  }
+  .visitMapBtn,
+  .visitWhatsBtn {
+    text-align: center;
+    padding: 16px 24px;
+    font-size: 15px;
+  }
+}

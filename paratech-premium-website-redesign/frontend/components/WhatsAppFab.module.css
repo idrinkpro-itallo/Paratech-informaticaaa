@@ -44,6 +44,9 @@
   box-shadow: 0 10px 24px rgba(0, 0, 0, .35);
   animation: glowPulse 2.4s ease-out infinite;
 }
+.fabLabel {
+  display: none;
+}
 
 @media (max-width: 600px) {
   .wrap {
@@ -53,5 +56,27 @@
   .fab {
     width: 52px;
     height: 52px;
+  }
+}
+
+/* Pill expandida com rótulo — só no mobile; no desktop o FAB continua
+   sempre um círculo simples (design intacto). */
+@media (max-width: 767px) {
+  .fab {
+    transition: width .35s cubic-bezier(.2, .8, .2, 1), padding .35s ease;
+  }
+  .fabExpanded {
+    width: auto;
+    gap: 10px;
+    justify-content: flex-start;
+    padding: 0 20px 0 16px;
+  }
+  .fabExpanded .fabLabel {
+    display: inline-block;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: var(--font-sora), Sora, sans-serif;
+    white-space: nowrap;
   }
 }

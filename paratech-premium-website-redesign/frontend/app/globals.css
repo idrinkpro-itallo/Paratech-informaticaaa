@@ -16,6 +16,18 @@ body {
   font-family: var(--font-manrope), Manrope, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Narrativa em tela cheia no mobile: a Home encadeia suas seções como
+   painéis que "travam" um a um na rolagem. Fica de fora de telas maiores
+   (tablet/desktop), onde a página rola normalmente — ver page.module.css,
+   SiteFooter.module.css e os 4 Hero*.module.css pelas seções que participam. */
+@media (max-width: 767px) {
+  html {
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+  }
 }
 
 a {
@@ -38,6 +50,23 @@ input[type="range"] {
 @keyframes glowPulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, .55); }
   50% { box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); }
+}
+
+/* Entrada ao rolar — usado pelo componente <Reveal> em conteúdo espalhado
+   pelas páginas (títulos de seção, cards de grid, etc). */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .7s cubic-bezier(.2, .8, .2, 1), transform .7s cubic-bezier(.2, .8, .2, 1);
+}
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes heroMountUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {

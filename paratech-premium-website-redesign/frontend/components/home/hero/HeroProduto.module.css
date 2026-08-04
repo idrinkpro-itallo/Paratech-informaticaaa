@@ -275,3 +275,38 @@
   .statsRow { gap: 22px; }
   .stage { height: 280px; }
 }
+
+/* Painel 1 da narrativa mobile — tela cheia real (100dvh), com o conteúdo
+   de texto entrando com leve fade/slide ao montar a página. */
+@media (max-width: 767px) {
+  .hero {
+    min-height: 100dvh;
+    padding: 100px 22px 32px;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .inner {
+    gap: 28px;
+  }
+  .copy {
+    animation: heroMountUp .8s cubic-bezier(.2, .8, .2, 1) both;
+  }
+  .stage {
+    height: 300px;
+    animation: heroMountUp .9s .12s cubic-bezier(.2, .8, .2, 1) both;
+  }
+  .title {
+    font-size: clamp(32px, 9vw, 42px);
+  }
+  .lead {
+    font-size: 16px;
+  }
+  .ctaWhats, .ctaCatalog {
+    flex: 1;
+    justify-content: center;
+    padding: 16px 18px;
+  }
+  .statsRow {
+    margin-top: 32px;
+  }
+}

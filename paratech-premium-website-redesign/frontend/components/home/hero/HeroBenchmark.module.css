@@ -189,3 +189,37 @@
   .card { order: -1; }
   .hero { padding: 100px 24px 48px; }
 }
+
+/* Painel 1 da narrativa mobile — tela cheia real (100dvh), card de métrica
+   entra levemente atrasado em relação ao texto para dar sensação de reveal. */
+@media (max-width: 767px) {
+  .hero {
+    min-height: 100dvh;
+    padding: 100px 22px 32px;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .inner {
+    gap: 26px;
+  }
+  .copy {
+    animation: heroMountUp .8s cubic-bezier(.2, .8, .2, 1) both;
+  }
+  .card {
+    animation: heroMountUp .9s .12s cubic-bezier(.2, .8, .2, 1) both;
+    padding: 26px 24px;
+  }
+  .title {
+    font-size: clamp(28px, 8.5vw, 36px);
+  }
+  .lead {
+    font-size: 15px;
+  }
+  .metric {
+    font-size: clamp(42px, 15vw, 64px);
+  }
+  .cta {
+    width: 100%;
+    justify-content: center;
+  }
+}

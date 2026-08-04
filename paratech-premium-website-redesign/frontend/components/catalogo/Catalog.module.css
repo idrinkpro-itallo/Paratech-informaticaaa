@@ -167,3 +167,66 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 767px) {
+  .hero {
+    padding: 96px 22px 28px;
+  }
+  .title {
+    font-size: clamp(28px, 8.5vw, 34px);
+  }
+  .filtersRow {
+    gap: 10px;
+  }
+  .searchInput,
+  .sortSelect {
+    font-size: 16px;
+    padding: 14px 16px;
+  }
+  .searchInput {
+    min-width: 0;
+    width: 100%;
+  }
+  .sortSelect {
+    flex: 1;
+  }
+
+  /* Chips de categoria viram uma trilha horizontal em vez de quebrar linha —
+     mais rápido de escanear e tocar no celular. */
+  .chipsRow {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin: 20px -22px 0;
+    padding: 0 22px;
+  }
+  .chipsRow::-webkit-scrollbar {
+    display: none;
+  }
+  .chip {
+    flex-shrink: 0;
+  }
+
+  .resultsSection {
+    padding: 32px 22px 64px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .ctaSection {
+    padding: 44px 22px;
+  }
+  .ctaRow {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  .ctaBtn {
+    text-align: center;
+    padding: 16px;
+    font-size: 15px;
+  }
+}

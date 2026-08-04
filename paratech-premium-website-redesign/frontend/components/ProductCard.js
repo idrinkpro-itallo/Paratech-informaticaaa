@@ -33,7 +33,7 @@ export default function ProductCard({ product, showFavorite = false, isFavorite 
             src={product.imageUrl}
             alt={product.name}
             fill
-            sizes="(max-width: 640px) 50vw, 280px"
+            sizes="(max-width: 640px) 100vw, (max-width: 960px) 50vw, 280px"
             style={{ objectFit: "cover", zIndex: 1 }}
           />
         ) : (

@@ -53,7 +53,7 @@ export default function HeroProduto({ content, product }) {
               rel="noopener noreferrer"
               className={styles.ctaWhats}
             >
-              Falar no WhatsApp
+              Fale agora com um especialista
             </a>
             <Link href="/catalogo" className={styles.ctaCatalog}>
               {content.ctaCatalogLabel}
@@ -82,7 +82,7 @@ export default function HeroProduto({ content, product }) {
                     src={product.imageUrl}
                     alt={product.name}
                     fill
-                    sizes="(max-width: 960px) 70vw, 420px"
+                    sizes="(max-width: 640px) 85vw, (max-width: 960px) 70vw, 420px"
                     style={{ objectFit: "contain" }}
                     priority
                   />

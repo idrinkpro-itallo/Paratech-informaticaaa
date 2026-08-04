@@ -1,6 +1,12 @@
 .visual {
   height: 150px;
 }
+
+@media (max-width: 767px) {
+  .visual {
+    height: 200px;
+  }
+}
 .body {
   padding: 26px 24px 24px;
 }

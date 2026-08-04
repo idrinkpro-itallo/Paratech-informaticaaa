@@ -240,3 +240,14 @@
     transition: none !important;
   }
 }
+
+/* Cards em coluna única no mobile: a foto ganha mais protagonismo. */
+@media (max-width: 767px) {
+  .pv-visual {
+    height: 240px;
+  }
+  .btn-quote, .btn-whatsapp {
+    padding: 14px;
+    font-size: 14px;
+  }
+}

@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./WhatsAppFab.module.css";
 import { WA_SUPPORT } from "@/lib/products-data";
@@ -11,6 +14,18 @@ function WhatsAppGlyph() {
 }
 
 export default function WhatsAppFab({ showCatalogLink = false }) {
+  // No mobile o FAB nasce como pill com rótulo (reforça a chamada assim que
+  // a página carrega) e recolhe pro círculo de sempre depois que o usuário
+  // começa a rolar — no desktop o CSS neutraliza isso e ele fica como era.
+  const [expanded, setExpanded] = useState(true);
+
+  useEffect(() => {
+    const onScroll = () => setExpanded(window.scrollY < 160);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <div className={styles.wrap}>
       {showCatalogLink && (
@@ -23,11 +38,12 @@ export default function WhatsAppFab({ showCatalogLink = false }) {
         href={`https://wa.me/${WA_SUPPORT}`}
         target="_blank"
         rel="noopener noreferrer"
-        className={styles.fab}
+        className={`${styles.fab} ${expanded ? styles.fabExpanded : ""}`}
         aria-label="Falar com um especialista no WhatsApp"
         title="Fale com um Especialista"
       >
         <WhatsAppGlyph />
+        <span className={styles.fabLabel}>Fale agora com um especialista</span>
       </a>
     </div>
   );

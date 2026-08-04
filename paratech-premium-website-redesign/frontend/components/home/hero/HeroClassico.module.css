@@ -360,3 +360,37 @@
     height: 225px;
   }
 }
+
+/* Painel 1 da narrativa mobile — tela cheia real (100dvh); a vitrine
+   rotativa entra levemente atrasada em relação ao texto. */
+@media (max-width: 767px) {
+  .hero {
+    min-height: 100dvh;
+    padding: 0 22px;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .heroInner {
+    padding: 100px 0 32px;
+    gap: 26px;
+  }
+  .copy {
+    animation: heroMountUp .8s cubic-bezier(.2, .8, .2, 1) both;
+  }
+  .heroBanner {
+    height: 400px;
+    animation: heroMountUp .9s .12s cubic-bezier(.2, .8, .2, 1) both;
+  }
+  .heroBannerImageWrap {
+    width: 200px;
+    height: 200px;
+  }
+  .heroTitle {
+    font-size: clamp(30px, 9vw, 40px);
+  }
+  .ctaWhats, .ctaCatalog {
+    flex: 1;
+    justify-content: center;
+    padding: 16px 18px;
+  }
+}

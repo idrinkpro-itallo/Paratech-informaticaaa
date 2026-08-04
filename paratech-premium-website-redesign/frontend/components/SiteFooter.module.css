@@ -171,3 +171,20 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Último painel da narrativa mobile da Home (ver page.module.css) — fecha a
+   sequência de scroll-snap centralizando o conteúdo na tela. */
+@media (max-width: 767px) {
+  .footerFull {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .fullGrid {
+    gap: 32px;
+  }
+}

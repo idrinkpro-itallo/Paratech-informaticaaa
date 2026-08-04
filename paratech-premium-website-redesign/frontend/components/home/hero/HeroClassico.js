@@ -38,7 +38,7 @@ export default function HeroClassico({ content, products }) {
       <div className={styles.blurYellow} aria-hidden="true" />
 
       <div className={styles.heroInner}>
-        <div>
+        <div className={styles.copy}>
           <div className={styles.badge}>{content.kicker}</div>
           <h1 className={styles.heroTitle}>
             {content.titleBefore}{" "}
@@ -54,7 +54,7 @@ export default function HeroClassico({ content, products }) {
               rel="noopener noreferrer"
               className={styles.ctaWhats}
             >
-              Falar no WhatsApp
+              Fale agora com um especialista
             </a>
             <Link href="/catalogo" className={styles.ctaCatalog}>
               {content.ctaCatalogLabel}
@@ -113,7 +113,7 @@ export default function HeroClassico({ content, products }) {
                           src={s.product.imageUrl}
                           alt={s.product.name}
                           fill
-                          sizes="(max-width: 960px) 70vw, 360px"
+                          sizes="(max-width: 640px) 80vw, (max-width: 960px) 70vw, 360px"
                           style={{ objectFit: "contain", filter: claro ? "grayscale(1) contrast(1.05)" : undefined }}
                           priority={i === 0}
                         />

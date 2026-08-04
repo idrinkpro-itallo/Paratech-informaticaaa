@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./page.module.css";
+import Reveal from "@/components/Reveal";
 import SiteHeader from "@/components/SiteHeader";
 import { SiteFooterFull } from "@/components/SiteFooter";
 import WhatsAppFab from "@/components/WhatsAppFab";
@@ -42,13 +43,15 @@ export default async function HomePage() {
 
       {sections.categorias && (
         <section id="categorias" className={styles.categoriesSection}>
-          <div className={styles.sectionHead}>
+          <Reveal as="div" className={styles.sectionHead}>
             <div className={styles.eyebrow}>CATEGORIAS</div>
             <h2 className={styles.sectionTitle}>Encontre o que sua empresa precisa</h2>
-          </div>
+          </Reveal>
           <div className={styles.categoriesGrid}>
-            {categories.map((c) => (
-              <CategoryTile key={c.id} category={c} />
+            {categories.map((c, i) => (
+              <Reveal as="div" key={c.id} delay={i * 60}>
+                <CategoryTile category={c} />
+              </Reveal>
             ))}
           </div>
         </section>
@@ -57,16 +60,18 @@ export default async function HomePage() {
       {sections.destaque && (
         <section className={styles.featuredSection}>
           <div className={styles.featuredInner}>
-            <div className={styles.featuredHead}>
+            <Reveal as="div" className={styles.featuredHead}>
               <div>
                 <div className={styles.eyebrow}>PRODUTOS EM DESTAQUE</div>
                 <h2 className={styles.sectionTitle}>Os mais procurados</h2>
               </div>
               <Link href="/catalogo" className={styles.viewAllLink}>Ver catálogo completo →</Link>
-            </div>
+            </Reveal>
             <div className={styles.productsGrid}>
-              {featuredProducts.map((p) => (
-                <ProductCard key={p.id} product={p} />
+              {featuredProducts.map((p, i) => (
+                <Reveal as="div" key={p.id} delay={i * 60}>
+                  <ProductCard product={p} />
+                </Reveal>
               ))}
             </div>
           </div>
@@ -75,19 +80,19 @@ export default async function HomePage() {
 
       {sections.diferenciais && (
         <section className={styles.featuresSection}>
-          <div className={styles.sectionHead}>
+          <Reveal as="div" className={styles.sectionHead}>
             <div className={styles.eyebrow}>POR QUE A PARATECH</div>
             <h2 className={styles.sectionTitle}>Diferenciais que fazem a diferença</h2>
-          </div>
+          </Reveal>
           <div className={styles.featuresGrid}>
             {home.features.map((f, i) => (
-              <div key={i} className={styles.featureCard}>
+              <Reveal as="div" key={i} delay={i * 60} className={styles.featureCard}>
                 <div className={styles.featureIconWrap} style={{ background: FEATURE_ICONS[i].iconBg }}>
                   {FEATURE_ICONS[i].icon}
                 </div>
                 <div className={styles.featureTitle}>{f.title}</div>
                 <div className={styles.featureDesc}>{f.desc}</div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </section>
@@ -108,23 +113,23 @@ export default async function HomePage() {
 
       {sections.galeria && (
         <section className={styles.gallerySection}>
-          <div className={styles.sectionHead}>
+          <Reveal as="div" className={styles.sectionHead}>
             <div className={styles.eyebrow}>GALERIA</div>
             <h2 className={styles.sectionTitle}>Nossa loja e equipe</h2>
-          </div>
+          </Reveal>
           <div className={styles.galleryGrid}>
             {home.gallery.map((photo, i) =>
               photo.url ? (
-                <div key={i} className={styles.galleryPhoto}>
+                <Reveal as="div" key={i} delay={i * 60} className={styles.galleryPhoto}>
                   <Image
                     src={photo.url}
                     alt={photo.caption}
                     fill
-                    sizes="(max-width: 640px) 50vw, 33vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw"
                     style={{ objectFit: "cover" }}
                   />
                   <span className={styles.galleryCaption}>{photo.caption}</span>
-                </div>
+                </Reveal>
               ) : (
                 <div key={i} className={styles.galleryPlaceholder}>{photo.caption}</div>
               )
@@ -135,7 +140,7 @@ export default async function HomePage() {
 
       {sections.visite && (
         <section className={styles.visitSection}>
-          <div className={styles.visitRow}>
+          <Reveal as="div" className={styles.visitRow}>
             <div>
               <h3 className={styles.visitTitle}>{home.visitTitle}</h3>
               <p className={styles.visitSubtitle}>{home.visitSubtitle}</p>
@@ -148,10 +153,10 @@ export default async function HomePage() {
                 rel="noopener noreferrer"
                 className={styles.visitWhatsBtn}
               >
-                Falar no WhatsApp
+                Fale agora com um especialista
               </a>
             </div>
-          </div>
+          </Reveal>
         </section>
       )}
 

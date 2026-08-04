@@ -175,3 +175,38 @@
     padding: 24px;
   }
 }
+
+@container (max-width: 767px) {
+  .hero {
+    padding: 96px 22px 40px;
+  }
+  .title {
+    font-size: clamp(28px, 8.5vw, 34px);
+  }
+  .content {
+    padding: 40px 22px 64px;
+  }
+  .grid {
+    gap: 22px;
+  }
+  .card, .formCard {
+    padding: 22px;
+    border-radius: 16px;
+  }
+  .mapCard {
+    height: 220px;
+    border-radius: 16px;
+  }
+  .input, .select, .textarea {
+    font-size: 16px;
+    padding: 14px 16px;
+  }
+  .whatsBtn {
+    padding: 16px;
+    font-size: 15px;
+  }
+  .submitBtn {
+    padding: 16px;
+    font-size: 15px;
+  }
+}

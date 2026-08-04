@@ -187,3 +187,28 @@
 @container (max-width: 640px) {
   .sideLabel { font-size: 10px; padding: 6px 10px; }
 }
+
+/* Painel 1 da narrativa mobile — tela cheia real (100dvh); o texto entra
+   com fade/slide depois que o slider antes/depois já está visível. */
+@media (max-width: 767px) {
+  .hero {
+    min-height: 100dvh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .copy {
+    padding: 0 22px 44px;
+    animation: heroMountUp .85s .15s cubic-bezier(.2, .8, .2, 1) both;
+  }
+  .title {
+    font-size: clamp(30px, 10vw, 44px);
+  }
+  .subtitle {
+    font-size: 13px;
+  }
+  .cta {
+    width: 100%;
+    justify-content: center;
+    padding: 16px 24px;
+  }
+}

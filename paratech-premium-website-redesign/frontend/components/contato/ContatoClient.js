@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "./Contato.module.css";
+import Reveal from "@/components/Reveal";
 import SiteHeader from "@/components/SiteHeader";
 import { SiteFooterSimple } from "@/components/SiteFooter";
 import WhatsAppFab from "@/components/WhatsAppFab";
@@ -35,7 +36,7 @@ export default function ContatoClient({ content }) {
         <div className={styles.grid}>
           <div className={styles.leftCol}>
             {content.sections.informacoes && (
-              <div className={styles.card}>
+              <Reveal as="div" className={styles.card}>
                 <div className={styles.cardTitle}>Informações</div>
                 <div className={styles.infoList}>
                   <div>
@@ -68,21 +69,21 @@ export default function ContatoClient({ content }) {
                   rel="noopener noreferrer"
                   className={styles.whatsBtn}
                 >
-                  Falar no WhatsApp agora
+                  Fale agora com um especialista
                 </a>
-              </div>
+              </Reveal>
             )}
-            <div className={styles.mapCard}>
+            <Reveal as="div" delay={80} className={styles.mapCard}>
               <iframe
                 title="Mapa Paratech"
                 src={content.mapEmbedUrl}
                 loading="lazy"
                 className={styles.mapFrame}
               />
-            </div>
+            </Reveal>
           </div>
 
-          <div className={styles.formCard}>
+          <Reveal as="div" delay={140} className={styles.formCard}>
             <div className={styles.cardTitle}>Envie uma mensagem</div>
             <form className={styles.form} onSubmit={handleSubmit}>
               <label htmlFor="contato-nome" className={styles.visuallyHidden}>Seu nome</label>
@@ -134,7 +135,7 @@ export default function ContatoClient({ content }) {
               <button type="submit" className={styles.submitBtn}>Enviar mensagem</button>
               <div className={styles.formNote}>Ao enviar, sua mensagem será aberta no WhatsApp com um especialista.</div>
             </form>
-          </div>
+          </Reveal>
         </div>
       </section>
 

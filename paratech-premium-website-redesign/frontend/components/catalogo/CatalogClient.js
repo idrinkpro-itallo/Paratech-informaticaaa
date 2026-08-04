@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import styles from "./Catalog.module.css";
+import Reveal from "@/components/Reveal";
 import SiteHeader from "@/components/SiteHeader";
 import { SiteFooterSimple } from "@/components/SiteFooter";
 import WhatsAppFab from "@/components/WhatsAppFab";
@@ -100,14 +101,15 @@ export default function CatalogClient({ categories, products }) {
         </div>
 
         <div className={styles.grid}>
-          {filteredProducts.map((p) => (
-            <ProductCard
-              key={p.id}
-              product={p}
-              showFavorite
-              isFavorite={!!favorites[p.id]}
-              onToggleFavorite={() => setFavorites((f) => ({ ...f, [p.id]: !f[p.id] }))}
-            />
+          {filteredProducts.map((p, i) => (
+            <Reveal as="div" key={p.id} delay={(i % 8) * 50}>
+              <ProductCard
+                product={p}
+                showFavorite
+                isFavorite={!!favorites[p.id]}
+                onToggleFavorite={() => setFavorites((f) => ({ ...f, [p.id]: !f[p.id] }))}
+              />
+            </Reveal>
           ))}
         </div>
 
@@ -128,7 +130,7 @@ export default function CatalogClient({ categories, products }) {
             rel="noopener noreferrer"
             className={styles.ctaBtn}
           >
-            Solicitar orçamento
+            Peça seu orçamento no WhatsApp
           </a>
         </div>
       </section>
