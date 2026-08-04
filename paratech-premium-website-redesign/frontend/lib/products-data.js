@@ -15,7 +15,9 @@ export const CATEGORY_META = {
   "audio": { label: "Áudio", c1: "#2a1332", c2: "#150a1a", accent: "#e879f9", glow: "rgba(232,121,249,.4)", tagline: "Som de qualidade para trabalho e lazer" },
   "security-cameras": { label: "Câmeras de Segurança", c1: "#0f2e1e", c2: "#08170f", accent: "#34d399", glow: "rgba(52,211,153,.4)", tagline: "Monitoramento e tranquilidade 24h" },
   "cables": { label: "Cabos", c1: "#302f0d", c2: "#181706", accent: "#facc15", glow: "rgba(250,204,21,.4)", tagline: "As conexões certas para cada equipamento" },
-  "office-equipment": { label: "Escritório", c1: "#331414", c2: "#1a0a0a", accent: "#f87171", glow: "rgba(248,113,113,.4)", tagline: "Tudo para o escritório e a escola" }
+  "office-equipment": { label: "Escritório", c1: "#331414", c2: "#1a0a0a", accent: "#f87171", glow: "rgba(248,113,113,.4)", tagline: "Tudo para o escritório e a escola" },
+  "eletrodomesticos": { label: "Eletrodomésticos", c1: "#1a2340", c2: "#0d1220", accent: "#818cf8", glow: "rgba(129,140,248,.4)", tagline: "Praticidade e qualidade para o seu dia a dia" },
+  "escolar": { label: "Escolar", c1: "#243a0d", c2: "#121e07", accent: "#a3e635", glow: "rgba(163,230,53,.4)", tagline: "Tudo para equipar a sala de aula e o aluno" }
 };
 
 export const STOCK_META = {

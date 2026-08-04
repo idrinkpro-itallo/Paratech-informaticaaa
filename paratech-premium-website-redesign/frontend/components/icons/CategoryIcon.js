@@ -102,6 +102,20 @@ const ICON_PATHS = {
       <path d="M3 13h18M10.5 13v2M13.5 13v2" />
     </>
   ),
+  "eletrodomesticos": (
+    <>
+      <rect x="5" y="3" width="14" height="18" rx="1.5" />
+      <path d="M5 11h14" />
+      <circle cx="16" cy="7" r="0.6" fill="currentColor" stroke="none" />
+      <circle cx="16" cy="15" r="0.6" fill="currentColor" stroke="none" />
+    </>
+  ),
+  "escolar": (
+    <>
+      <path d="M12 6c-2-1.3-4.5-1.8-7-1.5v13c2.5-.3 5 .2 7 1.5 2-1.3 4.5-1.8 7-1.5v-13c-2.5-.3-5 .2-7 1.5Z" />
+      <path d="M12 6v13" />
+    </>
+  ),
 };
 
 export default function CategoryIcon({ category, className = "pv-icon" }) {
