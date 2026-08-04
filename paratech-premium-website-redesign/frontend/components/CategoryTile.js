@@ -14,11 +14,10 @@ export default function CategoryTile({ category }) {
     <Link href={`/catalogo#${category.id}`} className="pv-card">
       {category.coverImage ? (
         <div
-          className={`pv-visual ${styles.visual}`}
+          className={`pv-visual ${styles.visual} ${styles.visualCover}`}
           style={{
             backgroundImage: `url(${category.coverImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            "--cover-tint": meta.c1,
           }}
         />
       ) : (

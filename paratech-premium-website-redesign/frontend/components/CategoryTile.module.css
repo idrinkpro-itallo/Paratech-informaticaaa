@@ -2,9 +2,23 @@
   height: 150px;
 }
 
+.visualCover {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 @media (max-width: 767px) {
   .visual {
-    height: 200px;
+    height: 220px;
+  }
+
+  /* No mobile a foto inteira precisa aparecer, sem corte — troca de
+     "cover" (preenche e corta) para "contain" (encaixa inteira), com o
+     fundo tingido na cor da categoria preenchendo a sobra ao redor. */
+  .visualCover {
+    background-size: contain;
+    background-color: var(--cover-tint, #16181B);
   }
 }
 .body {
