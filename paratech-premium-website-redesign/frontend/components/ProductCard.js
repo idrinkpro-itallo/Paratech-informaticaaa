@@ -34,6 +34,7 @@ export default function ProductCard({ product, showFavorite = false, isFavorite 
             alt={product.name}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 960px) 50vw, 280px"
+            className="pv-photo-pulse"
             style={{ objectFit: "cover", zIndex: 1 }}
           />
         ) : (

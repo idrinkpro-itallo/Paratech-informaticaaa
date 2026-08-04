@@ -168,7 +168,7 @@
 
 .stage {
   position: relative;
-  height: 500px;
+  height: 540px;
   perspective: 1000px;
 }
 
@@ -229,8 +229,8 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 420px;
-  height: 380px;
+  max-width: 480px;
+  height: 430px;
 }
 
 .shadow {
@@ -292,7 +292,7 @@
     animation: heroMountUp .8s cubic-bezier(.2, .8, .2, 1) both;
   }
   .stage {
-    height: 300px;
+    height: 330px;
     animation: heroMountUp .9s .12s cubic-bezier(.2, .8, .2, 1) both;
   }
   .title {

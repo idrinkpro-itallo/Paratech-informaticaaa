@@ -76,7 +76,7 @@ export default function HeroProduto({ content, product }) {
           {content.badgeText && <div className={styles.badge}>{content.badgeText}</div>}
           <div className={styles.tilt} style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}>
             <div className={styles.floatWrap}>
-              <div className={styles.imageWrap}>
+              <div className={`${styles.imageWrap} pv-photo-pulse`}>
                 {product?.imageUrl && (
                   <Image
                     src={product.imageUrl}

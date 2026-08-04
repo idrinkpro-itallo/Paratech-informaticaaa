@@ -109,14 +109,16 @@ export default function HeroClassico({ content, products }) {
                     )}
                     <div className={styles.heroBannerImageWrap}>
                       {s.product.imageUrl && (
-                        <Image
-                          src={s.product.imageUrl}
-                          alt={s.product.name}
-                          fill
-                          sizes="(max-width: 640px) 80vw, (max-width: 960px) 70vw, 360px"
-                          style={{ objectFit: "contain", filter: claro ? "grayscale(1) contrast(1.05)" : undefined }}
-                          priority={i === 0}
-                        />
+                        <div className="pv-photo-pulse" style={{ position: "relative", width: "100%", height: "100%" }}>
+                          <Image
+                            src={s.product.imageUrl}
+                            alt={s.product.name}
+                            fill
+                            sizes="(max-width: 640px) 80vw, (max-width: 960px) 70vw, 360px"
+                            style={{ objectFit: "contain", filter: claro ? "grayscale(1) contrast(1.05)" : undefined }}
+                            priority={i === 0}
+                          />
+                        </div>
                       )}
                     </div>
                     <div className={styles.heroBannerKicker} style={{ color: palette.accent }}>

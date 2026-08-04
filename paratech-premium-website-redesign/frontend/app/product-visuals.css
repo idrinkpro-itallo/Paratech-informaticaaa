@@ -21,7 +21,7 @@
 /* ── Visual tile (stands in for the product photo) ─────────────────────── */
 .pv-visual {
   position: relative;
-  height: 190px;
+  height: 212px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -234,8 +234,19 @@
   85% { opacity: .8; }
 }
 
+/* Pulsação reutilizável para fotos de produto em destaque (hero, cards) —
+   leve zoom + glow, aplicada via classe .pv-photo-pulse no elemento que
+   envolve a <Image>. */
+@keyframes pv-photo-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(255, 255, 255, .4)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(255, 255, 255, .6)); }
+}
+.pv-photo-pulse {
+  animation: pv-photo-pulse 2.5s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .pv-icon, .pv-icon-glow, .pv-particles span, .pv-visual::after {
+  .pv-icon, .pv-icon-glow, .pv-particles span, .pv-visual::after, .pv-photo-pulse {
     animation: none !important;
     transition: none !important;
   }
@@ -244,7 +255,7 @@
 /* Cards em coluna única no mobile: a foto ganha mais protagonismo. */
 @media (max-width: 767px) {
   .pv-visual {
-    height: 240px;
+    height: 260px;
   }
   .btn-quote, .btn-whatsapp {
     padding: 14px;

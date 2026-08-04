@@ -243,8 +243,8 @@
 .heroBannerImageWrap {
   position: relative;
   z-index: 2;
-  width: 390px;
-  height: 390px;
+  width: 430px;
+  height: 430px;
   margin-bottom: 22px;
   animation: heroImgFloat 5s ease-in-out infinite;
 }
@@ -334,11 +334,11 @@
     text-align: left;
   }
   .heroBanner {
-    height: 520px;
+    height: 540px;
   }
   .heroBannerImageWrap {
-    width: 290px;
-    height: 290px;
+    width: 320px;
+    height: 320px;
   }
 }
 @container (max-width: 640px) {
@@ -349,15 +349,15 @@
     gap: 22px;
   }
   .heroBanner {
-    height: 450px;
+    height: 460px;
   }
   .heroBannerCard {
     padding: 32px 20px 30px;
     border-radius: 22px;
   }
   .heroBannerImageWrap {
-    width: 225px;
-    height: 225px;
+    width: 245px;
+    height: 245px;
   }
 }
 
@@ -378,12 +378,12 @@
     animation: heroMountUp .8s cubic-bezier(.2, .8, .2, 1) both;
   }
   .heroBanner {
-    height: 400px;
+    height: 420px;
     animation: heroMountUp .9s .12s cubic-bezier(.2, .8, .2, 1) both;
   }
   .heroBannerImageWrap {
-    width: 200px;
-    height: 200px;
+    width: 230px;
+    height: 230px;
   }
   .heroTitle {
     font-size: clamp(30px, 9vw, 40px);
